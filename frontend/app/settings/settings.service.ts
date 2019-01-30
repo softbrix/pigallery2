@@ -15,12 +15,15 @@ export class SettingsService {
       Client: {
         Search: {
           enabled: true,
-          autocompleteEnabled: true,
+          AutoComplete: {
+            enabled: true,
+            cacheTimeout: 1000 * 60 * 60,
+            maxItemsPerCategory: 5
+          },
           instantSearchEnabled: true,
           InstantSearchTimeout: 0,
           searchCacheTimeout: 1000 * 60 * 60,
           instantSearchCacheTimeout: 1000 * 60 * 60,
-          autocompleteCacheTimeout: 1000 * 60 * 60
         },
         Thumbnail: {
           concurrentThumbnailGenerations: null,
@@ -71,8 +74,8 @@ export class SettingsService {
           updateTimeout: 2000
         },
         imagesFolder: '',
-	port: 80,
-	host: '0.0.0.0',
+        port: 80,
+        host: '0.0.0.0',
         thumbnail: {
           folder: '',
           qualityPriority: true,
@@ -88,7 +91,10 @@ export class SettingsService {
           folderPreviewSize: 0,
           reIndexingSensitivity: ReIndexingSensitivity.medium
         },
-        photoMetadataSize: 512 * 1024
+        photoMetadataSize: 512 * 1024,
+        duplicates: {
+          listingLimit: 1000
+        }
       }
     });
   }

@@ -10,6 +10,7 @@ export class GalleryRouter {
   public static route(app: Express) {
 
     this.addGetImageIcon(app);
+    this.addGetVideoIcon(app);
     this.addGetImageThumbnail(app);
     this.addGetVideoThumbnail(app);
     this.addGetImage(app);
@@ -88,6 +89,17 @@ export class GalleryRouter {
       // TODO: authorize path
       GalleryMWs.loadFile,
       ThumbnailGeneratorMWs.generateThumbnailFactory(ThumbnailSourceType.Video),
+      RenderingMWs.renderFile
+    );
+  }
+
+
+  private static addGetVideoIcon(app: Express) {
+    app.get('/api/gallery/content/:mediaPath(*\.(mp4|ogg|ogv|webm))/icon',
+      AuthenticationMWs.authenticate,
+      // TODO: authorize path
+      GalleryMWs.loadFile,
+      ThumbnailGeneratorMWs.generateIconFactory(ThumbnailSourceType.Video),
       RenderingMWs.renderFile
     );
   }

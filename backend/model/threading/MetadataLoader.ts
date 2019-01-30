@@ -1,13 +1,21 @@
 import {VideoMetadata} from '../../../common/entities/VideoDTO';
-import {PhotoMetadata} from '../../../common/entities/PhotoDTO';
+import {FaceRegion, PhotoMetadata} from '../../../common/entities/PhotoDTO';
 import {Config} from '../../../common/config/private/Config';
 import {Logger} from '../../Logger';
 import * as fs from 'fs';
 import * as sizeOf from 'image-size';
-import {OrientationTypes, ExifParserFactory} from 'ts-exif-parser';
+import {ExifParserFactory, OrientationTypes} from 'ts-exif-parser';
 import {IptcParser} from 'ts-node-iptc';
 import {FFmpegFactory} from '../FFmpegFactory';
 import {FfprobeData} from 'fluent-ffmpeg';
+
+// TODO: fix up different metadata loaders
+// @ts-ignore
+global.DataView = require('jdataview');
+// @ts-ignore
+global.DOMParser = require('xmldom').DOMParser;
+// @ts-ignore
+const ExifReader = require('exifreader');
 
 const LOG_TAG = '[MetadataLoader]';
 const ffmpeg = FFmpegFactory.get();
@@ -112,7 +120,7 @@ export class MetadataLoader {
               }
 
               if (exif.tags.CreateDate || exif.tags.DateTimeOriginal || exif.tags.ModifyDate) {
-                metadata.creationDate = exif.tags.CreateDate || exif.tags.DateTimeOriginal || exif.tags.ModifyDate;
+                metadata.creationDate = (exif.tags.CreateDate || exif.tags.DateTimeOriginal || exif.tags.ModifyDate) * 1000;
               }
 
               if (exif.tags.Orientation) {
@@ -139,23 +147,71 @@ export class MetadataLoader {
 
             try {
               const iptcData = IptcParser.parse(data);
-              if (iptcData.country_or_primary_location_name || iptcData.province_or_state || iptcData.city) {
+              if (iptcData.country_or_primary_location_name) {
                 metadata.positionData = metadata.positionData || {};
                 metadata.positionData.country = iptcData.country_or_primary_location_name.replace(/\0/g, '').trim();
+              }
+              if (iptcData.province_or_state) {
+                metadata.positionData = metadata.positionData || {};
                 metadata.positionData.state = iptcData.province_or_state.replace(/\0/g, '').trim();
+              }
+              if (iptcData.city) {
+                metadata.positionData = metadata.positionData || {};
                 metadata.positionData.city = iptcData.city.replace(/\0/g, '').trim();
               }
               if (iptcData.caption) {
                 metadata.caption = iptcData.caption.replace(/\0/g, '').trim();
               }
               metadata.keywords = iptcData.keywords || [];
+
               metadata.creationDate = <number>(iptcData.date_time ? iptcData.date_time.getTime() : metadata.creationDate);
 
             } catch (err) {
-              //  Logger.debug(LOG_TAG, 'Error parsing iptc data', fullPath, err);
+              // Logger.debug(LOG_TAG, 'Error parsing iptc data', fullPath, err);
             }
 
             metadata.creationDate = metadata.creationDate || 0;
+
+
+            try {
+              const ret = ExifReader.load(data);
+              const faces: FaceRegion[] = [];
+              if (ret.Regions && ret.Regions.value.RegionList && ret.Regions.value.RegionList.value) {
+                for (let i = 0; i < ret.Regions.value.RegionList.value.length; i++) {
+                  if (!ret.Regions.value.RegionList.value[i].value ||
+                    !ret.Regions.value.RegionList.value[i].value['rdf:Description'] ||
+                    !ret.Regions.value.RegionList.value[i].value['rdf:Description'].value ||
+                    !ret.Regions.value.RegionList.value[i].value['rdf:Description'].value['mwg-rs:Area']) {
+                    continue;
+                  }
+                  const region = ret.Regions.value.RegionList.value[i].value['rdf:Description'];
+                  const regionBox = ret.Regions.value.RegionList.value[i].value['rdf:Description'].value['mwg-rs:Area'].attributes;
+                  if (region.attributes['mwg-rs:Type'] !== 'Face' ||
+                    !region.attributes['mwg-rs:Name']) {
+                    continue;
+                  }
+                  const name = region.attributes['mwg-rs:Name'];
+                  const box = {
+                    width: Math.round(regionBox['stArea:w'] * metadata.size.width),
+                    height: Math.round(regionBox['stArea:h'] * metadata.size.height),
+                    x: Math.round(regionBox['stArea:x'] * metadata.size.width),
+                    y: Math.round(regionBox['stArea:y'] * metadata.size.height)
+                  };
+                  faces.push({name: name, box: box});
+                }
+              }
+              if (faces.length > 0) {
+                metadata.faces = faces; // save faces
+                // remove faces from keywords
+                metadata.faces.forEach(f => {
+                  const index = metadata.keywords.indexOf(f.name);
+                  if (index !== -1) {
+                    metadata.keywords.splice(index, 1);
+                  }
+                });
+              }
+            } catch (err) {
+            }
 
             return resolve(metadata);
           } catch (err) {

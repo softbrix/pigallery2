@@ -42,6 +42,25 @@ export class AdminMWs {
     }
   }
 
+
+  public static async getDuplicates(req: Request, res: Response, next: NextFunction) {
+    if (Config.Server.database.type === DatabaseType.memory) {
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Statistic is only available for indexed content'));
+    }
+
+
+    const galleryManager = <ISQLGalleryManager>ObjectManagerRepository.getInstance().GalleryManager;
+    try {
+      req.resultPipe =  await galleryManager.getPossibleDuplicates();
+      return next();
+    } catch (err) {
+      if (err instanceof Error) {
+        return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error while getting duplicates: ' + err.toString(), err));
+      }
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error while getting duplicates', err));
+    }
+  }
+
   public static async updateDatabaseSettings(req: Request, res: Response, next: NextFunction) {
 
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
@@ -399,7 +418,7 @@ export class AdminMWs {
   public static startIndexing(req: Request, res: Response, next: NextFunction) {
     try {
       const createThumbnails: boolean = (<IndexingDTO>req.body).createThumbnails || false;
-      ObjectManagerRepository.getInstance().IndexingManager.startIndexing(createThumbnails);
+      ObjectManagerRepository.getInstance().IndexingTaskManager.startIndexing(createThumbnails);
       req.resultPipe = 'ok';
       return next();
     } catch (err) {
@@ -413,7 +432,7 @@ export class AdminMWs {
 
   public static getIndexingProgress(req: Request, res: Response, next: NextFunction) {
     try {
-      req.resultPipe = ObjectManagerRepository.getInstance().IndexingManager.getProgress();
+      req.resultPipe = ObjectManagerRepository.getInstance().IndexingTaskManager.getProgress();
       return next();
     } catch (err) {
       if (err instanceof Error) {
@@ -425,7 +444,7 @@ export class AdminMWs {
 
   public static cancelIndexing(req: Request, res: Response, next: NextFunction) {
     try {
-      ObjectManagerRepository.getInstance().IndexingManager.cancelIndexing();
+      ObjectManagerRepository.getInstance().IndexingTaskManager.cancelIndexing();
       req.resultPipe = 'ok';
       return next();
     } catch (err) {
@@ -438,7 +457,7 @@ export class AdminMWs {
 
   public static async resetIndexes(req: Express.Request, res: Response, next: NextFunction) {
     try {
-      await ObjectManagerRepository.getInstance().IndexingManager.reset();
+      await ObjectManagerRepository.getInstance().IndexingTaskManager.reset();
       req.resultPipe = 'ok';
       return next();
     } catch (err) {

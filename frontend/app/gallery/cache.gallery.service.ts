@@ -77,7 +77,7 @@ export class GalleryCacheService {
     const tmp = localStorage.getItem(key);
     if (tmp != null) {
       const value: CacheItem<AutoCompleteItem[]> = JSON.parse(tmp);
-      if (value.timestamp < Date.now() - Config.Client.Search.autocompleteCacheTimeout) {
+      if (value.timestamp < Date.now() - Config.Client.Search.AutoComplete.cacheTimeout) {
         localStorage.removeItem(key);
         return null;
       }

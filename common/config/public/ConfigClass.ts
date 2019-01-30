@@ -7,14 +7,19 @@ export module ClientConfig {
     OpenStreetMap, Mapbox, Custom
   }
 
+  export interface AutoCompleteConfig {
+    enabled: boolean;
+    maxItemsPerCategory: number;
+    cacheTimeout: number;
+  }
+
   export interface SearchConfig {
     enabled: boolean;
     instantSearchEnabled: boolean;
-    autocompleteEnabled: boolean;
     InstantSearchTimeout: number;
-    autocompleteCacheTimeout: number;
     instantSearchCacheTimeout: number;
     searchCacheTimeout: number;
+    AutoComplete: AutoCompleteConfig;
   }
 
   export interface SharingConfig {
@@ -95,11 +100,14 @@ export class PublicConfigClass {
     Search: {
       enabled: true,
       instantSearchEnabled: true,
-      autocompleteEnabled: true,
       InstantSearchTimeout: 3000,
-      autocompleteCacheTimeout: 1000 * 60 * 60,
       searchCacheTimeout: 1000 * 60 * 60,
-      instantSearchCacheTimeout: 1000 * 60 * 60
+      instantSearchCacheTimeout: 1000 * 60 * 60,
+      AutoComplete: {
+        enabled: true,
+        cacheTimeout: 1000 * 60 * 60,
+        maxItemsPerCategory: 5
+      }
     },
     Sharing: {
       enabled: true,

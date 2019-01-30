@@ -8,6 +8,7 @@ export class AdminRouter {
   public static route(app: Express) {
 
     this.addGetStatistic(app);
+    this.addGetDuplicates(app);
     this.addIndexGallery(app);
     this.addSettings(app);
   }
@@ -17,6 +18,14 @@ export class AdminRouter {
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       AdminMWs.loadStatistic,
+      RenderingMWs.renderResult
+    );
+  }
+  private static addGetDuplicates(app: Express) {
+    app.get('/api/admin/duplicates',
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(UserRoles.Admin),
+      AdminMWs.getDuplicates,
       RenderingMWs.renderResult
     );
   }

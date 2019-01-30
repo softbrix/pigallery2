@@ -1,8 +1,9 @@
-import {Column, Entity, ManyToOne, PrimaryGeneratedColumn, TableInheritance, Unique, Index} from 'typeorm';
+import {Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn, TableInheritance, Unique} from 'typeorm';
 import {DirectoryEntity} from './DirectoryEntity';
 import {MediaDimension, MediaDTO, MediaMetadata} from '../../../../common/entities/MediaDTO';
 import {OrientationTypes} from 'ts-exif-parser';
 import {CameraMetadataEntity, PositionMetaDataEntity} from './PhotoEntity';
+import {FaceRegionEntry} from './FaceRegionEntry';
 
 export class MediaDimensionEntity implements MediaDimension {
 
@@ -21,12 +22,16 @@ export class MediaMetadataEntity implements MediaMetadata {
   @Column(type => MediaDimensionEntity)
   size: MediaDimensionEntity;
 
-  @Column('bigint')
+  @Column('bigint', {
+    unsigned: true, transformer: {
+      from: v => parseInt(v, 10),
+      to: v => v
+    }
+  })
   creationDate: number;
 
-  @Column('int')
+  @Column('int', {unsigned: true})
   fileSize: number;
-
 
   @Column('simple-array')
   keywords: string[];
@@ -37,27 +42,30 @@ export class MediaMetadataEntity implements MediaMetadata {
   @Column(type => PositionMetaDataEntity)
   positionData: PositionMetaDataEntity;
 
-  @Column('tinyint', {default: OrientationTypes.TOP_LEFT})
+  @Column('tinyint', {unsigned: true, default: OrientationTypes.TOP_LEFT})
   orientation: OrientationTypes;
 
-  @Column('int')
+  @OneToMany(type => FaceRegionEntry, faceRegion => faceRegion.media)
+  faces: FaceRegionEntry[];
+
+  @Column('int', {unsigned: true})
   bitRate: number;
 
-  @Column('bigint')
+  @Column('int', {unsigned: true})
   duration: number;
 }
 
 // TODO: fix inheritance once its working in typeorm
 @Entity()
 @Unique(['name', 'directory'])
-@TableInheritance({column: {type: 'varchar', name: 'type'}})
+@TableInheritance({column: {type: 'varchar', name: 'type', length: 32}})
 export abstract class MediaEntity implements MediaDTO {
 
   @Index()
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({unsigned: true})
   id: number;
 
-  @Column('text')
+  @Column()
   name: string;
 
   @Index()

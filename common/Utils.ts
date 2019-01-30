@@ -90,14 +90,14 @@ export class Utils {
         continue;
       }
 
-      const part = args[i].replace('\\', '/');
+      const part = args[i].replace(new RegExp('\\\\', 'g'), '/');
       if (part === '/' || part === './') {
         continue;
       }
 
       url += part + '/';
     }
-    url = url.replace('//', '/');
+    url = url.replace(new RegExp('/+', 'g'), '/');
 
     if (url.trim() === '') {
       url = './';

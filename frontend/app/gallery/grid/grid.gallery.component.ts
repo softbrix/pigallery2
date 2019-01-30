@@ -7,10 +7,10 @@ import {
   Input,
   OnChanges,
   OnDestroy,
+  OnInit,
   QueryList,
   ViewChild,
-  ViewChildren,
-  OnInit
+  ViewChildren
 } from '@angular/core';
 import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
 import {GridRowBuilder} from './GridRowBuilder';
@@ -27,7 +27,7 @@ import {GalleryService} from '../gallery.service';
 import {SortingMethods} from '../../../../common/entities/SortingMethods';
 import {MediaDTO} from '../../../../common/entities/MediaDTO';
 import {QueryParams} from '../../../../common/QueryParams';
-import {Media} from '../Media';
+import {SeededRandomService} from '../../model/seededRandom.service';
 
 @Component({
   selector: 'app-gallery-grid',
@@ -38,24 +38,13 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
 
   @ViewChild('gridContainer') gridContainer: ElementRef;
   @ViewChildren(GalleryPhotoComponent) gridPhotoQL: QueryList<GalleryPhotoComponent>;
-  private scrollListenerPhotos: GalleryPhotoComponent[] = [];
-
   @Input() media: MediaDTO[];
   @Input() lightbox: GalleryLightboxComponent;
-
   photosToRender: Array<GridMedia> = [];
   containerWidth = 0;
   screenHeight = 0;
-
   public IMAGE_MARGIN = 2;
-  private TARGET_COL_COUNT = 5;
-  private MIN_ROW_COUNT = 2;
-  private MAX_ROW_COUNT = 5;
-
-  private onScrollFired = false;
-  private helperTime: number = null;
   isAfterViewInit = false;
-  private renderedPhotoIndex = 0;
   subscriptions: {
     route: Subscription,
     sorting: Subscription
@@ -64,13 +53,21 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
     sorting: null
   };
   delayedRenderUpToPhoto: string = null;
+  private scrollListenerPhotos: GalleryPhotoComponent[] = [];
+  private TARGET_COL_COUNT = 5;
+  private MIN_ROW_COUNT = 2;
+  private MAX_ROW_COUNT = 5;
+  private onScrollFired = false;
+  private helperTime: number = null;
+  private renderedPhotoIndex = 0;
 
   constructor(private overlayService: OverlayService,
               private changeDetector: ChangeDetectorRef,
               public queryService: QueryService,
               private router: Router,
               public galleryService: GalleryService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private rndService: SeededRandomService) {
   }
 
   ngOnInit() {
@@ -159,17 +156,6 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
     this.isAfterViewInit = true;
   }
 
-
-  private renderUpToMedia(mediaStringId: string) {
-    const index = this.media.findIndex(p => this.queryService.getMediaStringId(p) === mediaStringId);
-    if (index === -1) {
-      this.router.navigate([], {queryParams: this.queryService.getParams()});
-      return;
-    }
-    while (this.renderedPhotoIndex < index && this.renderARow()) {
-    }
-  }
-
   public renderARow(): number {
     if (this.renderedPhotoIndex >= this.media.length
       || this.containerWidth === 0) {
@@ -202,6 +188,37 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
 
     this.renderedPhotoIndex += photoRowBuilder.getPhotoRow().length;
     return rowHeight;
+  }
+
+  @HostListener('window:scroll')
+  onScroll() {
+    if (!this.onScrollFired &&
+      // should we trigger this at all?
+      (this.renderedPhotoIndex < this.media.length || this.scrollListenerPhotos.length > 0)) {
+      window.requestAnimationFrame(() => {
+        this.renderPhotos();
+
+        if (Config.Client.Other.enableOnScrollThumbnailPrioritising === true) {
+          this.scrollListenerPhotos.forEach((pc: GalleryPhotoComponent) => {
+            pc.onScroll();
+          });
+          this.scrollListenerPhotos = this.scrollListenerPhotos.filter(pc => pc.ScrollListener);
+        }
+
+        this.onScrollFired = false;
+      });
+      this.onScrollFired = true;
+    }
+  }
+
+  private renderUpToMedia(mediaStringId: string) {
+    const index = this.media.findIndex(p => this.queryService.getMediaStringId(p) === mediaStringId);
+    if (index === -1) {
+      this.router.navigate([], {queryParams: this.queryService.getParams()});
+      return;
+    }
+    while (this.renderedPhotoIndex < index && this.renderARow()) {
+    }
   }
 
   private clearRenderedPhotos() {
@@ -244,6 +261,20 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
           return b.metadata.creationDate - a.metadata.creationDate;
         });
         break;
+      case SortingMethods.random:
+        this.rndService.setSeed(this.media.length);
+        this.media.sort((a: PhotoDTO, b: PhotoDTO) => {
+          if (a.name.toLowerCase() < b.name.toLowerCase()) {
+            return -1;
+          }
+          if (a.name.toLowerCase() > b.name.toLowerCase()) {
+            return 1;
+          }
+          return 0;
+        }).sort(() => {
+          return this.rndService.get() - 0.5;
+        });
+        break;
     }
 
 
@@ -281,7 +312,6 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
 
   }
 
-
   /**
    * Returns true, if scroll is >= 70% to render more images.
    * Or of onscroll rendering is off: return always to render all the images at once
@@ -292,29 +322,6 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
     return Config.Client.Other.enableOnScrollRendering === false ||
       PageHelper.ScrollY >= (document.body.clientHeight + offset - window.innerHeight) * 0.7
       || (document.body.clientHeight + offset) * 0.85 < window.innerHeight;
-
-  }
-
-
-  @HostListener('window:scroll')
-  onScroll() {
-    if (!this.onScrollFired &&
-      // should we trigger this at all?
-      (this.renderedPhotoIndex < this.media.length || this.scrollListenerPhotos.length > 0)) {
-      window.requestAnimationFrame(() => {
-        this.renderPhotos();
-
-        if (Config.Client.Other.enableOnScrollThumbnailPrioritising === true) {
-          this.scrollListenerPhotos.forEach((pc: GalleryPhotoComponent) => {
-            pc.onScroll();
-          });
-          this.scrollListenerPhotos = this.scrollListenerPhotos.filter(pc => pc.ScrollListener);
-        }
-
-        this.onScrollFired = false;
-      });
-      this.onScrollFired = true;
-    }
   }
 
   private renderPhotos(numberOfPhotos: number = 0) {

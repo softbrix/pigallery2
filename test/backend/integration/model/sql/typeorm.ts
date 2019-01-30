@@ -16,7 +16,6 @@ import {
   PositionMetaDataEntity
 } from '../../../../../backend/model/sql/enitites/PhotoEntity';
 import {MediaDimensionEntity} from '../../../../../backend/model/sql/enitites/MediaEntity';
-import {DataStructureVersion} from '../../../../../common/DataStructureVersion';
 import {VersionEntity} from '../../../../../backend/model/sql/enitites/VersionEntity';
 
 describe('Typeorm integration', () => {

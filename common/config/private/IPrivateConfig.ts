@@ -56,6 +56,10 @@ export interface ThreadingConfig {
   thumbnailThreads: number;
 }
 
+export interface DuplicatesConfig {
+  listingLimit: number; // maximum number of duplicates to list
+}
+
 export interface ServerConfig {
   port: number;
   host: string;
@@ -67,6 +71,7 @@ export interface ServerConfig {
   sessionTimeout: number;
   indexing: IndexingConfig;
   photoMetadataSize: number;
+  duplicates: DuplicatesConfig;
 }
 
 export interface IPrivateConfig {

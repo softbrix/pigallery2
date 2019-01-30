@@ -1,6 +1,13 @@
 import {Column, Entity, ChildEntity, Unique} from 'typeorm';
-import {CameraMetadata, GPSMetadata, PhotoDTO, PhotoMetadata, PositionMetaData} from '../../../../common/entities/PhotoDTO';
-import {OrientationTypes} from 'ts-exif-parser';
+import {
+  CameraMetadata,
+  FaceRegion,
+  FaceRegionBox,
+  GPSMetadata,
+  PhotoDTO,
+  PhotoMetadata,
+  PositionMetaData
+} from '../../../../common/entities/PhotoDTO';
 import {MediaEntity, MediaMetadataEntity} from './MediaEntity';
 
 export class CameraMetadataEntity implements CameraMetadata {
@@ -37,6 +44,7 @@ export class GPSMetadataEntity implements GPSMetadata {
   @Column('int', {nullable: true})
   altitude: number;
 }
+
 
 export class PositionMetaDataEntity implements PositionMetaData {
 
@@ -75,5 +83,4 @@ export class PhotoMetadataEntity extends MediaMetadataEntity implements PhotoMet
 export class PhotoEntity extends MediaEntity implements PhotoDTO {
   @Column(type => PhotoMetadataEntity)
   metadata: PhotoMetadataEntity;
-
 }

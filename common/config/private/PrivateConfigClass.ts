@@ -45,6 +45,9 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
       folderPreviewSize: 2,
       cachedFolderTimeout: 1000 * 60 * 60,
       reIndexingSensitivity: ReIndexingSensitivity.low
+    },
+    duplicates: {
+      listingLimit: 1000
     }
   };
   private ConfigLoader: any;
@@ -60,7 +63,11 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
   public load() {
     ConfigLoader.loadBackendConfig(this,
       path.join(__dirname, './../../../config.json'),
-      [['PORT', 'Server-port']]);
+      [['PORT', 'Server-port'],
+        ['MYSQL_HOST', 'Server-database-mysql-host'],
+        ['MYSQL_PASSWORD', 'Server-database-mysql-password'],
+        ['MYSQL_USERNAME', 'Server-database-mysql-username'],
+        ['MYSQL_DATABASE', 'Server-database-mysql-database']]);
 
     if (Utils.enumToArray(UserRoles).map(r => r.key).indexOf(this.Client.unAuthenticatedUserRole) === -1) {
       throw new Error('Unknown user role for Client.unAuthenticatedUserRole, found: ' + this.Client.unAuthenticatedUserRole);

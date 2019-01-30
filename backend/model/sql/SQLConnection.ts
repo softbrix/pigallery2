@@ -15,15 +15,18 @@ import {MediaEntity} from './enitites/MediaEntity';
 import {VideoEntity} from './enitites/VideoEntity';
 import {DataStructureVersion} from '../../../common/DataStructureVersion';
 import {FileEntity} from './enitites/FileEntity';
+import {FaceRegionEntry} from './enitites/FaceRegionEntry';
+import {PersonEntry} from './enitites/PersonEntry';
+import {Utils} from '../../../common/Utils';
 
 
 export class SQLConnection {
 
 
+  private static connection: Connection = null;
+
   constructor() {
   }
-
-  private static connection: Connection = null;
 
   public static async getConnection(): Promise<Connection> {
     if (this.connection == null) {
@@ -32,6 +35,8 @@ export class SQLConnection {
       options.entities = [
         UserEntity,
         FileEntity,
+        FaceRegionEntry,
+        PersonEntry,
         MediaEntity,
         PhotoEntity,
         VideoEntity,
@@ -40,8 +45,10 @@ export class SQLConnection {
         VersionEntity
       ];
       options.synchronize = false;
-    //  options.logging = 'all';
-      this.connection = await createConnection(options);
+      //  options.logging = 'all';
+
+
+      this.connection = await this.createConnection(options);
       await SQLConnection.schemeSync(this.connection);
     }
     return this.connection;
@@ -57,6 +64,8 @@ export class SQLConnection {
     options.entities = [
       UserEntity,
       FileEntity,
+      FaceRegionEntry,
+      PersonEntry,
       MediaEntity,
       PhotoEntity,
       VideoEntity,
@@ -66,7 +75,7 @@ export class SQLConnection {
     ];
     options.synchronize = false;
     // options.logging = "all";
-    const conn = await createConnection(options);
+    const conn = await this.createConnection(options);
     await SQLConnection.schemeSync(conn);
     await conn.close();
     return true;
@@ -84,6 +93,38 @@ export class SQLConnection {
       await userRepository.save(a);
     }
 
+  }
+
+  public static async close() {
+    try {
+      if (this.connection != null) {
+        await this.connection.close();
+        this.connection = null;
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  private static async createConnection(options: ConnectionOptions) {
+    if (options.type === 'sqlite') {
+      return await createConnection(options);
+    }
+    try {
+      return await createConnection(options);
+    } catch (e) {
+      if (e.sqlMessage === 'Unknown database \'' + options.database + '\'') {
+        Logger.debug('creating database: ' + options.database);
+        const tmpOption = Utils.clone(options);
+        // @ts-ignore
+        delete tmpOption.database;
+        const tmpConn = await createConnection(tmpOption);
+        await tmpConn.query('CREATE DATABASE IF NOT EXISTS ' + options.database);
+        await tmpConn.close();
+        return await createConnection(options);
+      }
+      throw e;
+    }
   }
 
   private static async schemeSync(connection: Connection) {
@@ -137,17 +178,6 @@ export class SQLConnection {
       };
     }
     return driver;
-  }
-
-  public static async close() {
-    try {
-      if (this.connection != null) {
-        await this.connection.close();
-        this.connection = null;
-      }
-    } catch (err) {
-      console.error(err);
-    }
   }
 
 

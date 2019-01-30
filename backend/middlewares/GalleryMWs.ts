@@ -222,7 +222,7 @@ export class GalleryMWs {
   }
 
   public static async autocomplete(req: Request, res: Response, next: NextFunction) {
-    if (Config.Client.Search.autocompleteEnabled === false) {
+    if (Config.Client.Search.AutoComplete.enabled === false) {
       return next();
     }
     if (!(req.params.text)) {

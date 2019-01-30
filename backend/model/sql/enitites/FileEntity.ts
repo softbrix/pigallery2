@@ -7,7 +7,7 @@ import {FileDTO} from '../../../../common/entities/FileDTO';
 export class FileEntity implements FileDTO {
 
   @Index()
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({unsigned: true})
   id: number;
 
   @Column('text')

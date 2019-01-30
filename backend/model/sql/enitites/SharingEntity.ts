@@ -5,7 +5,7 @@ import {UserDTO} from '../../../../common/entities/UserDTO';
 
 @Entity()
 export class SharingEntity implements SharingDTO {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({unsigned: true})
   id: number;
 
   @Column()
@@ -17,10 +17,20 @@ export class SharingEntity implements SharingDTO {
   @Column({type: 'text', nullable: true})
   password: string;
 
-  @Column()
+  @Column('bigint', {
+    unsigned: true, transformer: {
+      from: v => parseInt(v, 10),
+      to: v => v
+    }
+  })
   expires: number;
 
-  @Column()
+  @Column('bigint', {
+    unsigned: true, transformer: {
+      from: v => parseInt(v, 10),
+      to: v => v
+    }
+  })
   timeStamp: number;
 
   @Column()

@@ -65,7 +65,7 @@ export class ThumbnailGeneratorMWs {
       }
 
     } catch (error) {
-      return next(new ErrorDTO(ErrorCodes.SERVER_ERROR, 'error during postprocessing result', error.toString()));
+      return next(new ErrorDTO(ErrorCodes.SERVER_ERROR, 'error during postprocessing result (adding thumbnail info)', error.toString()));
 
     }
 

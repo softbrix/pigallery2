@@ -1,9 +1,12 @@
 dist: trusty
 language: node_js
 node_js:
-- '10'
-- '11'
-
+  - '10'
+  - '11'
+env:
+  - MYSQL_HOST='localhost' MYSQL_PASSWORD='' MYSQL_USERNAME='root' MYSQL_DATABASE='pigallery2_test'
+services:
+  - mysql
 addons:
   chrome: stable
 before_install:

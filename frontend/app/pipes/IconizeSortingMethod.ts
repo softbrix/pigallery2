@@ -14,6 +14,8 @@ export class IconizeSortingMethod implements PipeTransform {
         return '<span class="oi oi-sort-ascending"></span>';
       case SortingMethods.descDate:
         return '<span class="oi oi-sort-descending"></span>';
+      case SortingMethods.random:
+        return '<span class="oi oi-random"></span>';
     }
   }
 }

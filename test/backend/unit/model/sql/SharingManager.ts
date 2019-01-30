@@ -1,32 +1,23 @@
 import {expect} from 'chai';
-import * as fs from 'fs';
-import * as path from 'path';
-import {Config} from '../../../../../common/config/private/Config';
-import {DatabaseType} from '../../../../../common/config/private/IPrivateConfig';
 import {SQLConnection} from '../../../../../backend/model/sql/SQLConnection';
 import {SharingManager} from '../../../../../backend/model/sql/SharingManager';
 import {SharingDTO} from '../../../../../common/entities/SharingDTO';
 import {UserEntity} from '../../../../../backend/model/sql/enitites/UserEntity';
 import {UserDTO, UserRoles} from '../../../../../common/entities/UserDTO';
+import {SQLTestHelper} from '../../../SQLTestHelper';
 
-describe('SharingManager', () => {
+// to help WebStorm to handle the test cases
+declare let describe: any;
+declare const after: any;
+describe = SQLTestHelper.describe;
 
+describe('SharingManager', (sqlHelper: SQLTestHelper) => {
 
-  const tempDir = path.join(__dirname, '../../tmp');
-  const dbPath = path.join(tempDir, 'test.db');
 
   let creator: UserDTO = null;
 
   const setUpSqlDB = async () => {
-    if (fs.existsSync(dbPath)) {
-      fs.unlinkSync(dbPath);
-    }
-    if (!fs.existsSync(tempDir)) {
-      fs.mkdirSync(tempDir);
-    }
-
-    Config.Server.database.type = DatabaseType.sqlite;
-    Config.Server.database.sqlite.storage = dbPath;
+    await sqlHelper.initDB();
 
     const conn = await SQLConnection.getConnection();
 
@@ -41,22 +32,13 @@ describe('SharingManager', () => {
     await SQLConnection.close();
   };
 
-  const teardownUpSqlDB = async () => {
-    await SQLConnection.close();
-    if (fs.existsSync(dbPath)) {
-      fs.unlinkSync(dbPath);
-    }
-    if (fs.existsSync(tempDir)) {
-      fs.rmdirSync(tempDir);
-    }
-  };
 
   beforeEach(async () => {
     await setUpSqlDB();
   });
 
-  afterEach(async () => {
-    await teardownUpSqlDB();
+  after(async () => {
+    await sqlHelper.clearDB();
   });
 
 
