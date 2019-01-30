@@ -9,6 +9,7 @@
   "bin": "./backend/index.js",
   "scripts": {
     "install": "tsc && gulp build-prod",
+    "build-backend": "tsc && gulp build-backend",
     "build-release": "gulp build-release",
     "pretest": "tsc",
     "test": "ng test && mocha --recursive test/backend/unit && mocha --recursive test/backend/integration  && mocha --recursive test/common/unit ",

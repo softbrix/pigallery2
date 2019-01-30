@@ -88,12 +88,15 @@ export class DiskMangerWorker {
               if (photosOnly === true) {
                 continue;
               }
+              const photosLeft = maxPhotos != null ? maxPhotos - directory.media.length : null;
               const d = await DiskMangerWorker.scanDirectory(path.join(relativeDirectoryName, file),
-                Config.Server.indexing.folderPreviewSize, true
+                photosLeft, photosOnly
               );
-              d.lastScanned = 0; // it was not a fully scan
-              d.isPartial = true;
-              directory.directories.push(d);
+              d.media.forEach(m => {
+                m.name = path.join(file, m.name);
+                directory.media.push(m)
+              });
+              //directory.directories.push(d);
             } else if (DiskMangerWorker.isImage(fullFilePath)) {
               directory.media.push(<PhotoDTO>{
                 name: file,
@@ -126,6 +129,7 @@ export class DiskMangerWorker {
 
           return resolve(directory);
         } catch (err) {
+          console.error(err)
           return reject({error: err.toString()});
         }
 

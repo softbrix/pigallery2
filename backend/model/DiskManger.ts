@@ -35,6 +35,7 @@ export class DiskManager {
         addDirs(d);
       });
     };
+    directory.media.sort((a,b) => a.name.localeCompare(b.name))
     addDirs(directory);
     return directory;
   }
