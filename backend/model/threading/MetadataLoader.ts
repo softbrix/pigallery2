@@ -174,7 +174,9 @@ export class MetadataLoader {
 
 
             try {
+
               const ret = ExifReader.load(data);
+              ret.ImageWidth.id
               const faces: FaceRegion[] = [];
               if (ret.Regions && ret.Regions.value.RegionList && ret.Regions.value.RegionList.value) {
                 for (let i = 0; i < ret.Regions.value.RegionList.value.length; i++) {

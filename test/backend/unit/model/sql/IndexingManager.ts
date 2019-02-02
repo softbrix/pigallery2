@@ -109,6 +109,43 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
       .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
   });
 
+
+  it('should save photos with extreme parameters', async () => {
+    const gm = new GalleryManagerTest();
+    const im = new IndexingManagerTest();
+
+    const parent = TestHelper.getRandomizedDirectoryEntry();
+    const p1 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo1');
+    const p2 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo2');
+    const minFloat = 1.1 * Math.pow(10, -38);
+    const maxFloat = 3.4 * Math.pow(10, +38);
+    p1.metadata.cameraData.fStop = minFloat;
+    p2.metadata.cameraData.fStop = maxFloat;
+    p1.metadata.cameraData.exposure = minFloat;
+    p2.metadata.cameraData.exposure = maxFloat;
+    p1.metadata.cameraData.focalLength = 0;
+    p2.metadata.cameraData.focalLength = 4294967295;
+    p1.metadata.positionData.GPSData.altitude = maxFloat;
+    p2.metadata.positionData.GPSData.altitude = minFloat;
+    p1.metadata.positionData.GPSData.latitude = maxFloat;
+    p2.metadata.positionData.GPSData.latitude = minFloat;
+    p1.metadata.positionData.GPSData.longitude = maxFloat;
+    p2.metadata.positionData.GPSData.longitude = minFloat;
+
+
+    DirectoryDTO.removeReferences(parent);
+    await im.saveToDB(Utils.clone(parent));
+
+    const conn = await SQLConnection.getConnection();
+    const selected = await gm.selectParentDir(conn, parent.name, parent.path);
+    await gm.fillParentDir(conn, selected);
+
+    DirectoryDTO.removeReferences(selected);
+    removeIds(selected);
+    expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
+      .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
+  });
+
   it('should skip meta files', async () => {
     const gm = new GalleryManagerTest();
     const im = new IndexingManagerTest();

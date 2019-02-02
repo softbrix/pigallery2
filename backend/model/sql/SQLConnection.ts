@@ -45,7 +45,7 @@ export class SQLConnection {
         VersionEntity
       ];
       options.synchronize = false;
-      //  options.logging = 'all';
+        options.logging = 'all';
 
 
       this.connection = await this.createConnection(options);

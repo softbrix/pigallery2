@@ -1,13 +1,5 @@
-import {Column, Entity, ChildEntity, Unique} from 'typeorm';
-import {
-  CameraMetadata,
-  FaceRegion,
-  FaceRegionBox,
-  GPSMetadata,
-  PhotoDTO,
-  PhotoMetadata,
-  PositionMetaData
-} from '../../../../common/entities/PhotoDTO';
+import {ChildEntity, Column} from 'typeorm';
+import {CameraMetadata, GPSMetadata, PhotoDTO, PhotoMetadata, PositionMetaData} from '../../../../common/entities/PhotoDTO';
 import {MediaEntity, MediaMetadataEntity} from './MediaEntity';
 
 export class CameraMetadataEntity implements CameraMetadata {
@@ -21,13 +13,13 @@ export class CameraMetadataEntity implements CameraMetadata {
   @Column('text', {nullable: true})
   make: string;
 
-  @Column('int', {nullable: true})
+  @Column('float', {nullable: true})
   fStop: number;
 
-  @Column('int', {nullable: true})
+  @Column('float', {nullable: true})
   exposure: number;
 
-  @Column('int', {nullable: true})
+  @Column('int', {nullable: true, unsigned: true})
   focalLength: number;
 
   @Column('text', {nullable: true})
@@ -37,11 +29,11 @@ export class CameraMetadataEntity implements CameraMetadata {
 
 export class GPSMetadataEntity implements GPSMetadata {
 
-  @Column('int', {nullable: true})
+  @Column('float', {nullable: true})
   latitude: number;
-  @Column('int', {nullable: true})
+  @Column('float', {nullable: true})
   longitude: number;
-  @Column('int', {nullable: true})
+  @Column('float', {nullable: true})
   altitude: number;
 }
 
