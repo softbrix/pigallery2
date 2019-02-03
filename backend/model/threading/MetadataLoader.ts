@@ -4,18 +4,13 @@ import {Config} from '../../../common/config/private/Config';
 import {Logger} from '../../Logger';
 import * as fs from 'fs';
 import * as sizeOf from 'image-size';
+// @ts-ignore
+import * as ExifReader from 'exifreader';
 import {ExifParserFactory, OrientationTypes} from 'ts-exif-parser';
 import {IptcParser} from 'ts-node-iptc';
 import {FFmpegFactory} from '../FFmpegFactory';
 import {FfprobeData} from 'fluent-ffmpeg';
 
-// TODO: fix up different metadata loaders
-// @ts-ignore
-global.DataView = require('jdataview');
-// @ts-ignore
-global.DOMParser = require('xmldom').DOMParser;
-// @ts-ignore
-const ExifReader = require('exifreader');
 
 const LOG_TAG = '[MetadataLoader]';
 const ffmpeg = FFmpegFactory.get();
@@ -176,7 +171,6 @@ export class MetadataLoader {
             try {
 
               const ret = ExifReader.load(data);
-              ret.ImageWidth.id
               const faces: FaceRegion[] = [];
               if (ret.Regions && ret.Regions.value.RegionList && ret.Regions.value.RegionList.value) {
                 for (let i = 0; i < ret.Regions.value.RegionList.value.length; i++) {
