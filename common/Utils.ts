@@ -179,4 +179,19 @@ export class Utils {
     return curr;
   }
 
+  public static isUInt32(value: number, max: number = 4294967295) {
+    return !isNaN(value) && value >= 0 && value <= max;
+  }
+
+  public static isInt32(value: number) {
+    return !isNaN(value) && value >= -2147483648 && value <= 2147483647;
+  }
+
+  public static isFloat32(value: number) {
+    const E = Math.pow(10, 38);
+    const nE = Math.pow(10, -38);
+    return !isNaN(value) && ((value >= -3.402823466 * E && value <= -1.175494351 * nE) ||
+      (value <= 3.402823466 * E && value >= 1.175494351 * nE));
+  }
+
 }

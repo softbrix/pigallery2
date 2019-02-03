@@ -10,6 +10,7 @@ import {ExifParserFactory, OrientationTypes} from 'ts-exif-parser';
 import {IptcParser} from 'ts-node-iptc';
 import {FFmpegFactory} from '../FFmpegFactory';
 import {FfprobeData} from 'fluent-ffmpeg';
+import {Utils} from '../../../common/Utils';
 
 
 const LOG_TAG = '[MetadataLoader]';
@@ -49,8 +50,13 @@ export class MetadataLoader {
               metadata.size.width = data.streams[i].width;
               metadata.size.height = data.streams[i].height;
 
-              metadata.duration = Math.floor(data.streams[i].duration * 1000);
-              metadata.bitRate = parseInt(data.streams[i].bit_rate, 10) || null;
+              if (Utils.isInt32(Math.floor(data.streams[i].duration * 1000))) {
+                metadata.duration = Math.floor(data.streams[i].duration * 1000);
+              }
+
+              if (Utils.isInt32(parseInt(data.streams[i].bit_rate, 10))) {
+                metadata.duration = parseInt(data.streams[i].bit_rate, 10) || null;
+              }
               metadata.creationDate = Date.parse(data.streams[i].tags.creation_time);
               break;
             }
@@ -96,22 +102,36 @@ export class MetadataLoader {
                 exif.tags.ExposureTime || exif.tags.FocalLength ||
                 exif.tags.LensModel) {
                 metadata.cameraData = {
-                  ISO: exif.tags.ISO,
                   model: exif.tags.Model,
                   make: exif.tags.Make,
-                  fStop: exif.tags.FNumber,
-                  exposure: exif.tags.ExposureTime,
-                  focalLength: exif.tags.FocalLength,
-                  lens: exif.tags.LensModel,
+                  lens: exif.tags.LensModel
                 };
+                if (Utils.isUInt32(exif.tags.ISO)) {
+                  metadata.cameraData.ISO = exif.tags.ISO;
+                }
+                if (Utils.isFloat32(exif.tags.ISO)) {
+                  metadata.cameraData.focalLength = exif.tags.FocalLength;
+                }
+                if (Utils.isFloat32(exif.tags.ExposureTime)) {
+                  metadata.cameraData.exposure = exif.tags.ExposureTime;
+                }
+                if (Utils.isFloat32(exif.tags.FNumber)) {
+                  metadata.cameraData.fStop = exif.tags.FNumber;
+                }
               }
               if (!isNaN(exif.tags.GPSLatitude) || exif.tags.GPSLongitude || exif.tags.GPSAltitude) {
                 metadata.positionData = metadata.positionData || {};
-                metadata.positionData.GPSData = {
-                  latitude: exif.tags.GPSLatitude,
-                  longitude: exif.tags.GPSLongitude,
-                  altitude: exif.tags.GPSAltitude
-                };
+                metadata.positionData.GPSData = {};
+
+                if (Utils.isFloat32(exif.tags.GPSLongitude)) {
+                  metadata.positionData.GPSData.longitude = exif.tags.GPSLongitude;
+                }
+                if (Utils.isFloat32(exif.tags.GPSLatitude)) {
+                  metadata.positionData.GPSData.latitude = exif.tags.GPSLatitude;
+                }
+                if (Utils.isInt32(exif.tags.GPSAltitude)) {
+                  metadata.positionData.GPSData.altitude = exif.tags.GPSAltitude;
+                }
               }
 
               if (exif.tags.CreateDate || exif.tags.DateTimeOriginal || exif.tags.ModifyDate) {
@@ -217,4 +237,5 @@ export class MetadataLoader {
       }
     );
   }
+
 }

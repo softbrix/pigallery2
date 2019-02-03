@@ -4,7 +4,7 @@ import {MediaEntity, MediaMetadataEntity} from './MediaEntity';
 
 export class CameraMetadataEntity implements CameraMetadata {
 
-  @Column('int', {nullable: true})
+  @Column('int', {nullable: true, unsigned: true})
   ISO: number;
 
   @Column('text', {nullable: true})
@@ -19,7 +19,7 @@ export class CameraMetadataEntity implements CameraMetadata {
   @Column('float', {nullable: true})
   exposure: number;
 
-  @Column('int', {nullable: true, unsigned: true})
+  @Column('float', {nullable: true})
   focalLength: number;
 
   @Column('text', {nullable: true})
@@ -33,7 +33,7 @@ export class GPSMetadataEntity implements GPSMetadata {
   latitude: number;
   @Column('float', {nullable: true})
   longitude: number;
-  @Column('float', {nullable: true})
+  @Column('int', {nullable: true})
   altitude: number;
 }
 
