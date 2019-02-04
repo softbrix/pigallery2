@@ -187,48 +187,48 @@ export class MetadataLoader {
 
             metadata.creationDate = metadata.creationDate || 0;
 
+            if (Config.Client.Faces.enabled) {
+              try {
 
-            try {
-
-              const ret = ExifReader.load(data);
-              const faces: FaceRegion[] = [];
-              if (ret.Regions && ret.Regions.value.RegionList && ret.Regions.value.RegionList.value) {
-                for (let i = 0; i < ret.Regions.value.RegionList.value.length; i++) {
-                  if (!ret.Regions.value.RegionList.value[i].value ||
-                    !ret.Regions.value.RegionList.value[i].value['rdf:Description'] ||
-                    !ret.Regions.value.RegionList.value[i].value['rdf:Description'].value ||
-                    !ret.Regions.value.RegionList.value[i].value['rdf:Description'].value['mwg-rs:Area']) {
-                    continue;
+                const ret = ExifReader.load(data);
+                const faces: FaceRegion[] = [];
+                if (ret.Regions && ret.Regions.value.RegionList && ret.Regions.value.RegionList.value) {
+                  for (let i = 0; i < ret.Regions.value.RegionList.value.length; i++) {
+                    if (!ret.Regions.value.RegionList.value[i].value ||
+                      !ret.Regions.value.RegionList.value[i].value['rdf:Description'] ||
+                      !ret.Regions.value.RegionList.value[i].value['rdf:Description'].value ||
+                      !ret.Regions.value.RegionList.value[i].value['rdf:Description'].value['mwg-rs:Area']) {
+                      continue;
+                    }
+                    const region = ret.Regions.value.RegionList.value[i].value['rdf:Description'];
+                    const regionBox = ret.Regions.value.RegionList.value[i].value['rdf:Description'].value['mwg-rs:Area'].attributes;
+                    if (region.attributes['mwg-rs:Type'] !== 'Face' ||
+                      !region.attributes['mwg-rs:Name']) {
+                      continue;
+                    }
+                    const name = region.attributes['mwg-rs:Name'];
+                    const box = {
+                      width: Math.round(regionBox['stArea:w'] * metadata.size.width),
+                      height: Math.round(regionBox['stArea:h'] * metadata.size.height),
+                      x: Math.round(regionBox['stArea:x'] * metadata.size.width),
+                      y: Math.round(regionBox['stArea:y'] * metadata.size.height)
+                    };
+                    faces.push({name: name, box: box});
                   }
-                  const region = ret.Regions.value.RegionList.value[i].value['rdf:Description'];
-                  const regionBox = ret.Regions.value.RegionList.value[i].value['rdf:Description'].value['mwg-rs:Area'].attributes;
-                  if (region.attributes['mwg-rs:Type'] !== 'Face' ||
-                    !region.attributes['mwg-rs:Name']) {
-                    continue;
-                  }
-                  const name = region.attributes['mwg-rs:Name'];
-                  const box = {
-                    width: Math.round(regionBox['stArea:w'] * metadata.size.width),
-                    height: Math.round(regionBox['stArea:h'] * metadata.size.height),
-                    x: Math.round(regionBox['stArea:x'] * metadata.size.width),
-                    y: Math.round(regionBox['stArea:y'] * metadata.size.height)
-                  };
-                  faces.push({name: name, box: box});
                 }
+                if (Config.Client.Faces.keywordsToPersons && faces.length > 0) {
+                  metadata.faces = faces; // save faces
+                  // remove faces from keywords
+                  metadata.faces.forEach(f => {
+                    const index = metadata.keywords.indexOf(f.name);
+                    if (index !== -1) {
+                      metadata.keywords.splice(index, 1);
+                    }
+                  });
+                }
+              } catch (err) {
               }
-              if (faces.length > 0) {
-                metadata.faces = faces; // save faces
-                // remove faces from keywords
-                metadata.faces.forEach(f => {
-                  const index = metadata.keywords.indexOf(f.name);
-                  if (index !== -1) {
-                    metadata.keywords.splice(index, 1);
-                  }
-                });
-              }
-            } catch (err) {
             }
-
             return resolve(metadata);
           } catch (err) {
             return reject({file: fullPath, error: err});

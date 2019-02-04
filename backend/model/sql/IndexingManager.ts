@@ -5,7 +5,7 @@ import {DiskManager} from '../DiskManger';
 import {PhotoEntity} from './enitites/PhotoEntity';
 import {Utils} from '../../../common/Utils';
 import {FaceRegion, PhotoMetadata} from '../../../common/entities/PhotoDTO';
-import {Connection,  Repository} from 'typeorm';
+import {Connection, Repository} from 'typeorm';
 import {MediaEntity} from './enitites/MediaEntity';
 import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {VideoEntity} from './enitites/VideoEntity';
@@ -14,10 +14,11 @@ import {FileDTO} from '../../../common/entities/FileDTO';
 import {NotificationManager} from '../NotifocationManager';
 import {FaceRegionEntry} from './enitites/FaceRegionEntry';
 import {ObjectManagerRepository} from '../ObjectManagerRepository';
+import {IIndexingManager} from '../interfaces/IIndexingManager';
 
 const LOG_TAG = '[IndexingManager]';
 
-export class IndexingManager {
+export class IndexingManager implements IIndexingManager {
 
   private savingQueue: DirectoryDTO[] = [];
   private isSaving = false;

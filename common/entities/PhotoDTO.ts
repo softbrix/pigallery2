@@ -20,7 +20,7 @@ export interface FaceRegionBox {
 
 export interface FaceRegion {
   name: string;
-  box: FaceRegionBox;
+  box?: FaceRegionBox; // some faces don t have region ass they are coming from keywords
 }
 
 export interface PhotoMetadata extends MediaMetadata {

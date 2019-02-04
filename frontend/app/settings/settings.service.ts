@@ -59,6 +59,10 @@ export class SettingsService {
             showItemCount: true
           }
         },
+        Faces: {
+          enabled: true,
+          keywordsToPersons: true
+        },
         urlBase: '',
         publicUrl: '',
         applicationTitle: '',

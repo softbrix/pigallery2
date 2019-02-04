@@ -65,6 +65,10 @@ export module ClientConfig {
     enabled: boolean;
   }
 
+  export interface FacesConfig {
+    enabled: boolean;
+    keywordsToPersons: boolean;
+  }
 
   export interface Config {
     applicationTitle: string;
@@ -81,6 +85,7 @@ export module ClientConfig {
     languages: string[];
     Video: VideoConfig;
     MetaFile: MetaFileConfig;
+    Faces: FacesConfig;
   }
 
 }
@@ -137,6 +142,10 @@ export class PublicConfigClass {
       NavBar: {
         showItemCount: true
       }
+    },
+    Faces: {
+      enabled: true,
+      keywordsToPersons: true
     },
     authenticationRequired: true,
     unAuthenticatedUserRole: UserRoles.Admin,

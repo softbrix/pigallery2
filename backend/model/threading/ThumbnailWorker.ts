@@ -169,7 +169,7 @@ export class ImageRendererFactory {
     return async (input: RendererInput): Promise<void> => {
 
       Logger.silly('[SharpThRenderer] rendering thumbnail:' + input.mediaPath);
-      const image: Sharp = sharp(input.mediaPath);
+      const image: Sharp = sharp(input.mediaPath, {failOnError: false});
       const metadata: Metadata = await image.metadata();
 
       /**
