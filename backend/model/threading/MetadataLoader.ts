@@ -35,38 +35,39 @@ export class MetadataLoader {
         metadata.fileSize = stat.size;
       } catch (err) {
       }
-      ffmpeg(fullPath).ffprobe((err: any, data: FfprobeData) => {
-        if (!!err || data === null) {
-          return reject(err);
-        }
-
-        if (!data.streams[0]) {
-          return resolve(metadata);
-        }
-
-        try {
-          for (let i = 0; i < data.streams.length; i++) {
-            if (data.streams[i].width) {
-              metadata.size.width = data.streams[i].width;
-              metadata.size.height = data.streams[i].height;
-
-              if (Utils.isInt32(Math.floor(data.streams[i].duration * 1000))) {
-                metadata.duration = Math.floor(data.streams[i].duration * 1000);
-              }
-
-              if (Utils.isInt32(parseInt(data.streams[i].bit_rate, 10))) {
-                metadata.duration = parseInt(data.streams[i].bit_rate, 10) || null;
-              }
-              metadata.creationDate = Date.parse(data.streams[i].tags.creation_time);
-              break;
-            }
+      try {
+        ffmpeg(fullPath).ffprobe((err: any, data: FfprobeData) => {
+          if (!!err || data === null || !data.streams[0]) {
+            return resolve(metadata);
           }
 
-        } catch (err) {
-        }
 
+          try {
+            for (let i = 0; i < data.streams.length; i++) {
+              if (data.streams[i].width) {
+                metadata.size.width = data.streams[i].width;
+                metadata.size.height = data.streams[i].height;
+
+                if (Utils.isInt32(Math.floor(data.streams[i].duration * 1000))) {
+                  metadata.duration = Math.floor(data.streams[i].duration * 1000);
+                }
+
+                if (Utils.isInt32(parseInt(data.streams[i].bit_rate, 10))) {
+                  metadata.duration = parseInt(data.streams[i].bit_rate, 10) || null;
+                }
+                metadata.creationDate = Date.parse(data.streams[i].tags.creation_time);
+                break;
+              }
+            }
+
+          } catch (err) {
+          }
+
+          return resolve(metadata);
+        });
+      } catch (e) {
         return resolve(metadata);
-      });
+      }
     });
   }
 
