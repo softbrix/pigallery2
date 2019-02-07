@@ -1,6 +1,13 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
-import {DatabaseType, IPrivateConfig, ReIndexingSensitivity, ThumbnailProcessingLib} from '../../../common/config/private/IPrivateConfig';
+import {
+  DatabaseType,
+  IPrivateConfig,
+  LogLevel,
+  ReIndexingSensitivity,
+  SQLLogLevel,
+  ThumbnailProcessingLib
+} from '../../../common/config/private/IPrivateConfig';
 import {NetworkService} from '../model/network/network.service';
 import {SortingMethods} from '../../../common/entities/SortingMethods';
 import {UserRoles} from '../../../common/entities/UserDTO';
@@ -73,6 +80,10 @@ export class SettingsService {
       Server: {
         database: {
           type: DatabaseType.memory
+        },
+        log: {
+          level: LogLevel.info,
+          sqlLevel: SQLLogLevel.error
         },
         sharing: {
           updateTimeout: 2000

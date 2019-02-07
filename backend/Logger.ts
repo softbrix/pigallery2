@@ -1,9 +1,11 @@
 import * as winston from 'winston';
+import {Config} from '../common/config/private/Config';
+import {LogLevel} from '../common/config/private/IPrivateConfig';
 
 export const winstonSettings = {
   transports: [
     new winston.transports.Console(<any>{
-      level: process.env.NODE_ENV === 'production' ? 'info' : 'silly',
+      level: LogLevel[Config.Server.log.level],
       handleExceptions: true,
       json: false,
       colorize: true,

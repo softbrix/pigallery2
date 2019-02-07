@@ -8,6 +8,10 @@ export enum LogLevel {
   error = 1, warn = 2, info = 3, debug = 4, verbose = 5
 }
 
+export enum SQLLogLevel {
+  none = 1, error = 2, all = 3
+}
+
 export enum ThumbnailProcessingLib {
   Jimp = 1,
   gm = 2,
@@ -60,6 +64,11 @@ export interface DuplicatesConfig {
   listingLimit: number; // maximum number of duplicates to list
 }
 
+export interface LogConfig {
+  level: LogLevel;
+  sqlLevel: SQLLogLevel;
+}
+
 export interface ServerConfig {
   port: number;
   host: string;
@@ -72,6 +81,7 @@ export interface ServerConfig {
   indexing: IndexingConfig;
   photoMetadataSize: number;
   duplicates: DuplicatesConfig;
+  log: LogConfig;
 }
 
 export interface IPrivateConfig {
