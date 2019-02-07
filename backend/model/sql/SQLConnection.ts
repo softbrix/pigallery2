@@ -170,7 +170,8 @@ export class SQLConnection {
         port: 3306,
         username: config.mysql.username,
         password: config.mysql.password,
-        database: config.mysql.database
+        database: config.mysql.database,
+        charset: 'utf8mb4'
       };
     } else if (config.type === DatabaseType.sqlite) {
       driver = {

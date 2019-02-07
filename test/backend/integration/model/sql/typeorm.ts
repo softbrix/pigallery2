@@ -184,7 +184,7 @@ describe('Typeorm integration', () => {
     const photos = await pr
       .createQueryBuilder('media')
       .orderBy('media.metadata.creationDate', 'ASC')
-      .where('media.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + photo.metadata.positionData.city + '%'})
+      .where('media.metadata.positionData.city LIKE :text COLLATE utf8mb4_general_ci', {text: '%' + photo.metadata.positionData.city + '%'})
       .innerJoinAndSelect('media.directory', 'directory')
       .limit(10)
       .getMany();
@@ -206,7 +206,7 @@ describe('Typeorm integration', () => {
     const photos = await pr
       .createQueryBuilder('media')
       .orderBy('media.metadata.creationDate', 'ASC')
-      .where('media.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + city + '%'})
+      .where('media.metadata.positionData.city LIKE :text COLLATE utf8mb4_general_ci', {text: '%' + city + '%'})
       .innerJoinAndSelect('media.directory', 'directory')
       .limit(10)
       .getMany();

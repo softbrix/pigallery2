@@ -40,7 +40,7 @@ export class SearchManager implements ISearchManager {
     (await photoRepository
       .createQueryBuilder('photo')
       .select('DISTINCT(photo.metadata.keywords)')
-      .where('photo.metadata.keywords LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+      .where('photo.metadata.keywords LIKE :text COLLATE utf8mb4_general_ci', {text: '%' + text + '%'})
       .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
       .getRawMany())
       .map(r => <Array<string>>(<string>r.metadataKeywords).split(','))
@@ -52,7 +52,7 @@ export class SearchManager implements ISearchManager {
     result = result.concat(this.encapsulateAutoComplete((await personRepository
       .createQueryBuilder('person')
       .select('DISTINCT(person.name)')
-      .where('person.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+      .where('person.name LIKE :text COLLATE utf8mb4_general_ci', {text: '%' + text + '%'})
       .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
       .orderBy('person.name')
       .getRawMany())
@@ -62,9 +62,9 @@ export class SearchManager implements ISearchManager {
       .createQueryBuilder('photo')
       .select('photo.metadata.positionData.country as country, ' +
         'photo.metadata.positionData.state as state, photo.metadata.positionData.city as city')
-      .where('photo.metadata.positionData.country LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .orWhere('photo.metadata.positionData.state LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .orWhere('photo.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+      .where('photo.metadata.positionData.country LIKE :text COLLATE utf8mb4_general_ci', {text: '%' + text + '%'})
+      .orWhere('photo.metadata.positionData.state LIKE :text COLLATE utf8mb4_general_ci', {text: '%' + text + '%'})
+      .orWhere('photo.metadata.positionData.city LIKE :text COLLATE utf8mb4_general_ci', {text: '%' + text + '%'})
       .groupBy('photo.metadata.positionData.country, photo.metadata.positionData.state, photo.metadata.positionData.city')
       .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
       .getRawMany())
@@ -78,7 +78,7 @@ export class SearchManager implements ISearchManager {
     result = result.concat(this.encapsulateAutoComplete((await photoRepository
       .createQueryBuilder('media')
       .select('DISTINCT(media.name)')
-      .where('media.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+      .where('media.name LIKE :text COLLATE utf8mb4_general_ci', {text: '%' + text + '%'})
       .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
       .getRawMany())
       .map(r => r.name), SearchTypes.photo));
@@ -87,7 +87,7 @@ export class SearchManager implements ISearchManager {
     result = result.concat(this.encapsulateAutoComplete((await photoRepository
       .createQueryBuilder('media')
       .select('DISTINCT(media.metadata.caption) as caption')
-      .where('media.metadata.caption LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+      .where('media.metadata.caption LIKE :text COLLATE utf8mb4_general_ci', {text: '%' + text + '%'})
       .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
       .getRawMany())
       .map(r => r.caption), SearchTypes.photo));
@@ -96,7 +96,7 @@ export class SearchManager implements ISearchManager {
     result = result.concat(this.encapsulateAutoComplete((await videoRepository
       .createQueryBuilder('media')
       .select('DISTINCT(media.name)')
-      .where('media.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+      .where('media.name LIKE :text COLLATE utf8mb4_general_ci', {text: '%' + text + '%'})
       .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
       .getRawMany())
       .map(r => r.name), SearchTypes.video));
@@ -104,7 +104,7 @@ export class SearchManager implements ISearchManager {
     result = result.concat(this.encapsulateAutoComplete((await directoryRepository
       .createQueryBuilder('dir')
       .select('DISTINCT(dir.name)')
-      .where('dir.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+      .where('dir.name LIKE :text COLLATE utf8mb4_general_ci', {text: '%' + text + '%'})
       .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
       .getRawMany())
       .map(r => r.name), SearchTypes.directory));
@@ -142,31 +142,31 @@ export class SearchManager implements ISearchManager {
 
           if (!searchType || searchType === SearchTypes.directory) {
             subQuery.leftJoin('media.directory', 'directory')
-              .orWhere('directory.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
+              .orWhere('directory.name LIKE :text COLLATE utf8mb4_general_ci', {text: '%' + text + '%'});
           }
 
           if (!searchType || searchType === SearchTypes.photo || searchType === SearchTypes.video) {
-            subQuery.orWhere('media.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
+            subQuery.orWhere('media.name LIKE :text COLLATE utf8mb4_general_ci', {text: '%' + text + '%'});
           }
 
           if (!searchType || searchType === SearchTypes.photo) {
-            subQuery.orWhere('media.metadata.caption LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
+            subQuery.orWhere('media.metadata.caption LIKE :text COLLATE utf8mb4_general_ci', {text: '%' + text + '%'});
           }
           if (!searchType || searchType === SearchTypes.person) {
             subQuery
               .leftJoin('media.metadata.faces', 'faces')
               .leftJoin('faces.person', 'person')
-              .orWhere('person.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
+              .orWhere('person.name LIKE :text COLLATE utf8mb4_general_ci', {text: '%' + text + '%'});
           }
 
           if (!searchType || searchType === SearchTypes.position) {
-            subQuery.orWhere('media.metadata.positionData.country LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-              .orWhere('media.metadata.positionData.state LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-              .orWhere('media.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
+            subQuery.orWhere('media.metadata.positionData.country LIKE :text COLLATE utf8mb4_general_ci', {text: '%' + text + '%'})
+              .orWhere('media.metadata.positionData.state LIKE :text COLLATE utf8mb4_general_ci', {text: '%' + text + '%'})
+              .orWhere('media.metadata.positionData.city LIKE :text COLLATE utf8mb4_general_ci', {text: '%' + text + '%'});
 
           }
           if (!searchType || searchType === SearchTypes.keyword) {
-            subQuery.orWhere('media.metadata.keywords LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
+            subQuery.orWhere('media.metadata.keywords LIKE :text COLLATE utf8mb4_general_ci', {text: '%' + text + '%'});
           }
 
           return subQuery;
@@ -187,7 +187,7 @@ export class SearchManager implements ISearchManager {
     result.directories = await connection
       .getRepository(DirectoryEntity)
       .createQueryBuilder('dir')
-      .where('dir.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+      .where('dir.name LIKE :text COLLATE utf8mb4_general_ci', {text: '%' + text + '%'})
       .limit(201)
       .getMany();
 
@@ -217,13 +217,13 @@ export class SearchManager implements ISearchManager {
           .leftJoin('media.directory', 'directory')
           .leftJoin('media.metadata.faces', 'faces')
           .leftJoin('faces.person', 'person')
-          .where('media.metadata.keywords LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-          .orWhere('media.metadata.positionData.country LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-          .orWhere('media.metadata.positionData.state LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-          .orWhere('media.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-          .orWhere('media.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-          .orWhere('media.metadata.caption LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-          .orWhere('person.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+          .where('media.metadata.keywords LIKE :text COLLATE utf8mb4_general_ci', {text: '%' + text + '%'})
+          .orWhere('media.metadata.positionData.country LIKE :text COLLATE utf8mb4_general_ci', {text: '%' + text + '%'})
+          .orWhere('media.metadata.positionData.state LIKE :text COLLATE utf8mb4_general_ci', {text: '%' + text + '%'})
+          .orWhere('media.metadata.positionData.city LIKE :text COLLATE utf8mb4_general_ci', {text: '%' + text + '%'})
+          .orWhere('media.name LIKE :text COLLATE utf8mb4_general_ci', {text: '%' + text + '%'})
+          .orWhere('media.metadata.caption LIKE :text COLLATE utf8mb4_general_ci', {text: '%' + text + '%'})
+          .orWhere('person.name LIKE :text COLLATE utf8mb4_general_ci', {text: '%' + text + '%'})
         ,
         'innerMedia',
         'media.id=innerMedia.id')
@@ -238,7 +238,7 @@ export class SearchManager implements ISearchManager {
     result.directories = await connection
       .getRepository(DirectoryEntity)
       .createQueryBuilder('dir')
-      .where('dir.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+      .where('dir.name LIKE :text COLLATE utf8mb4_general_ci', {text: '%' + text + '%'})
       .limit(10)
       .getMany();
 

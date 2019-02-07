@@ -44,6 +44,7 @@ class IndexingManagerTest extends IndexingManager {
 // to help WebStorm to handle the test cases
 declare let describe: any;
 declare const after: any;
+declare const it: any;
 describe = SQLTestHelper.describe;
 
 describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
@@ -79,6 +80,29 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
       });
     }
   };
+
+  it('should support case sensitive file names', async () => {
+    const gm = new GalleryManagerTest();
+    const im = new IndexingManagerTest();
+
+    const parent = TestHelper.getRandomizedDirectoryEntry();
+    const p1 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo1');
+    const p2 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo2');
+    p1.name = 'test.jpg';
+    p2.name = 'Test.jpg';
+
+    DirectoryDTO.removeReferences(parent);
+    await im.saveToDB(Utils.clone(parent));
+
+    const conn = await SQLConnection.getConnection();
+    const selected = await gm.selectParentDir(conn, parent.name, parent.path);
+    await gm.fillParentDir(conn, selected);
+
+    DirectoryDTO.removeReferences(selected);
+    removeIds(selected);
+    expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
+      .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
+  });
 
   it('should save parent directory', async () => {
     const gm = new GalleryManagerTest();
