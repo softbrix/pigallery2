@@ -97,7 +97,9 @@ export class GalleryMWs {
       if (cw.directory) {
         const removeVideos = (dir: DirectoryDTO) => {
           dir.media = dir.media.filter(m => !MediaDTO.isVideo(m));
-          dir.directories.forEach(d => removeVideos(d));
+          if (dir.directories) {
+            dir.directories.forEach(d => removeVideos(d));
+          }
         };
         removeVideos(cw.directory);
       }
