@@ -99,7 +99,7 @@ export class DiskMangerWorker {
                   metadata: await MetadataLoader.loadVideoMetadata(fullFilePath)
                 });
               } catch (e) {
-                Logger.warn('Media loading error, skipping: ' + file);
+                Logger.warn('Media loading error, skipping: ' + file + ', reason: ' + e.toString());
               }
 
             } else if (photosOnly === false && Config.Client.MetaFile.enabled === true &&

@@ -6,6 +6,7 @@ import {AdminComponent} from './admin/admin.component';
 import {ShareLoginComponent} from './sharelogin/share-login.component';
 import {QueryParams} from '../../common/QueryParams';
 import {DuplicateComponent} from './duplicates/duplicates.component';
+import {FacesComponent} from './faces/faces.component';
 
 export function galleryMatcherFunction(
   segments: UrlSegment[]): UrlMatchResult | null {
@@ -54,6 +55,10 @@ const ROUTES: Routes = [
   {
     path: 'duplicates',
     component: DuplicateComponent
+  },
+  {
+    path: 'faces',
+    component: FacesComponent
   },
   {
     matcher: galleryMatcherFunction,

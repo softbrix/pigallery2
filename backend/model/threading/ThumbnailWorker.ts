@@ -47,6 +47,12 @@ export interface RendererInput {
   makeSquare: boolean;
   thPath: string;
   qualityPriority: boolean;
+  cut?: {
+    x: number,
+    y: number,
+    width: number,
+    height: number
+  };
 }
 
 export class VideoRendererFactory {
@@ -140,6 +146,15 @@ export class ImageRendererFactory {
        */
       const ratio = image.bitmap.height / image.bitmap.width;
       const algo = input.qualityPriority === true ? Jimp.RESIZE_BEZIER : Jimp.RESIZE_NEAREST_NEIGHBOR;
+
+      if (input.cut) {
+        image.crop(
+          input.cut.x,
+          input.cut.y,
+          input.cut.width,
+          input.cut.height
+        );
+      }
       if (input.makeSquare === false) {
         const newWidth = Math.sqrt((input.size * input.size) / ratio);
 
@@ -167,7 +182,6 @@ export class ImageRendererFactory {
     const sharp = require('sharp');
     sharp.cache(false);
     return async (input: RendererInput): Promise<void> => {
-
       Logger.silly('[SharpThRenderer] rendering thumbnail:' + input.mediaPath);
       const image: Sharp = sharp(input.mediaPath, {failOnError: false});
       const metadata: Metadata = await image.metadata();
@@ -183,6 +197,15 @@ export class ImageRendererFactory {
        */
       const ratio = metadata.height / metadata.width;
       const kernel = input.qualityPriority === true ? sharp.kernel.lanczos3 : sharp.kernel.nearest;
+
+      if (input.cut) {
+        image.extract({
+          top: input.cut.y,
+          left: input.cut.x,
+          width: input.cut.width,
+          height: input.cut.height
+        });
+      }
       if (input.makeSquare === false) {
         const newWidth = Math.round(Math.sqrt((input.size * input.size) / ratio));
         image.resize(newWidth, null, {

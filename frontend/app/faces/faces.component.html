@@ -1,0 +1,7 @@
+<app-frame>
+
+  <div body class="container-fluid">
+     <app-face *ngFor="let person of facesService.persons.value"
+               [person]="person"></app-face>
+  </div>
+</app-frame>

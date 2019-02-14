@@ -214,6 +214,9 @@ export class MetadataLoader {
                       x: Math.round(regionBox['stArea:x'] * metadata.size.width),
                       y: Math.round(regionBox['stArea:y'] * metadata.size.height)
                     };
+                    // convert center base box to corner based box
+                    box.x = Math.max(0, box.x - box.width / 2);
+                    box.y = Math.max(0, box.y - box.height / 2);
                     faces.push({name: name, box: box});
                   }
                 }

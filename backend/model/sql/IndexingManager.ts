@@ -289,6 +289,7 @@ export class IndexingManager implements IIndexingManager {
       await this.saveChildDirs(connection, currentDirId, scannedDirectory);
       await this.saveMedia(connection, currentDirId, scannedDirectory.media);
       await this.saveMetaFiles(connection, currentDirId, scannedDirectory);
+      await ObjectManagerRepository.getInstance().PersonManager.updateCounts();
     } catch (e) {
       throw e;
     } finally {

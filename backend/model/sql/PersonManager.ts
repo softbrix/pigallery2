@@ -3,18 +3,44 @@ import {SQLConnection} from './SQLConnection';
 import {PersonEntry} from './enitites/PersonEntry';
 import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {PhotoDTO} from '../../../common/entities/PhotoDTO';
+import {MediaEntity} from './enitites/MediaEntity';
+import {FaceRegionEntry} from './enitites/FaceRegionEntry';
 
 const LOG_TAG = '[PersonManager]';
 
 export class PersonManager implements IPersonManager {
-
   persons: PersonEntry[] = [];
+
+  async getSamplePhoto(name: string): Promise<PhotoDTO> {
+    const connection = await SQLConnection.getConnection();
+    const rawAndEntities = await connection.getRepository(MediaEntity).createQueryBuilder('media')
+      .limit(1)
+      .leftJoinAndSelect('media.directory', 'directory')
+      .leftJoinAndSelect('media.metadata.faces', 'faces')
+      .leftJoinAndSelect('faces.person', 'person')
+      .where('person.name LIKE :name COLLATE utf8_general_ci', {name: '%' + name + '%'}).getRawAndEntities();
+
+    if (rawAndEntities.entities.length === 0) {
+      return null;
+    }
+    const media: PhotoDTO = rawAndEntities.entities[0];
+
+    media.metadata.faces = [FaceRegionEntry.fromRawToDTO(rawAndEntities.raw[0])];
+
+    return media;
+
+  }
 
   async loadAll(): Promise<void> {
     const connection = await SQLConnection.getConnection();
     const personRepository = connection.getRepository(PersonEntry);
     this.persons = await personRepository.find();
 
+  }
+
+  async getAll(): Promise<PersonEntry[]> {
+    await this.loadAll();
+    return this.persons;
   }
 
   // TODO dead code, remove it
@@ -30,7 +56,7 @@ export class PersonManager implements IPersonManager {
       if (personKeywords.length === 0) {
         return;
       }
-      // remove persons
+      // remove persons from keywords
       m.metadata.keywords = m.metadata.keywords.filter(k => !personFilter(k));
       m.metadata.faces = m.metadata.faces || [];
       personKeywords.forEach((pk: string) => {
@@ -79,6 +105,12 @@ export class PersonManager implements IPersonManager {
       this.persons = await personRepository.find();
     }
 
+  }
+
+  public async updateCounts() {
+    const connection = await SQLConnection.getConnection();
+    await connection.query('update person_entry set count = ' +
+      ' (select COUNT(1) from face_region_entry where face_region_entry.personId = person_entry.id)');
   }
 
 }

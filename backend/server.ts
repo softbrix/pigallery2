@@ -22,6 +22,7 @@ import {NotificationRouter} from './routes/NotificationRouter';
 import {ConfigDiagnostics} from './model/diagnostics/ConfigDiagnostics';
 import {Localizations} from './model/Localizations';
 import {CookieNames} from '../common/CookieNames';
+import {PersonRouter} from './routes/PersonRouter';
 
 const _session = require('cookie-session');
 
@@ -31,42 +32,6 @@ export class Server {
 
   private app: _express.Express;
   private server: HttpServer;
-
-  /**
-   * Event listener for HTTP server "error" event.
-   */
-  private onError = (error: any) => {
-    if (error.syscall !== 'listen') {
-      Logger.error(LOG_TAG, 'Server error', error);
-      throw error;
-    }
-
-    const bind = Config.Server.host + ':' + Config.Server.port;
-
-    // handle specific listen error with friendly messages
-    switch (error.code) {
-      case 'EACCES':
-        Logger.error(LOG_TAG, bind + ' requires elevated privileges');
-        process.exit(1);
-        break;
-      case 'EADDRINUSE':
-        Logger.error(LOG_TAG, bind + ' is already in use');
-        process.exit(1);
-        break;
-      default:
-        throw error;
-    }
-  };
-  /**
-   * Event listener for HTTP server "listening" event.
-   */
-  private onListening = () => {
-    const addr = this.server.address();
-    const bind = typeof addr === 'string'
-      ? 'pipe ' + addr
-      : 'port ' + addr.port;
-    Logger.info(LOG_TAG, 'Listening on ' + bind);
-  };
 
   constructor() {
     if (!(process.env.NODE_ENV === 'production')) {
@@ -125,6 +90,7 @@ export class Server {
 
     UserRouter.route(this.app);
     GalleryRouter.route(this.app);
+    PersonRouter.route(this.app);
     SharingRouter.route(this.app);
     AdminRouter.route(this.app);
     NotificationRouter.route(this.app);
@@ -145,6 +111,43 @@ export class Server {
 
 
   }
+
+  /**
+   * Event listener for HTTP server "error" event.
+   */
+  private onError = (error: any) => {
+    if (error.syscall !== 'listen') {
+      Logger.error(LOG_TAG, 'Server error', error);
+      throw error;
+    }
+
+    const bind = Config.Server.host + ':' + Config.Server.port;
+
+    // handle specific listen error with friendly messages
+    switch (error.code) {
+      case 'EACCES':
+        Logger.error(LOG_TAG, bind + ' requires elevated privileges');
+        process.exit(1);
+        break;
+      case 'EADDRINUSE':
+        Logger.error(LOG_TAG, bind + ' is already in use');
+        process.exit(1);
+        break;
+      default:
+        throw error;
+    }
+  };
+
+  /**
+   * Event listener for HTTP server "listening" event.
+   */
+  private onListening = () => {
+    const addr = this.server.address();
+    const bind = typeof addr === 'string'
+      ? 'pipe ' + addr
+      : 'port ' + addr.port;
+    Logger.info(LOG_TAG, 'Listening on ' + bind);
+  };
 
 }
 

@@ -35,6 +35,7 @@ export class SettingsService {
         Thumbnail: {
           concurrentThumbnailGenerations: null,
           iconSize: 30,
+          personThumbnailSize: 200,
           thumbnailSizes: []
         },
         Sharing: {
@@ -92,6 +93,7 @@ export class SettingsService {
         port: 80,
         host: '0.0.0.0',
         thumbnail: {
+          personFaceMargin: 0.1,
           folder: '',
           qualityPriority: true,
           processingLibrary: ThumbnailProcessingLib.sharp

@@ -39,6 +39,7 @@ export interface ThumbnailConfig {
   folder: string;
   processingLibrary: ThumbnailProcessingLib;
   qualityPriority: boolean;
+  personFaceMargin: number; // in ration [0-1]
 }
 
 export interface SharingConfig {

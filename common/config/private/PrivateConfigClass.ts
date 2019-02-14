@@ -25,7 +25,8 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
     thumbnail: {
       folder: 'demo/TEMP',
       processingLibrary: ThumbnailProcessingLib.sharp,
-      qualityPriority: true
+      qualityPriority: true,
+      personFaceMargin: 0.6
     },
     log: {
       level: LogLevel.info,
