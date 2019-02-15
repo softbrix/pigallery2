@@ -3,6 +3,7 @@ import {HttpClientTestingModule, HttpTestingController} from '@angular/common/ht
 import {NetworkService} from './network.service';
 import {Message} from '../../../../common/entities/Message';
 import {SlimLoadingBarService} from 'ng2-slim-loading-bar';
+import {VersionService} from '../version.service';
 
 
 describe('NetworkService Success tests', () => {
@@ -18,6 +19,7 @@ describe('NetworkService Success tests', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
+        VersionService,
         SlimLoadingBarService,
         NetworkService
       ]
@@ -130,6 +132,7 @@ describe('NetworkService Fail tests', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
+        VersionService,
         SlimLoadingBarService,
         NetworkService
       ]
