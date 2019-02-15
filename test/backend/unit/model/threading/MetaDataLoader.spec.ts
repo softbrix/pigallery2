@@ -31,4 +31,12 @@ describe('MetadataLoader', () => {
     expect(Utils.clone(data)).to.be.deep.equal(expected);
   });
 
+
+  it('should load mp4', async () => {
+    const data = await MetadataLoader.loadVideoMetadata(path.join(__dirname, '/../../assets/video.mp4'));
+    const expected = require(path.join(__dirname, '/../../assets/video.json'));
+    expect(Utils.clone(data)).to.be.deep.equal(expected);
+  });
+
+
 });

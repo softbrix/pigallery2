@@ -53,7 +53,7 @@ export class MetadataLoader {
                 }
 
                 if (Utils.isInt32(parseInt(data.streams[i].bit_rate, 10))) {
-                  metadata.duration = parseInt(data.streams[i].bit_rate, 10) || null;
+                  metadata.bitRate = parseInt(data.streams[i].bit_rate, 10) || null;
                 }
                 metadata.creationDate = Date.parse(data.streams[i].tags.creation_time);
                 break;
