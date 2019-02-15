@@ -36,7 +36,7 @@ export class DirectoryEntity implements DirectoryDTO {
    */
   @Column({
     type: 'bigint', nullable: true, unsigned: true, transformer: {
-      from: v => parseInt(v, 10),
+      from: v => parseInt(v, 10) || null,
       to: v => v
     }
   })

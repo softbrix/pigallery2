@@ -1,5 +1,5 @@
-import {Column, Entity, ChildEntity} from 'typeorm';
-import { MediaEntity, MediaMetadataEntity} from './MediaEntity';
+import {ChildEntity, Column} from 'typeorm';
+import {MediaEntity, MediaMetadataEntity} from './MediaEntity';
 import {VideoDTO, VideoMetadata} from '../../../../common/entities/VideoDTO';
 
 
@@ -8,7 +8,12 @@ export class VideoMetadataEntity extends MediaMetadataEntity implements VideoMet
   @Column('int')
   bitRate: number;
 
-  @Column('bigint')
+  @Column('bigint', {
+    unsigned: true, nullable: true, transformer: {
+      from: v => parseInt(v, 10) || null,
+      to: v => v
+    }
+  })
   duration: number;
 
 }
