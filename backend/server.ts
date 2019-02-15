@@ -11,7 +11,7 @@ import {GalleryRouter} from './routes/GalleryRouter';
 import {AdminRouter} from './routes/AdminRouter';
 import {ErrorRouter} from './routes/ErrorRouter';
 import {SharingRouter} from './routes/SharingRouter';
-import {ObjectManagerRepository} from './model/ObjectManagerRepository';
+import {ObjectManagers} from './model/ObjectManagers';
 import {Logger} from './Logger';
 import {Config} from '../common/config/private/Config';
 import {DatabaseType} from '../common/config/private/IPrivateConfig';
@@ -81,9 +81,9 @@ export class Server {
 
     this.app.use(locale(Config.Client.languages, 'en'));
     if (Config.Server.database.type !== DatabaseType.memory) {
-      await ObjectManagerRepository.InitSQLManagers();
+      await ObjectManagers.InitSQLManagers();
     } else {
-      await ObjectManagerRepository.InitMemoryManagers();
+      await ObjectManagers.InitMemoryManagers();
     }
 
     PublicRouter.route(this.app);

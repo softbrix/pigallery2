@@ -4,6 +4,7 @@ import {RenderingMWs} from '../middlewares/RenderingMWs';
 import {UserRoles} from '../../common/entities/UserDTO';
 import {PersonMWs} from '../middlewares/PersonMWs';
 import {ThumbnailGeneratorMWs} from '../middlewares/thumbnail/ThumbnailGeneratorMWs';
+import {VersionMWs} from '../middlewares/VersionMWs';
 
 export class PersonRouter {
   public static route(app: Express) {
@@ -16,6 +17,7 @@ export class PersonRouter {
     app.get(['/api/person'],
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.User),
+      VersionMWs.injectGalleryVersion,
       PersonMWs.listPersons,
       RenderingMWs.renderResult
     );
@@ -25,6 +27,7 @@ export class PersonRouter {
     app.get(['/api/person/:name/thumbnail'],
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.User),
+      VersionMWs.injectGalleryVersion,
       PersonMWs.getSamplePhoto,
       ThumbnailGeneratorMWs.generatePersonThumbnail,
       RenderingMWs.renderFile

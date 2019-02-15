@@ -12,9 +12,10 @@ import {Utils} from '../../../../../common/Utils';
 import {MediaDTO} from '../../../../../common/entities/MediaDTO';
 import {FileDTO} from '../../../../../common/entities/FileDTO';
 import {IndexingManager} from '../../../../../backend/model/sql/IndexingManager';
-import {ObjectManagerRepository} from '../../../../../backend/model/ObjectManagerRepository';
+import {ObjectManagers} from '../../../../../backend/model/ObjectManagers';
 import {PersonManager} from '../../../../../backend/model/sql/PersonManager';
 import {SQLTestHelper} from '../../../SQLTestHelper';
+import {VersionManager} from '../../../../../backend/model/sql/VersionManager';
 
 class GalleryManagerTest extends GalleryManager {
 
@@ -52,7 +53,8 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
 
   beforeEach(async () => {
     await sqlHelper.initDB();
-    ObjectManagerRepository.getInstance().PersonManager = new PersonManager();
+    ObjectManagers.getInstance().PersonManager = new PersonManager();
+    ObjectManagers.getInstance().VersionManager = new VersionManager();
   });
 
 
@@ -296,7 +298,7 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
     beforeEach(() => {
       dirTime = 0;
 
-      ObjectManagerRepository.getInstance().IndexingManager = new IndexingManagerTest();
+      ObjectManagers.getInstance().IndexingManager = new IndexingManagerTest();
       indexedTime.lastModified = 0;
       indexedTime.lastScanned = 0;
     });
@@ -319,7 +321,7 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
         return Promise.resolve();
       };
 
-      ObjectManagerRepository.getInstance().IndexingManager.indexDirectory = (...args) => {
+      ObjectManagers.getInstance().IndexingManager.indexDirectory = (...args) => {
         return <any>Promise.resolve('indexing');
       };
 

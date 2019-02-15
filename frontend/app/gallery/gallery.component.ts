@@ -115,7 +115,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
   private onRoute = async (params: Params) => {
     const searchText = params[QueryParams.gallery.searchText];
     if (searchText && searchText !== '') {
-      const typeString: string = params['type'];
+      const typeString: string = params[QueryParams.gallery.search.type];
       let type: SearchTypes = null;
       if (typeString && typeString !== '') {
         type = <any>SearchTypes[<any>typeString];

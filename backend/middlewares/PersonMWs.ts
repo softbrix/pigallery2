@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from 'express';
 import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
-import {ObjectManagerRepository} from '../model/ObjectManagerRepository';
+import {ObjectManagers} from '../model/ObjectManagers';
 
 
 const LOG_TAG = '[PersonMWs]';
@@ -12,7 +12,7 @@ export class PersonMWs {
 
 
     try {
-      req.resultPipe = await ObjectManagerRepository.getInstance()
+      req.resultPipe = await ObjectManagers.getInstance()
         .PersonManager.getAll();
 
       return next();
@@ -29,7 +29,7 @@ export class PersonMWs {
     }
     const name = req.params.name;
     try {
-      const photo = await ObjectManagerRepository.getInstance()
+      const photo = await ObjectManagers.getInstance()
         .PersonManager.getSamplePhoto(name);
 
       if (photo === null) {

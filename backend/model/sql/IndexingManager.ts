@@ -13,7 +13,7 @@ import {FileEntity} from './enitites/FileEntity';
 import {FileDTO} from '../../../common/entities/FileDTO';
 import {NotificationManager} from '../NotifocationManager';
 import {FaceRegionEntry} from './enitites/FaceRegionEntry';
-import {ObjectManagerRepository} from '../ObjectManagerRepository';
+import {ObjectManagers} from '../ObjectManagers';
 import {IIndexingManager} from '../interfaces/IIndexingManager';
 
 const LOG_TAG = '[IndexingManager]';
@@ -242,7 +242,7 @@ export class IndexingManager implements IIndexingManager {
         persons.push(scannedFaces[i].name);
       }
     }
-    await ObjectManagerRepository.getInstance().PersonManager.saveAll(persons);
+    await ObjectManagers.getInstance().PersonManager.saveAll(persons);
 
 
     const indexedFaces = await faceRepository.createQueryBuilder('face')
@@ -270,7 +270,7 @@ export class IndexingManager implements IIndexingManager {
       }
 
       if (face == null) {
-        (<FaceRegionEntry>scannedFaces[i]).person = await ObjectManagerRepository.getInstance().PersonManager.get(scannedFaces[i].name);
+        (<FaceRegionEntry>scannedFaces[i]).person = await ObjectManagers.getInstance().PersonManager.get(scannedFaces[i].name);
         faceToInsert.push(scannedFaces[i]);
       }
     }
@@ -289,7 +289,8 @@ export class IndexingManager implements IIndexingManager {
       await this.saveChildDirs(connection, currentDirId, scannedDirectory);
       await this.saveMedia(connection, currentDirId, scannedDirectory.media);
       await this.saveMetaFiles(connection, currentDirId, scannedDirectory);
-      await ObjectManagerRepository.getInstance().PersonManager.updateCounts();
+      await ObjectManagers.getInstance().PersonManager.updateCounts();
+      await ObjectManagers.getInstance().VersionManager.updateDataVersion();
     } catch (e) {
       throw e;
     } finally {

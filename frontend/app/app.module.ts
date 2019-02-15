@@ -77,6 +77,7 @@ import {SeededRandomService} from './model/seededRandom.service';
 import {FacesComponent} from './faces/faces.component';
 import {FacesService} from './faces/faces.service';
 import {FaceComponent} from './faces/face/face.component';
+import {VersionService} from './model/version.service';
 
 
 @Injectable()
@@ -201,6 +202,7 @@ export function translationsFactory(locale: string) {
     QueryService,
     DuplicateService,
     FacesService,
+    VersionService,
     {
       provide: TRANSLATIONS,
       useFactory: translationsFactory,

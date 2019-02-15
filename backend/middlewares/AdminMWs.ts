@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from 'express';
 import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
-import {ObjectManagerRepository} from '../model/ObjectManagerRepository';
+import {ObjectManagers} from '../model/ObjectManagers';
 import {Logger} from '../Logger';
 import {SQLConnection} from '../model/sql/SQLConnection';
 import {DataBaseConfig, DatabaseType, IndexingConfig, ThumbnailConfig} from '../../common/config/private/IPrivateConfig';
@@ -25,7 +25,7 @@ export class AdminMWs {
     }
 
 
-    const galleryManager = <ISQLGalleryManager>ObjectManagerRepository.getInstance().GalleryManager;
+    const galleryManager = <ISQLGalleryManager>ObjectManagers.getInstance().GalleryManager;
     try {
       req.resultPipe = {
         directories: await galleryManager.countDirectories(),
@@ -49,7 +49,7 @@ export class AdminMWs {
     }
 
 
-    const galleryManager = <ISQLGalleryManager>ObjectManagerRepository.getInstance().GalleryManager;
+    const galleryManager = <ISQLGalleryManager>ObjectManagers.getInstance().GalleryManager;
     try {
       req.resultPipe =  await galleryManager.getPossibleDuplicates();
       return next();
@@ -86,11 +86,11 @@ export class AdminMWs {
       Logger.info(LOG_TAG, 'new config:');
       Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
 
-      await ObjectManagerRepository.reset();
+      await ObjectManagers.reset();
       if (Config.Server.database.type !== DatabaseType.memory) {
-        await ObjectManagerRepository.InitSQLManagers();
+        await ObjectManagers.InitSQLManagers();
       } else {
-        await ObjectManagerRepository.InitMemoryManagers();
+        await ObjectManagers.InitMemoryManagers();
       }
 
       return next();
@@ -418,7 +418,7 @@ export class AdminMWs {
   public static startIndexing(req: Request, res: Response, next: NextFunction) {
     try {
       const createThumbnails: boolean = (<IndexingDTO>req.body).createThumbnails || false;
-      ObjectManagerRepository.getInstance().IndexingTaskManager.startIndexing(createThumbnails);
+      ObjectManagers.getInstance().IndexingTaskManager.startIndexing(createThumbnails);
       req.resultPipe = 'ok';
       return next();
     } catch (err) {
@@ -432,7 +432,7 @@ export class AdminMWs {
 
   public static getIndexingProgress(req: Request, res: Response, next: NextFunction) {
     try {
-      req.resultPipe = ObjectManagerRepository.getInstance().IndexingTaskManager.getProgress();
+      req.resultPipe = ObjectManagers.getInstance().IndexingTaskManager.getProgress();
       return next();
     } catch (err) {
       if (err instanceof Error) {
@@ -444,7 +444,7 @@ export class AdminMWs {
 
   public static cancelIndexing(req: Request, res: Response, next: NextFunction) {
     try {
-      ObjectManagerRepository.getInstance().IndexingTaskManager.cancelIndexing();
+      ObjectManagers.getInstance().IndexingTaskManager.cancelIndexing();
       req.resultPipe = 'ok';
       return next();
     } catch (err) {
@@ -457,7 +457,7 @@ export class AdminMWs {
 
   public static async resetIndexes(req: Express.Request, res: Response, next: NextFunction) {
     try {
-      await ObjectManagerRepository.getInstance().IndexingTaskManager.reset();
+      await ObjectManagers.getInstance().IndexingTaskManager.reset();
       req.resultPipe = 'ok';
       return next();
     } catch (err) {
