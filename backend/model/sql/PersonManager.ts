@@ -111,6 +111,13 @@ export class PersonManager implements IPersonManager {
     const connection = await SQLConnection.getConnection();
     await connection.query('update person_entry set count = ' +
       ' (select COUNT(1) from face_region_entry where face_region_entry.personId = person_entry.id)');
+
+    // remove persons without photo
+    await connection.getRepository(PersonEntry)
+      .createQueryBuilder()
+      .where('count = 0')
+      .delete()
+      .execute();
   }
 
 }
