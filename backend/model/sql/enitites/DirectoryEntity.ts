@@ -2,6 +2,7 @@ import {Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn, Uni
 import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import {MediaEntity} from './MediaEntity';
 import {FileEntity} from './FileEntity';
+import {columnCharsetCS} from './EntityUtils';
 
 @Entity()
 @Unique(['name', 'path'])
@@ -12,7 +13,7 @@ export class DirectoryEntity implements DirectoryDTO {
   id: number;
 
   @Index()
-  @Column()
+  @Column(columnCharsetCS)
   name: string;
 
   @Index()
@@ -35,7 +36,7 @@ export class DirectoryEntity implements DirectoryDTO {
    */
   @Column({
     type: 'bigint', nullable: true, unsigned: true, transformer: {
-      from: v => parseInt(v, 10),
+      from: v => parseInt(v, 10) || null,
       to: v => v
     }
   })

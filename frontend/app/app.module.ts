@@ -74,6 +74,10 @@ import {DuplicateService} from './duplicates/duplicates.service';
 import {DuplicateComponent} from './duplicates/duplicates.component';
 import {DuplicatesPhotoComponent} from './duplicates/photo/photo.duplicates.component';
 import {SeededRandomService} from './model/seededRandom.service';
+import {FacesComponent} from './faces/faces.component';
+import {FacesService} from './faces/faces.service';
+import {FaceComponent} from './faces/face/face.component';
+import {VersionService} from './model/version.service';
 
 
 @Injectable()
@@ -133,6 +137,7 @@ export function translationsFactory(locale: string) {
     LoginComponent,
     ShareLoginComponent,
     GalleryComponent,
+    FacesComponent,
     // misc
     FrameComponent,
     LanguageComponent,
@@ -152,6 +157,8 @@ export function translationsFactory(locale: string) {
     AdminComponent,
     InfoPanelLightboxComponent,
     RandomQueryBuilderGalleryComponent,
+    // Face
+    FaceComponent,
     // Settings
     UserMangerSettingsComponent,
     DatabaseSettingsComponent,
@@ -194,6 +201,8 @@ export function translationsFactory(locale: string) {
     OverlayService,
     QueryService,
     DuplicateService,
+    FacesService,
+    VersionService,
     {
       provide: TRANSLATIONS,
       useFactory: translationsFactory,

@@ -40,7 +40,8 @@ export module ClientConfig {
 
   export interface ThumbnailConfig {
     iconSize: number;
-    thumbnailSizes: Array<number>;
+    personThumbnailSize: number;
+    thumbnailSizes: number[];
     concurrentThumbnailGenerations: number;
   }
 
@@ -65,6 +66,10 @@ export module ClientConfig {
     enabled: boolean;
   }
 
+  export interface FacesConfig {
+    enabled: boolean;
+    keywordsToPersons: boolean;
+  }
 
   export interface Config {
     applicationTitle: string;
@@ -81,6 +86,7 @@ export module ClientConfig {
     languages: string[];
     Video: VideoConfig;
     MetaFile: MetaFileConfig;
+    Faces: FacesConfig;
   }
 
 }
@@ -95,7 +101,8 @@ export class PublicConfigClass {
     Thumbnail: {
       concurrentThumbnailGenerations: 1,
       thumbnailSizes: [200, 400, 600],
-      iconSize: 45
+      iconSize: 45,
+      personThumbnailSize: 200
     },
     Search: {
       enabled: true,
@@ -137,6 +144,10 @@ export class PublicConfigClass {
       NavBar: {
         showItemCount: true
       }
+    },
+    Faces: {
+      enabled: true,
+      keywordsToPersons: true
     },
     authenticationRequired: true,
     unAuthenticatedUserRole: UserRoles.Admin,

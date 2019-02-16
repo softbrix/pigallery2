@@ -133,9 +133,9 @@ export class GalleryService {
         await this.instantSearch(text, type);
         return;
       }
-      const params: { type?: SearchTypes } = {};
+      const params: { [key: string]: any } = {};
       if (typeof type !== 'undefined' && type !== null) {
-        params['type'] = type;
+        params[QueryParams.gallery.search.type] = type;
       }
       cw.searchResult = (await this.networkService.getJson<ContentWrapper>('/search/' + text, params)).searchResult;
       if (this.ongoingSearch &&

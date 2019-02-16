@@ -15,8 +15,8 @@
       "box": {
         "height": 2,
         "width": 2,
-        "x": 8,
-        "y": 4
+        "x": 7,
+        "y": 3
       },
       "name": "squirrel"
     },
@@ -24,8 +24,8 @@
       "box": {
         "height": 3,
         "width": 2,
-        "x": 5,
-        "y": 5
+        "x": 4,
+        "y": 3.5
       },
       "name": "special_chars űáéúőóüío?._:"
     }

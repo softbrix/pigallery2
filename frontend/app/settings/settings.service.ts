@@ -1,6 +1,13 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
-import {DatabaseType, IPrivateConfig, ReIndexingSensitivity, ThumbnailProcessingLib} from '../../../common/config/private/IPrivateConfig';
+import {
+  DatabaseType,
+  IPrivateConfig,
+  LogLevel,
+  ReIndexingSensitivity,
+  SQLLogLevel,
+  ThumbnailProcessingLib
+} from '../../../common/config/private/IPrivateConfig';
 import {NetworkService} from '../model/network/network.service';
 import {SortingMethods} from '../../../common/entities/SortingMethods';
 import {UserRoles} from '../../../common/entities/UserDTO';
@@ -28,6 +35,7 @@ export class SettingsService {
         Thumbnail: {
           concurrentThumbnailGenerations: null,
           iconSize: 30,
+          personThumbnailSize: 200,
           thumbnailSizes: []
         },
         Sharing: {
@@ -59,6 +67,10 @@ export class SettingsService {
             showItemCount: true
           }
         },
+        Faces: {
+          enabled: true,
+          keywordsToPersons: true
+        },
         urlBase: '',
         publicUrl: '',
         applicationTitle: '',
@@ -70,6 +82,10 @@ export class SettingsService {
         database: {
           type: DatabaseType.memory
         },
+        log: {
+          level: LogLevel.info,
+          sqlLevel: SQLLogLevel.error
+        },
         sharing: {
           updateTimeout: 2000
         },
@@ -77,6 +93,7 @@ export class SettingsService {
         port: 80,
         host: '0.0.0.0',
         thumbnail: {
+          personFaceMargin: 0.1,
           folder: '',
           qualityPriority: true,
           processingLibrary: ThumbnailProcessingLib.sharp

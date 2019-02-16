@@ -8,6 +8,7 @@ import {Config} from '../../../common/config/private/Config';
 import {VideoDTO} from '../../../common/entities/VideoDTO';
 import {FileDTO} from '../../../common/entities/FileDTO';
 import {MetadataLoader} from './MetadataLoader';
+import {Logger} from '../../Logger';
 
 const LOG_TAG = '[DiskManagerTask]';
 
@@ -31,21 +32,6 @@ export class DiskMangerWorker {
       '.gpx'
     ]
   };
-
-  private static isImage(fullPath: string) {
-    const extension = path.extname(fullPath).toLowerCase();
-    return this.SupportedEXT.photo.indexOf(extension) !== -1;
-  }
-
-  private static isVideo(fullPath: string) {
-    const extension = path.extname(fullPath).toLowerCase();
-    return this.SupportedEXT.video.indexOf(extension) !== -1;
-  }
-
-  private static isMetaFile(fullPath: string) {
-    const extension = path.extname(fullPath).toLowerCase();
-    return this.SupportedEXT.metaFile.indexOf(extension) !== -1;
-  }
 
   public static calcLastModified(stat: Stats) {
     return Math.max(stat.ctime.getTime(), stat.mtime.getTime());
@@ -106,11 +92,15 @@ export class DiskMangerWorker {
               }
             } else if (photosOnly === false && Config.Client.Video.enabled === true &&
               DiskMangerWorker.isVideo(fullFilePath)) {
-              directory.media.push(<VideoDTO>{
-                name: file,
-                directory: null,
-                metadata: await MetadataLoader.loadVideoMetadata(fullFilePath)
-              });
+              try {
+                directory.media.push(<VideoDTO>{
+                  name: file,
+                  directory: null,
+                  metadata: await MetadataLoader.loadVideoMetadata(fullFilePath)
+                });
+              } catch (e) {
+                Logger.warn('Media loading error, skipping: ' + file + ', reason: ' + e.toString());
+              }
 
             } else if (photosOnly === false && Config.Client.MetaFile.enabled === true &&
               DiskMangerWorker.isMetaFile(fullFilePath)) {
@@ -132,6 +122,21 @@ export class DiskMangerWorker {
       });
     });
 
+  }
+
+  private static isImage(fullPath: string) {
+    const extension = path.extname(fullPath).toLowerCase();
+    return this.SupportedEXT.photo.indexOf(extension) !== -1;
+  }
+
+  private static isVideo(fullPath: string) {
+    const extension = path.extname(fullPath).toLowerCase();
+    return this.SupportedEXT.video.indexOf(extension) !== -1;
+  }
+
+  private static isMetaFile(fullPath: string) {
+    const extension = path.extname(fullPath).toLowerCase();
+    return this.SupportedEXT.metaFile.indexOf(extension) !== -1;
   }
 
 }

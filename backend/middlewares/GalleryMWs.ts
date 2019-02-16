@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import {NextFunction, Request, Response} from 'express';
 import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
 import {DirectoryDTO} from '../../common/entities/DirectoryDTO';
-import {ObjectManagerRepository} from '../model/ObjectManagerRepository';
+import {ObjectManagers} from '../model/ObjectManagers';
 import {SearchTypes} from '../../common/entities/AutoCompleteItem';
 import {ContentWrapper} from '../../common/entities/ConentWrapper';
 import {PhotoDTO} from '../../common/entities/PhotoDTO';
@@ -32,7 +32,7 @@ export class GalleryMWs {
     }
 
     try {
-      const directory = await ObjectManagerRepository.getInstance()
+      const directory = await ObjectManagers.getInstance()
         .GalleryManager.listDirectory(directoryName,
           parseInt(req.query[QueryParams.gallery.knownLastModified], 10),
           parseInt(req.query[QueryParams.gallery.knownLastScanned], 10));
@@ -97,7 +97,9 @@ export class GalleryMWs {
       if (cw.directory) {
         const removeVideos = (dir: DirectoryDTO) => {
           dir.media = dir.media.filter(m => !MediaDTO.isVideo(m));
-          dir.directories.forEach(d => removeVideos(d));
+          if (dir.directories) {
+            dir.directories.forEach(d => removeVideos(d));
+          }
         };
         removeVideos(cw.directory);
       }
@@ -144,7 +146,7 @@ export class GalleryMWs {
         return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'Input error: to date is earlier than from date'));
       }
 
-      const photo = await ObjectManagerRepository.getInstance()
+      const photo = await ObjectManagers.getInstance()
         .GalleryManager.getRandomPhoto(query);
       if (!photo) {
         return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'No photo found'));
@@ -187,11 +189,11 @@ export class GalleryMWs {
     }
 
     let type: SearchTypes;
-    if (req.query.type) {
-      type = parseInt(req.query.type, 10);
+    if (req.query[QueryParams.gallery.search.type]) {
+      type = parseInt(req.query[QueryParams.gallery.search.type], 10);
     }
     try {
-      const result = await ObjectManagerRepository.getInstance().SearchManager.search(req.params.text, type);
+      const result = await ObjectManagers.getInstance().SearchManager.search(req.params.text, type);
 
       result.directories.forEach(dir => dir.media = dir.media || []);
       req.resultPipe = new ContentWrapper(null, result);
@@ -211,7 +213,7 @@ export class GalleryMWs {
     }
 
     try {
-      const result = await ObjectManagerRepository.getInstance().SearchManager.instantSearch(req.params.text);
+      const result = await ObjectManagers.getInstance().SearchManager.instantSearch(req.params.text);
 
       result.directories.forEach(dir => dir.media = dir.media || []);
       req.resultPipe = new ContentWrapper(null, result);
@@ -230,7 +232,7 @@ export class GalleryMWs {
     }
 
     try {
-      req.resultPipe = await ObjectManagerRepository.getInstance().SearchManager.autocomplete(req.params.text);
+      req.resultPipe = await ObjectManagers.getInstance().SearchManager.autocomplete(req.params.text);
       return next();
     } catch (err) {
       return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error during searching', err));

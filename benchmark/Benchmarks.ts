@@ -1,7 +1,7 @@
 import {SQLConnection} from '../backend/model/sql/SQLConnection';
 import {Config} from '../common/config/private/Config';
 import {DatabaseType, ReIndexingSensitivity} from '../common/config/private/IPrivateConfig';
-import {ObjectManagerRepository} from '../backend/model/ObjectManagerRepository';
+import {ObjectManagers} from '../backend/model/ObjectManagers';
 import {DiskMangerWorker} from '../backend/model/threading/DiskMangerWorker';
 import {IndexingManager} from '../backend/model/sql/IndexingManager';
 import {SearchManager} from '../backend/model/sql/SearchManager';
@@ -124,7 +124,7 @@ export class Benchmarks {
     }
     Config.Server.database.type = DatabaseType.sqlite;
     Config.Server.database.sqlite.storage = this.dbPath;
-    await ObjectManagerRepository.InitSQLManagers();
+    await ObjectManagers.InitSQLManagers();
   };
 
   private async setupDB() {

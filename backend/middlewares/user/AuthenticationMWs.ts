@@ -2,7 +2,7 @@
 import {NextFunction, Request, Response} from 'express';
 import {ErrorCodes, ErrorDTO} from '../../../common/entities/Error';
 import {UserDTO, UserRoles} from '../../../common/entities/UserDTO';
-import {ObjectManagerRepository} from '../../model/ObjectManagerRepository';
+import {ObjectManagers} from '../../model/ObjectManagers';
 import {Config} from '../../../common/config/private/Config';
 import {PasswordHelper} from '../../model/PasswordHelper';
 import {Utils} from '../../../common/Utils';
@@ -91,7 +91,7 @@ export class AuthenticationMWs {
     try {
       const password = (req.body ? req.body.password : null) || null;
 
-      const sharing = await ObjectManagerRepository.getInstance().SharingManager.findOne({
+      const sharing = await ObjectManagers.getInstance().SharingManager.findOne({
         sharingKey: req.query[QueryParams.gallery.sharingKey_short] || req.params[QueryParams.gallery.sharingKey_long]
       });
 
@@ -134,7 +134,7 @@ export class AuthenticationMWs {
     }
     try {
       // lets find the user
-      const user = Utils.clone(await ObjectManagerRepository.getInstance().UserManager.findOne({
+      const user = Utils.clone(await ObjectManagers.getInstance().UserManager.findOne({
         name: req.body.loginCredential.username,
         password: req.body.loginCredential.password
       }));
@@ -155,7 +155,7 @@ export class AuthenticationMWs {
   private static async getSharingUser(req: Request) {
     if (Config.Client.Sharing.enabled === true &&
       (!!req.params[QueryParams.gallery.sharingKey_short] || !!req.params[QueryParams.gallery.sharingKey_long])) {
-      const sharing = await ObjectManagerRepository.getInstance().SharingManager.findOne({
+      const sharing = await ObjectManagers.getInstance().SharingManager.findOne({
         sharingKey: req.query[QueryParams.gallery.sharingKey_short] || req.params[QueryParams.gallery.sharingKey_long],
       });
       if (!sharing || sharing.expires < Date.now()) {

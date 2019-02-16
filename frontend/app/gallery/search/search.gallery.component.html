@@ -22,10 +22,10 @@
         <a [routerLink]="['/search', item.text, {type: SearchTypes[item.type]}]">
                     <span [ngSwitch]="item.type">
                       <span *ngSwitchCase="SearchTypes.photo" class="oi oi-image"></span>
+                      <span *ngSwitchCase="SearchTypes.person" class="oi oi-person"></span>
                       <span *ngSwitchCase="SearchTypes.video" class="oi oi-video"></span>
                       <span *ngSwitchCase="SearchTypes.directory" class="oi oi-folder"></span>
                       <span *ngSwitchCase="SearchTypes.keyword" class="oi oi-tag"></span>
-                      <span *ngSwitchCase="SearchTypes.person" class="oi oi-person"></span>
                       <span *ngSwitchCase="SearchTypes.position" class="oi oi-map-marker"></span>
                     </span>
           {{item.preText}}<strong>{{item.highLightText}}</strong>{{item.postText}}

@@ -5,6 +5,7 @@ import {RenderingMWs} from '../middlewares/RenderingMWs';
 import {ThumbnailGeneratorMWs} from '../middlewares/thumbnail/ThumbnailGeneratorMWs';
 import {UserRoles} from '../../common/entities/UserDTO';
 import {ThumbnailSourceType} from '../model/threading/ThumbnailWorker';
+import {VersionMWs} from '../middlewares/VersionMWs';
 
 export class GalleryRouter {
   public static route(app: Express) {
@@ -28,6 +29,7 @@ export class GalleryRouter {
     app.get(['/api/gallery/content/:directory(*)', '/api/gallery/', '/api/gallery//'],
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authoriseDirectory,
+      VersionMWs.injectGalleryVersion,
       GalleryMWs.listDirectory,
       ThumbnailGeneratorMWs.addThumbnailInformation,
       GalleryMWs.cleanUpGalleryResults,
@@ -66,6 +68,7 @@ export class GalleryRouter {
   private static addRandom(app: Express) {
     app.get(['/api/gallery/random'],
       AuthenticationMWs.authenticate,
+      VersionMWs.injectGalleryVersion,
       // TODO: authorize path
       GalleryMWs.getRandomImage,
       GalleryMWs.loadFile,
@@ -118,6 +121,7 @@ export class GalleryRouter {
     app.get('/api/search/:text',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Guest),
+      VersionMWs.injectGalleryVersion,
       GalleryMWs.search,
       ThumbnailGeneratorMWs.addThumbnailInformation,
       GalleryMWs.cleanUpGalleryResults,
@@ -129,6 +133,7 @@ export class GalleryRouter {
     app.get('/api/instant-search/:text',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Guest),
+      VersionMWs.injectGalleryVersion,
       GalleryMWs.instantSearch,
       ThumbnailGeneratorMWs.addThumbnailInformation,
       GalleryMWs.cleanUpGalleryResults,
@@ -140,6 +145,7 @@ export class GalleryRouter {
     app.get('/api/autocomplete/:text',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Guest),
+      VersionMWs.injectGalleryVersion,
       GalleryMWs.autocomplete,
       RenderingMWs.renderResult
     );

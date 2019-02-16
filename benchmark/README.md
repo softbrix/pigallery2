@@ -6,6 +6,7 @@ These results are created mostly for development, but I'm making them public for
 
 **System**: Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz, 16GB Ram, SHDD: 1TB, 5400 rpm
 **Gallery**: directories: 0 media: 341, faces: 39
+
 | action | action details | average time | details |
 |:------:|:--------------:|:------------:|:-------:|
 | Scanning directory |  | 2486.5ms | media: 341, directories:0 |

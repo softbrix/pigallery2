@@ -5,9 +5,10 @@ import {GalleryManager} from '../../../../../backend/model/sql/GalleryManager';
 import {IndexingManager} from '../../../../../backend/model/sql/IndexingManager';
 import {DirectoryDTO} from '../../../../../common/entities/DirectoryDTO';
 import {Utils} from '../../../../../common/Utils';
-import {ObjectManagerRepository} from '../../../../../backend/model/ObjectManagerRepository';
+import {ObjectManagers} from '../../../../../backend/model/ObjectManagers';
 import {PersonManager} from '../../../../../backend/model/sql/PersonManager';
 import {MediaEntity} from '../../../../../backend/model/sql/enitites/MediaEntity';
+import {VersionManager} from '../../../../../backend/model/sql/VersionManager';
 
 class IndexingManagerTest extends IndexingManager {
 
@@ -26,7 +27,8 @@ describe('GalleryManager', (sqlHelper: SQLTestHelper) => {
 
   beforeEach(async () => {
     await sqlHelper.initDB();
-    ObjectManagerRepository.getInstance().PersonManager = new PersonManager();
+    ObjectManagers.getInstance().PersonManager = new PersonManager();
+    ObjectManagers.getInstance().VersionManager = new VersionManager();
   });
 
 

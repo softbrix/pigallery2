@@ -6,7 +6,7 @@ import {PhotoEntity} from './enitites/PhotoEntity';
 import {DirectoryEntity} from './enitites/DirectoryEntity';
 import {Config} from '../../../common/config/private/Config';
 import {SharingEntity} from './enitites/SharingEntity';
-import {DataBaseConfig, DatabaseType} from '../../../common/config/private/IPrivateConfig';
+import {DataBaseConfig, DatabaseType, SQLLogLevel} from '../../../common/config/private/IPrivateConfig';
 import {PasswordHelper} from '../PasswordHelper';
 import {ProjectPath} from '../../ProjectPath';
 import {VersionEntity} from './enitites/VersionEntity';
@@ -45,8 +45,9 @@ export class SQLConnection {
         VersionEntity
       ];
       options.synchronize = false;
-      //  options.logging = 'all';
-
+      if (Config.Server.log.sqlLevel !== SQLLogLevel.none) {
+        options.logging = SQLLogLevel[Config.Server.log.sqlLevel];
+      }
 
       this.connection = await this.createConnection(options);
       await SQLConnection.schemeSync(this.connection);
@@ -74,7 +75,9 @@ export class SQLConnection {
       VersionEntity
     ];
     options.synchronize = false;
-    // options.logging = "all";
+    if (Config.Server.log.sqlLevel !== SQLLogLevel.none) {
+      options.logging = SQLLogLevel[Config.Server.log.sqlLevel];
+    }
     const conn = await this.createConnection(options);
     await SQLConnection.schemeSync(conn);
     await conn.close();
@@ -169,7 +172,8 @@ export class SQLConnection {
         port: 3306,
         username: config.mysql.username,
         password: config.mysql.password,
-        database: config.mysql.database
+        database: config.mysql.database,
+        charset: 'utf8'
       };
     } else if (config.type === DatabaseType.sqlite) {
       driver = {

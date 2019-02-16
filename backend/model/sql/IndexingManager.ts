@@ -5,7 +5,7 @@ import {DiskManager} from '../DiskManger';
 import {PhotoEntity} from './enitites/PhotoEntity';
 import {Utils} from '../../../common/Utils';
 import {FaceRegion, PhotoMetadata} from '../../../common/entities/PhotoDTO';
-import {Connection,  Repository} from 'typeorm';
+import {Connection, Repository} from 'typeorm';
 import {MediaEntity} from './enitites/MediaEntity';
 import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {VideoEntity} from './enitites/VideoEntity';
@@ -13,11 +13,12 @@ import {FileEntity} from './enitites/FileEntity';
 import {FileDTO} from '../../../common/entities/FileDTO';
 import {NotificationManager} from '../NotifocationManager';
 import {FaceRegionEntry} from './enitites/FaceRegionEntry';
-import {ObjectManagerRepository} from '../ObjectManagerRepository';
+import {ObjectManagers} from '../ObjectManagers';
+import {IIndexingManager} from '../interfaces/IIndexingManager';
 
 const LOG_TAG = '[IndexingManager]';
 
-export class IndexingManager {
+export class IndexingManager implements IIndexingManager {
 
   private savingQueue: DirectoryDTO[] = [];
   private isSaving = false;
@@ -241,7 +242,7 @@ export class IndexingManager {
         persons.push(scannedFaces[i].name);
       }
     }
-    await ObjectManagerRepository.getInstance().PersonManager.saveAll(persons);
+    await ObjectManagers.getInstance().PersonManager.saveAll(persons);
 
 
     const indexedFaces = await faceRepository.createQueryBuilder('face')
@@ -269,7 +270,7 @@ export class IndexingManager {
       }
 
       if (face == null) {
-        (<FaceRegionEntry>scannedFaces[i]).person = await ObjectManagerRepository.getInstance().PersonManager.get(scannedFaces[i].name);
+        (<FaceRegionEntry>scannedFaces[i]).person = await ObjectManagers.getInstance().PersonManager.get(scannedFaces[i].name);
         faceToInsert.push(scannedFaces[i]);
       }
     }
@@ -288,6 +289,8 @@ export class IndexingManager {
       await this.saveChildDirs(connection, currentDirId, scannedDirectory);
       await this.saveMedia(connection, currentDirId, scannedDirectory.media);
       await this.saveMetaFiles(connection, currentDirId, scannedDirectory);
+      await ObjectManagers.getInstance().PersonManager.updateCounts();
+      await ObjectManagers.getInstance().VersionManager.updateDataVersion();
     } catch (e) {
       throw e;
     } finally {

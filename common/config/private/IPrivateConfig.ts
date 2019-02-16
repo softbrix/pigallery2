@@ -5,7 +5,11 @@ export enum DatabaseType {
 }
 
 export enum LogLevel {
-  error = 1, warn = 2, info = 3, debug = 4, verbose = 5
+  error = 1, warn = 2, info = 3, debug = 4, verbose = 5, silly = 6
+}
+
+export enum SQLLogLevel {
+  none = 1, error = 2, all = 3
 }
 
 export enum ThumbnailProcessingLib {
@@ -35,6 +39,7 @@ export interface ThumbnailConfig {
   folder: string;
   processingLibrary: ThumbnailProcessingLib;
   qualityPriority: boolean;
+  personFaceMargin: number; // in ration [0-1]
 }
 
 export interface SharingConfig {
@@ -60,6 +65,11 @@ export interface DuplicatesConfig {
   listingLimit: number; // maximum number of duplicates to list
 }
 
+export interface LogConfig {
+  level: LogLevel;
+  sqlLevel: SQLLogLevel;
+}
+
 export interface ServerConfig {
   port: number;
   host: string;
@@ -72,6 +82,7 @@ export interface ServerConfig {
   indexing: IndexingConfig;
   photoMetadataSize: number;
   duplicates: DuplicatesConfig;
+  log: LogConfig;
 }
 
 export interface IPrivateConfig {

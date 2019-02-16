@@ -4,6 +4,9 @@ import {MediaDimension, MediaDTO, MediaMetadata} from '../../../../common/entiti
 import {OrientationTypes} from 'ts-exif-parser';
 import {CameraMetadataEntity, PositionMetaDataEntity} from './PhotoEntity';
 import {FaceRegionEntry} from './FaceRegionEntry';
+import {Config} from '../../../../common/config/private/Config';
+import {DatabaseType} from '../../../../common/config/private/IPrivateConfig';
+import {columnCharsetCS} from './EntityUtils';
 
 export class MediaDimensionEntity implements MediaDimension {
 
@@ -55,6 +58,8 @@ export class MediaMetadataEntity implements MediaMetadata {
   duration: number;
 }
 
+
+
 // TODO: fix inheritance once its working in typeorm
 @Entity()
 @Unique(['name', 'directory'])
@@ -65,7 +70,7 @@ export abstract class MediaEntity implements MediaDTO {
   @PrimaryGeneratedColumn({unsigned: true})
   id: number;
 
-  @Column()
+  @Column(columnCharsetCS)
   name: string;
 
   @Index()

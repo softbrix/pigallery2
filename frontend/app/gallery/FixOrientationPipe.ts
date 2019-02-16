@@ -35,6 +35,15 @@ export class FixOrientationPipe implements PipeTransform {
         }
 
         // transform context before drawing image
+
+        // transform function parameters:
+        // a	Horizontal scaling
+        // b	Horizontal skewing
+        // c	Vertical skewing
+        // d	Vertical scaling
+        // e	Horizontal moving
+        // f	Vertical moving
+
         switch (orientation) {
           case OrientationTypes.TOP_RIGHT: // 2
             ctx.transform(-1, 0, 0, 1, width, 0);

@@ -1,6 +1,6 @@
 import {IIndexingTaskManager} from '../interfaces/IIndexingTaskManager';
 import {IndexingProgressDTO} from '../../../common/entities/settings/IndexingProgressDTO';
-import {ObjectManagerRepository} from '../ObjectManagerRepository';
+import {ObjectManagers} from '../ObjectManagers';
 import * as path from 'path';
 import * as fs from 'fs';
 import {SQLConnection} from './SQLConnection';
@@ -29,7 +29,7 @@ export class IndexingTaskManager implements IIndexingTaskManager {
     const directory = this.directoriesToIndex.shift();
     this.indexingProgress.current = directory;
     this.indexingProgress.left = this.directoriesToIndex.length;
-    const scanned = await ObjectManagerRepository.getInstance().IndexingManager.indexDirectory(directory);
+    const scanned = await ObjectManagers.getInstance().IndexingManager.indexDirectory(directory);
     if (this.enabled === false) {
       return;
     }

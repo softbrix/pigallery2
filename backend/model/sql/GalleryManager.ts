@@ -17,7 +17,7 @@ import {VideoEntity} from './enitites/VideoEntity';
 import {DiskMangerWorker} from '../threading/DiskMangerWorker';
 import {Logger} from '../../Logger';
 import {FaceRegionEntry} from './enitites/FaceRegionEntry';
-import {ObjectManagerRepository} from '../ObjectManagerRepository';
+import {ObjectManagers} from '../ObjectManagers';
 import {DuplicatesDTO} from '../../../common/entities/DuplicatesDTO';
 
 const LOG_TAG = '[GalleryManager]';
@@ -56,7 +56,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       if (dir.lastModified !== lastModified) {
         Logger.silly(LOG_TAG, 'Reindexing reason: lastModified mismatch: known: '
           + dir.lastModified + ', current:' + lastModified);
-        return ObjectManagerRepository.getInstance().IndexingManager.indexDirectory(relativeDirectoryName);
+        return ObjectManagers.getInstance().IndexingManager.indexDirectory(relativeDirectoryName);
       }
 
 
@@ -68,7 +68,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
         Logger.silly(LOG_TAG, 'lazy reindexing reason: cache timeout: lastScanned: '
           + (Date.now() - dir.lastScanned) + ' ms ago, cachedFolderTimeout:' + Config.Server.indexing.cachedFolderTimeout);
-        ObjectManagerRepository.getInstance().IndexingManager.indexDirectory(relativeDirectoryName).catch((err) => {
+        ObjectManagers.getInstance().IndexingManager.indexDirectory(relativeDirectoryName).catch((err) => {
           console.error(err);
         });
       }
@@ -78,7 +78,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
     // never scanned (deep indexed), do it and return with it
     Logger.silly(LOG_TAG, 'Reindexing reason: never scanned');
-    return ObjectManagerRepository.getInstance().IndexingManager.indexDirectory(relativeDirectoryName);
+    return ObjectManagers.getInstance().IndexingManager.indexDirectory(relativeDirectoryName);
 
 
   }
