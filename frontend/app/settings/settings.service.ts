@@ -1,6 +1,13 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
-import {DatabaseType, IPrivateConfig, ReIndexingSensitivity, ThumbnailProcessingLib} from '../../../common/config/private/IPrivateConfig';
+import {
+  DatabaseType,
+  IPrivateConfig,
+  LogLevel,
+  ReIndexingSensitivity,
+  SQLLogLevel,
+  ThumbnailProcessingLib
+} from '../../../common/config/private/IPrivateConfig';
 import {NetworkService} from '../model/network/network.service';
 import {SortingMethods} from '../../../common/entities/SortingMethods';
 import {UserRoles} from '../../../common/entities/UserDTO';
@@ -15,16 +22,20 @@ export class SettingsService {
       Client: {
         Search: {
           enabled: true,
-          autocompleteEnabled: true,
+          AutoComplete: {
+            enabled: true,
+            cacheTimeout: 1000 * 60 * 60,
+            maxItemsPerCategory: 5
+          },
           instantSearchEnabled: true,
           InstantSearchTimeout: 0,
           searchCacheTimeout: 1000 * 60 * 60,
           instantSearchCacheTimeout: 1000 * 60 * 60,
-          autocompleteCacheTimeout: 1000 * 60 * 60
         },
         Thumbnail: {
           concurrentThumbnailGenerations: null,
           iconSize: 30,
+          personThumbnailSize: 200,
           thumbnailSizes: []
         },
         Sharing: {
@@ -56,6 +67,10 @@ export class SettingsService {
             showItemCount: true
           }
         },
+        Faces: {
+          enabled: true,
+          keywordsToPersons: true
+        },
         urlBase: '',
         publicUrl: '',
         applicationTitle: '',
@@ -67,13 +82,18 @@ export class SettingsService {
         database: {
           type: DatabaseType.memory
         },
+        log: {
+          level: LogLevel.info,
+          sqlLevel: SQLLogLevel.error
+        },
         sharing: {
           updateTimeout: 2000
         },
         imagesFolder: '',
-	port: 80,
-	host: '0.0.0.0',
+        port: 80,
+        host: '0.0.0.0',
         thumbnail: {
+          personFaceMargin: 0.1,
           folder: '',
           qualityPriority: true,
           processingLibrary: ThumbnailProcessingLib.sharp
@@ -88,7 +108,10 @@ export class SettingsService {
           folderPreviewSize: 0,
           reIndexingSensitivity: ReIndexingSensitivity.medium
         },
-        photoMetadataSize: 512 * 1024
+        photoMetadataSize: 512 * 1024,
+        duplicates: {
+          listingLimit: 1000
+        }
       }
     });
   }

@@ -1,0 +1,13 @@
+.icon {
+  height: 30px;
+}
+
+.big-icon {
+  height: 60px;
+}
+
+.photo-container {
+  width: inherit;
+  height: inherit;
+  overflow: hidden;
+}

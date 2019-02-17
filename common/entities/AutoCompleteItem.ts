@@ -1,9 +1,10 @@
 export enum SearchTypes {
   directory = 1,
-  keyword = 2,
-  position = 3,
-  photo = 4,
-  video = 5
+  person = 2,
+  keyword = 3,
+  position = 5,
+  photo = 6,
+  video = 7
 }
 
 export class AutoCompleteItem {

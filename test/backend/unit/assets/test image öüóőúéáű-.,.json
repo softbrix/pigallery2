@@ -1,0 +1,54 @@
+{
+  "cameraData": {
+    "ISO": 3200,
+    "exposure": 0.00125,
+    "fStop": 5.6,
+    "focalLength": 85,
+    "lens": "EF-S15-85mm f/3.5-5.6 IS USM",
+    "make": "Canon",
+    "model": "óüöúőűáé ÓÜÖÚŐŰÁÉ"
+  },
+  "caption": "Test caption",
+  "creationDate": 1434018566000,
+  "faces": [
+    {
+      "box": {
+        "height": 2,
+        "width": 2,
+        "x": 7,
+        "y": 3
+      },
+      "name": "squirrel"
+    },
+    {
+      "box": {
+        "height": 3,
+        "width": 2,
+        "x": 4,
+        "y": 3.5
+      },
+      "name": "special_chars űáéúőóüío?._:"
+    }
+  ],
+  "fileSize": 39424,
+  "keywords": [
+    "Berkley",
+    "USA",
+    "űáéúőóüö ŰÁÉÚŐÓÜÖ"
+  ],
+  "orientation": 1,
+  "positionData": {
+    "GPSData": {
+      "altitude": 90,
+      "latitude": 37.871093333333334,
+      "longitude": -122.25678
+    },
+    "city": "test city őúéáűóöí-.,)(=",
+    "country": "test country őúéáűóöí-.,)(=/%!+\"'",
+    "state": "test state őúéáűóöí-.,)("
+  },
+  "size": {
+    "height": 10,
+    "width": 14
+  }
+}

@@ -1,21 +1,11 @@
 import {IIndexingManager} from '../interfaces/IIndexingManager';
-import {IndexingProgressDTO} from '../../../common/entities/settings/IndexingProgressDTO';
+import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
 
 export class IndexingManager implements IIndexingManager {
 
-  startIndexing(): void {
+  indexDirectory(relativeDirectoryName: string): Promise<DirectoryDTO> {
     throw new Error('not supported by memory DB');
   }
 
-  getProgress(): IndexingProgressDTO {
-    throw new Error('not supported by memory DB');
-  }
 
-  cancelIndexing(): void {
-    throw new Error('not supported by memory DB');
-  }
-
-  reset(): Promise<void> {
-    throw new Error('Method not implemented.');
-  }
 }

@@ -23,4 +23,8 @@ export enum ErrorCodes {
 export class ErrorDTO {
   constructor(public code: ErrorCodes, public message?: string, public details?: any) {
   }
+
+  toString(): string {
+    return '[' + ErrorCodes[this.code] + '] ' + this.message + (this.details ? this.details.toString() : '');
+  }
 }

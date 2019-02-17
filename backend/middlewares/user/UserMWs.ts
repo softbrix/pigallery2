@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from 'express';
 import {ErrorCodes, ErrorDTO} from '../../../common/entities/Error';
-import {ObjectManagerRepository} from '../../model/ObjectManagerRepository';
+import {ObjectManagers} from '../../model/ObjectManagers';
 import {Utils} from '../../../common/Utils';
 import {Config} from '../../../common/config/private/Config';
 
@@ -18,7 +18,7 @@ export class UserMWs {
     }
 
     try {
-      await ObjectManagerRepository.getInstance().UserManager.changePassword(req.body.userModReq);
+      await ObjectManagers.getInstance().UserManager.changePassword(req.body.userModReq);
       return next();
 
     } catch (err) {
@@ -36,7 +36,7 @@ export class UserMWs {
     }
 
     try {
-      await ObjectManagerRepository.getInstance().UserManager.createUser(req.body.newUser);
+      await ObjectManagers.getInstance().UserManager.createUser(req.body.newUser);
       return next();
 
     } catch (err) {
@@ -56,7 +56,7 @@ export class UserMWs {
 
 
     try {
-      await ObjectManagerRepository.getInstance().UserManager.deleteUser(req.params.id);
+      await ObjectManagers.getInstance().UserManager.deleteUser(req.params.id);
       return next();
 
     } catch (err) {
@@ -76,7 +76,7 @@ export class UserMWs {
     }
 
     try {
-      await  ObjectManagerRepository.getInstance().UserManager.changeRole(req.params.id, req.body.newRole);
+      await  ObjectManagers.getInstance().UserManager.changeRole(req.params.id, req.body.newRole);
       return next();
 
     } catch (err) {
@@ -91,7 +91,7 @@ export class UserMWs {
     }
 
     try {
-      let result = await ObjectManagerRepository.getInstance().UserManager.find({});
+      let result = await ObjectManagers.getInstance().UserManager.find({});
       result = Utils.clone(result);
       for (let i = 0; i < result.length; i++) {
         result[i].password = '';

@@ -1,6 +1,6 @@
 import {DirectoryDTO} from './DirectoryDTO';
 import {OrientationTypes} from 'ts-exif-parser';
-import {MediaDTO, MediaMetadata, MediaDimension} from './MediaDTO';
+import {MediaDimension, MediaDTO, MediaMetadata} from './MediaDTO';
 
 export interface PhotoDTO extends MediaDTO {
   id: number;
@@ -9,6 +9,18 @@ export interface PhotoDTO extends MediaDTO {
   metadata: PhotoMetadata;
   readyThumbnails: Array<number>;
   readyIcon: boolean;
+}
+
+export interface FaceRegionBox {
+  width: number;
+  height: number;
+  x: number;
+  y: number;
+}
+
+export interface FaceRegion {
+  name: string;
+  box?: FaceRegionBox; // some faces don t have region ass they are coming from keywords
 }
 
 export interface PhotoMetadata extends MediaMetadata {
@@ -20,6 +32,7 @@ export interface PhotoMetadata extends MediaMetadata {
   size: MediaDimension;
   creationDate: number;
   fileSize: number;
+  faces?: FaceRegion[];
 }
 
 

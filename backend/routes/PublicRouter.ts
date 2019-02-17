@@ -79,7 +79,7 @@ export class PublicRouter {
       });
 
 
-    app.get(['/', '/login', '/gallery*', '/share*', '/admin', '/search*'],
+      app.get(['/', '/login', '/gallery*', '/share*', '/admin', '/duplicates', '/faces', '/search*'],
       AuthenticationMWs.tryAuthenticate,
       setLocale,
       renderIndex

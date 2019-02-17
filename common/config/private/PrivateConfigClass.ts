@@ -1,5 +1,13 @@
 import {PublicConfigClass} from '../public/ConfigClass';
-import {DatabaseType, IPrivateConfig, ReIndexingSensitivity, ServerConfig, ThumbnailProcessingLib} from './IPrivateConfig';
+import {
+  DatabaseType,
+  IPrivateConfig,
+  LogLevel,
+  ReIndexingSensitivity,
+  ServerConfig,
+  SQLLogLevel,
+  ThumbnailProcessingLib
+} from './IPrivateConfig';
 import * as path from 'path';
 import {ConfigLoader} from 'typeconfig';
 import {Utils} from '../../Utils';
@@ -17,7 +25,12 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
     thumbnail: {
       folder: 'demo/TEMP',
       processingLibrary: ThumbnailProcessingLib.sharp,
-      qualityPriority: true
+      qualityPriority: true,
+      personFaceMargin: 0.6
+    },
+    log: {
+      level: LogLevel.info,
+      sqlLevel: SQLLogLevel.error
     },
     sessionTimeout: 1000 * 60 * 60 * 24 * 7,
     photoMetadataSize: 512 * 1024,
@@ -45,6 +58,9 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
       folderPreviewSize: 2,
       cachedFolderTimeout: 1000 * 60 * 60,
       reIndexingSensitivity: ReIndexingSensitivity.low
+    },
+    duplicates: {
+      listingLimit: 1000
     }
   };
   private ConfigLoader: any;
@@ -60,10 +76,20 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
   public load() {
     ConfigLoader.loadBackendConfig(this,
       path.join(__dirname, './../../../config.json'),
-      [['PORT', 'Server-port']]);
+      [['PORT', 'Server-port'],
+        ['MYSQL_HOST', 'Server-database-mysql-host'],
+        ['MYSQL_PASSWORD', 'Server-database-mysql-password'],
+        ['MYSQL_USERNAME', 'Server-database-mysql-username'],
+        ['MYSQL_DATABASE', 'Server-database-mysql-database']]);
 
     if (Utils.enumToArray(UserRoles).map(r => r.key).indexOf(this.Client.unAuthenticatedUserRole) === -1) {
       throw new Error('Unknown user role for Client.unAuthenticatedUserRole, found: ' + this.Client.unAuthenticatedUserRole);
+    }
+    if (Utils.enumToArray(LogLevel).map(r => r.key).indexOf(this.Server.log.level) === -1) {
+      throw new Error('Unknown Server.log.level, found: ' + this.Server.log.level);
+    }
+    if (Utils.enumToArray(SQLLogLevel).map(r => r.key).indexOf(this.Server.log.sqlLevel) === -1) {
+      throw new Error('Unknown Server.log.level, found: ' + this.Server.log.sqlLevel);
     }
 
   }

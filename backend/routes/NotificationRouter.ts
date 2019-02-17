@@ -3,6 +3,7 @@ import {AuthenticationMWs} from '../middlewares/user/AuthenticationMWs';
 import {RenderingMWs} from '../middlewares/RenderingMWs';
 import {NotificationMWs} from '../middlewares/NotificationMWs';
 import {Express} from 'express';
+import {VersionMWs} from '../middlewares/VersionMWs';
 
 export class NotificationRouter {
   public static route(app: Express) {
@@ -14,6 +15,7 @@ export class NotificationRouter {
     app.get('/api/notifications',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Guest),
+      VersionMWs.injectGalleryVersion,
       NotificationMWs.list,
       RenderingMWs.renderResult
     );

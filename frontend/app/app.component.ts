@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AuthenticationService} from './model/network/authentication.service';
 import {UserDTO} from '../../common/entities/UserDTO';
 import {Router} from '@angular/router';
@@ -10,9 +10,7 @@ import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-pi-gallery2',
-  template: `
-    <router-outlet></router-outlet>`,
-
+  template: `<router-outlet></router-outlet>`
 })
 export class AppComponent implements OnInit, OnDestroy {
 

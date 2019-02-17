@@ -1,11 +1,10 @@
-import {Column, Entity, ChildEntity, Unique} from 'typeorm';
+import {ChildEntity, Column} from 'typeorm';
 import {CameraMetadata, GPSMetadata, PhotoDTO, PhotoMetadata, PositionMetaData} from '../../../../common/entities/PhotoDTO';
-import {OrientationTypes} from 'ts-exif-parser';
 import {MediaEntity, MediaMetadataEntity} from './MediaEntity';
 
 export class CameraMetadataEntity implements CameraMetadata {
 
-  @Column('int', {nullable: true})
+  @Column('int', {nullable: true, unsigned: true})
   ISO: number;
 
   @Column('text', {nullable: true})
@@ -14,13 +13,13 @@ export class CameraMetadataEntity implements CameraMetadata {
   @Column('text', {nullable: true})
   make: string;
 
-  @Column('int', {nullable: true})
+  @Column('float', {nullable: true})
   fStop: number;
 
-  @Column('int', {nullable: true})
+  @Column('float', {nullable: true})
   exposure: number;
 
-  @Column('int', {nullable: true})
+  @Column('float', {nullable: true})
   focalLength: number;
 
   @Column('text', {nullable: true})
@@ -30,13 +29,14 @@ export class CameraMetadataEntity implements CameraMetadata {
 
 export class GPSMetadataEntity implements GPSMetadata {
 
-  @Column('int', {nullable: true})
+  @Column('float', {nullable: true})
   latitude: number;
-  @Column('int', {nullable: true})
+  @Column('float', {nullable: true})
   longitude: number;
   @Column('int', {nullable: true})
   altitude: number;
 }
+
 
 export class PositionMetaDataEntity implements PositionMetaData {
 
@@ -75,5 +75,4 @@ export class PhotoMetadataEntity extends MediaMetadataEntity implements PhotoMet
 export class PhotoEntity extends MediaEntity implements PhotoDTO {
   @Column(type => PhotoMetadataEntity)
   metadata: PhotoMetadataEntity;
-
 }

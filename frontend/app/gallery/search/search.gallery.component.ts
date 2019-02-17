@@ -54,7 +54,7 @@ export class GallerySearchComponent implements OnDestroy {
 
     const searchText = (<HTMLInputElement>event.target).value.trim();
 
-    if (Config.Client.Search.autocompleteEnabled &&
+    if (Config.Client.Search.AutoComplete.enabled &&
       this.cache.lastAutocomplete !== searchText) {
       this.cache.lastAutocomplete = searchText;
       this.autocomplete(searchText).catch(console.error);
@@ -92,7 +92,7 @@ export class GallerySearchComponent implements OnDestroy {
   }
 
   private async autocomplete(searchText: string) {
-    if (!Config.Client.Search.autocompleteEnabled) {
+    if (!Config.Client.Search.AutoComplete.enabled) {
       return;
     }
     if (searchText.trim() === '.') {

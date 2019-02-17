@@ -52,6 +52,9 @@ export class ThumbnailSettingsComponent
         if (v.value.toLowerCase() === 'sharp') {
           v.value += ' ' + this.i18n('(recommended)');
         }
+        if (v.value.toLowerCase() === 'gm') {
+          v.value += ' ' + this.i18n('(deprecated)');
+        }
         return v;
       });
     this.ThumbnailProcessingLib = ThumbnailProcessingLib;

@@ -1,0 +1,38 @@
+<app-frame>
+
+  <div body class="container">
+    <ng-template [ngIf]="renderedDirGroups">
+      <div class="alert alert-secondary" role="alert" *ngIf=" duplicateCount.photos >0" i18n>
+        Listing <strong>{{duplicateCount.pairs}}</strong> duplicates ({{duplicateCount.photos}} photos).
+      </div>
+      <div class="alert alert-secondary" role="alert" *ngIf=" duplicateCount.photos ==0" i18n>
+        No duplicates found
+      </div>
+      <div *ngFor="let group of renderedDirGroups">
+        <strong>{{group.name}}</strong>
+        <div *ngFor="let pairs of group.duplicates" class="card">
+          <div class="card-body">
+            <a *ngFor="let media of pairs.media"
+               class="row"
+               [routerLink]="['/gallery', getDirectoryPath(media.directory)]"
+               [queryParams]="queryService.getParams()">
+              <app-duplicates-photo class="col-1" [media]="media"></app-duplicates-photo>
+              <div class="col-6">
+                /{{getDirectoryPath(media.directory)}}/<strong>{{media.name}}</strong>
+              </div>
+              <div class="col-2">
+                {{media.metadata.fileSize | fileSize}}
+              </div>
+              <div class="col-3" [title]="media.metadata.creationDate">
+                {{media.metadata.creationDate | date}}, {{media.metadata.creationDate | date:'mediumTime'}}
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template [ngIf]="!renderedDirGroups">
+      loading
+    </ng-template>
+  </div>
+</app-frame>

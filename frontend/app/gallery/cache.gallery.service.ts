@@ -5,8 +5,8 @@ import {Config} from '../../../common/config/public/Config';
 import {AutoCompleteItem, SearchTypes} from '../../../common/entities/AutoCompleteItem';
 import {SearchResultDTO} from '../../../common/entities/SearchResultDTO';
 import {MediaDTO} from '../../../common/entities/MediaDTO';
-import {DataStructureVersion} from '../../../common/DataStructureVersion';
 import {SortingMethods} from '../../../common/entities/SortingMethods';
+import {VersionService} from '../model/version.service';
 
 interface CacheItem<T> {
   timestamp: number;
@@ -24,23 +24,17 @@ export class GalleryCacheService {
   private static readonly SEARCH_TYPE_PREFIX = ':type:';
   private static readonly VERSION = 'version';
 
-  constructor() {
-    const version = parseInt(localStorage.getItem(GalleryCacheService.VERSION), 10) || 0;
-    if (version !== DataStructureVersion) {
-      localStorage.clear();
-      localStorage.setItem(GalleryCacheService.VERSION, DataStructureVersion.toString());
-    }
+  constructor(private versionService: VersionService) {
+    const onNewVersion = (ver: string) => {
+      if (ver !== null &&
+        localStorage.getItem(GalleryCacheService.VERSION) !== ver) {
+        this.deleteCache();
+        localStorage.setItem(GalleryCacheService.VERSION, ver);
+      }
+    };
+    this.versionService.version.subscribe(onNewVersion);
+    onNewVersion(this.versionService.version.value);
   }
-
-  private reset() {
-    try {
-      localStorage.clear();
-      localStorage.setItem(GalleryCacheService.VERSION, DataStructureVersion.toString());
-    } catch (e) {
-
-    }
-  }
-
 
   public getSorting(dir: DirectoryDTO): SortingMethods {
     const key = GalleryCacheService.SORTING_PREFIX + dir.path + '/' + dir.name;
@@ -73,11 +67,14 @@ export class GalleryCacheService {
   }
 
   public getAutoComplete(text: string): AutoCompleteItem[] {
+    if (Config.Client.Other.enableCache === false) {
+      return null;
+    }
     const key = GalleryCacheService.AUTO_COMPLETE_PREFIX + text;
     const tmp = localStorage.getItem(key);
     if (tmp != null) {
       const value: CacheItem<AutoCompleteItem[]> = JSON.parse(tmp);
-      if (value.timestamp < Date.now() - Config.Client.Search.autocompleteCacheTimeout) {
+      if (value.timestamp < Date.now() - Config.Client.Search.AutoComplete.cacheTimeout) {
         localStorage.removeItem(key);
         return null;
       }
@@ -87,6 +84,9 @@ export class GalleryCacheService {
   }
 
   public setAutoComplete(text: string, items: Array<AutoCompleteItem>): void {
+    if (Config.Client.Other.enableCache === false) {
+      return;
+    }
     const tmp: CacheItem<Array<AutoCompleteItem>> = {
       timestamp: Date.now(),
       item: items
@@ -100,6 +100,9 @@ export class GalleryCacheService {
   }
 
   public getInstantSearch(text: string): SearchResultDTO {
+    if (Config.Client.Other.enableCache === false) {
+      return null;
+    }
     const key = GalleryCacheService.INSTANT_SEARCH_PREFIX + text;
     const tmp = localStorage.getItem(key);
     if (tmp != null) {
@@ -114,6 +117,9 @@ export class GalleryCacheService {
   }
 
   public setInstantSearch(text: string, searchResult: SearchResultDTO): void {
+    if (Config.Client.Other.enableCache === false) {
+      return;
+    }
     const tmp: CacheItem<SearchResultDTO> = {
       timestamp: Date.now(),
       item: searchResult
@@ -126,8 +132,10 @@ export class GalleryCacheService {
     }
   }
 
-
   public getSearch(text: string, type?: SearchTypes): SearchResultDTO {
+    if (Config.Client.Other.enableCache === false) {
+      return null;
+    }
     let key = GalleryCacheService.SEARCH_PREFIX + text;
     if (typeof type !== 'undefined' && type !== null) {
       key += GalleryCacheService.SEARCH_TYPE_PREFIX + type;
@@ -145,6 +153,9 @@ export class GalleryCacheService {
   }
 
   public setSearch(text: string, type: SearchTypes, searchResult: SearchResultDTO): void {
+    if (Config.Client.Other.enableCache === false) {
+      return;
+    }
     const tmp: CacheItem<SearchResultDTO> = {
       timestamp: Date.now(),
       item: searchResult
@@ -160,7 +171,6 @@ export class GalleryCacheService {
       console.error(e);
     }
   }
-
 
   public getDirectory(directoryName: string): DirectoryDTO {
     if (Config.Client.Other.enableCache === false) {
@@ -231,6 +241,36 @@ export class GalleryCacheService {
       });
     }
 
+  }
+
+  private deleteCache() {
+    try {
+      const toRemove = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        if (localStorage.key(i).startsWith(GalleryCacheService.CONTENT_PREFIX) ||
+          localStorage.key(i).startsWith(GalleryCacheService.SEARCH_PREFIX) ||
+          localStorage.key(i).startsWith(GalleryCacheService.INSTANT_SEARCH_PREFIX) ||
+          localStorage.key(i).startsWith(GalleryCacheService.AUTO_COMPLETE_PREFIX)
+        ) {
+          toRemove.push(localStorage.key(i));
+        }
+      }
+
+      for (let i = 0; i < toRemove.length; i++) {
+        localStorage.removeItem(toRemove[i]);
+      }
+    } catch (e) {
+
+    }
+  }
+
+  private reset() {
+    try {
+      localStorage.clear();
+      localStorage.setItem(GalleryCacheService.VERSION, this.versionService.version.value);
+    } catch (e) {
+
+    }
   }
 
 }

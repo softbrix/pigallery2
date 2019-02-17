@@ -14,6 +14,7 @@ import {RendererInput, ThumbnailSourceType, ThumbnailWorker} from '../../model/t
 
 import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {ITaskExecuter, TaskExecuter} from '../../model/threading/TaskExecuter';
+import {PhotoDTO} from '../../../common/entities/PhotoDTO';
 
 
 export class ThumbnailGeneratorMWs {
@@ -65,11 +66,70 @@ export class ThumbnailGeneratorMWs {
       }
 
     } catch (error) {
-      return next(new ErrorDTO(ErrorCodes.SERVER_ERROR, 'error during postprocessing result', error.toString()));
+      return next(new ErrorDTO(ErrorCodes.SERVER_ERROR, 'error during postprocessing result (adding thumbnail info)', error.toString()));
 
     }
 
     return next();
+
+  }
+
+  public static async generatePersonThumbnail(req: Request, res: Response, next: NextFunction) {
+    if (!req.resultPipe) {
+      return next();
+    }
+    // load parameters
+    const photo: PhotoDTO = req.resultPipe;
+    if (!photo.metadata.faces || photo.metadata.faces.length !== 1) {
+      return next(new ErrorDTO(ErrorCodes.THUMBNAIL_GENERATION_ERROR, 'Photo does not contain  a face'));
+    }
+
+    // load parameters
+    const mediaPath = path.resolve(ProjectPath.ImageFolder, photo.directory.path, photo.directory.name, photo.name);
+    const size: number = Config.Client.Thumbnail.personThumbnailSize;
+    const personName = photo.metadata.faces[0].name;
+    // generate thumbnail path
+    const thPath = path.join(ProjectPath.ThumbnailFolder, ThumbnailGeneratorMWs.generatePersonThumbnailName(mediaPath, personName, size));
+
+
+    req.resultPipe = thPath;
+
+    // check if thumbnail already exist
+    if (fs.existsSync(thPath) === true) {
+        return next();
+      }
+
+    // create thumbnail folder if not exist
+    if (!fs.existsSync(ProjectPath.ThumbnailFolder)) {
+      fs.mkdirSync(ProjectPath.ThumbnailFolder);
+    }
+
+    const margin = {
+      x: Math.round(photo.metadata.faces[0].box.width * (Config.Server.thumbnail.personFaceMargin)),
+      y: Math.round(photo.metadata.faces[0].box.height * (Config.Server.thumbnail.personFaceMargin))
+    };
+    // run on other thread
+    const input = <RendererInput>{
+      type: ThumbnailSourceType.Image,
+      mediaPath: mediaPath,
+      size: size,
+      thPath: thPath,
+      makeSquare: false,
+      cut: {
+        x: Math.round(Math.max(0, photo.metadata.faces[0].box.x - margin.x / 2)),
+        y: Math.round(Math.max(0, photo.metadata.faces[0].box.y - margin.y / 2)),
+        width: photo.metadata.faces[0].box.width + margin.x,
+        height: photo.metadata.faces[0].box.height + margin.y
+      },
+      qualityPriority: Config.Server.thumbnail.qualityPriority
+    };
+    try {
+      await ThumbnailGeneratorMWs.taskQue.execute(input);
+      return next();
+    } catch (error) {
+      return next(new ErrorDTO(ErrorCodes.THUMBNAIL_GENERATION_ERROR,
+        'Error during generating face thumbnail: ' + input.mediaPath, error.toString()));
+    }
 
   }
 
@@ -104,6 +164,14 @@ export class ThumbnailGeneratorMWs {
       ThumbnailGeneratorMWs.generateImage(mediaPath, size, sourceType, true, req, res, next);
 
     };
+  }
+
+  public static generateThumbnailName(mediaPath: string, size: number): string {
+    return crypto.createHash('md5').update(mediaPath).digest('hex') + '_' + size + '.jpg';
+  }
+
+  public static generatePersonThumbnailName(mediaPath: string, personName: string, size: number): string {
+    return crypto.createHash('md5').update(mediaPath + '_' + personName).digest('hex') + '_' + size + '.jpg';
   }
 
   private static addThInfoTODir(directory: DirectoryDTO) {
@@ -176,10 +244,6 @@ export class ThumbnailGeneratorMWs {
       return next(new ErrorDTO(ErrorCodes.THUMBNAIL_GENERATION_ERROR,
         'Error during generating thumbnail: ' + input.mediaPath, error.toString()));
     }
-  }
-
-  public static generateThumbnailName(mediaPath: string, size: number): string {
-    return crypto.createHash('md5').update(mediaPath).digest('hex') + '_' + size + '.jpg';
   }
 }
 

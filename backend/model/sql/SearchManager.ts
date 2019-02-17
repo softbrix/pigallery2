@@ -6,6 +6,10 @@ import {PhotoEntity} from './enitites/PhotoEntity';
 import {DirectoryEntity} from './enitites/DirectoryEntity';
 import {MediaEntity} from './enitites/MediaEntity';
 import {VideoEntity} from './enitites/VideoEntity';
+import {PersonEntry} from './enitites/PersonEntry';
+import {FaceRegionEntry} from './enitites/FaceRegionEntry';
+import {SelectQueryBuilder} from 'typeorm';
+import {Config} from '../../../common/config/private/Config';
 
 export class SearchManager implements ISearchManager {
 
@@ -22,14 +26,14 @@ export class SearchManager implements ISearchManager {
     return a;
   }
 
-  async autocomplete(text: string): Promise<Array<AutoCompleteItem>> {
+  async autocomplete(text: string): Promise<AutoCompleteItem[]> {
 
     const connection = await SQLConnection.getConnection();
 
     let result: AutoCompleteItem[] = [];
     const photoRepository = connection.getRepository(PhotoEntity);
     const videoRepository = connection.getRepository(VideoEntity);
-    const mediaRepository = connection.getRepository(MediaEntity);
+    const personRepository = connection.getRepository(PersonEntry);
     const directoryRepository = connection.getRepository(DirectoryEntity);
 
 
@@ -37,13 +41,22 @@ export class SearchManager implements ISearchManager {
       .createQueryBuilder('photo')
       .select('DISTINCT(photo.metadata.keywords)')
       .where('photo.metadata.keywords LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .limit(5)
+      .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
       .getRawMany())
       .map(r => <Array<string>>(<string>r.metadataKeywords).split(','))
       .forEach(keywords => {
         result = result.concat(this.encapsulateAutoComplete(keywords
           .filter(k => k.toLowerCase().indexOf(text.toLowerCase()) !== -1), SearchTypes.keyword));
       });
+
+    result = result.concat(this.encapsulateAutoComplete((await personRepository
+      .createQueryBuilder('person')
+      .select('DISTINCT(person.name)')
+      .where('person.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+      .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
+      .orderBy('person.name')
+      .getRawMany())
+      .map(r => r.name), SearchTypes.person));
 
     (await photoRepository
       .createQueryBuilder('photo')
@@ -53,7 +66,7 @@ export class SearchManager implements ISearchManager {
       .orWhere('photo.metadata.positionData.state LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
       .orWhere('photo.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
       .groupBy('photo.metadata.positionData.country, photo.metadata.positionData.state, photo.metadata.positionData.city')
-      .limit(5)
+      .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
       .getRawMany())
       .filter(pm => !!pm)
       .map(pm => <Array<string>>[pm.city || '', pm.country || '', pm.state || ''])
@@ -66,7 +79,7 @@ export class SearchManager implements ISearchManager {
       .createQueryBuilder('media')
       .select('DISTINCT(media.name)')
       .where('media.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .limit(5)
+      .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
       .getRawMany())
       .map(r => r.name), SearchTypes.photo));
 
@@ -75,7 +88,7 @@ export class SearchManager implements ISearchManager {
       .createQueryBuilder('media')
       .select('DISTINCT(media.metadata.caption) as caption')
       .where('media.metadata.caption LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .limit(5)
+      .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
       .getRawMany())
       .map(r => r.caption), SearchTypes.photo));
 
@@ -84,7 +97,7 @@ export class SearchManager implements ISearchManager {
       .createQueryBuilder('media')
       .select('DISTINCT(media.name)')
       .where('media.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .limit(5)
+      .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
       .getRawMany())
       .map(r => r.name), SearchTypes.video));
 
@@ -92,7 +105,7 @@ export class SearchManager implements ISearchManager {
       .createQueryBuilder('dir')
       .select('DISTINCT(dir.name)')
       .where('dir.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .limit(5)
+      .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
       .getRawMany())
       .map(r => r.name), SearchTypes.directory));
 
@@ -112,44 +125,60 @@ export class SearchManager implements ISearchManager {
       resultOverflow: false
     };
 
-    let repostiroy = connection.getRepository(MediaEntity);
+    let usedEntity = MediaEntity;
 
     if (searchType === SearchTypes.photo) {
-      repostiroy = connection.getRepository(PhotoEntity);
+      usedEntity = PhotoEntity;
     } else if (searchType === SearchTypes.video) {
-      repostiroy = connection.getRepository(VideoEntity);
+      usedEntity = VideoEntity;
     }
 
-    const query = repostiroy.createQueryBuilder('media')
-      .innerJoinAndSelect('media.directory', 'directory')
-      .orderBy('media.metadata.creationDate', 'ASC');
+    const query = await connection.getRepository(usedEntity).createQueryBuilder('media')
+      .innerJoin(q => {
+          const subQuery = q.from(usedEntity, 'media')
+            .select('distinct media.id')
+            .limit(2000);
 
 
-    if (!searchType || searchType === SearchTypes.directory) {
-      query.orWhere('directory.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
-    }
+          if (!searchType || searchType === SearchTypes.directory) {
+            subQuery.leftJoin('media.directory', 'directory')
+              .orWhere('directory.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
+          }
 
-    if (!searchType || searchType === SearchTypes.photo || searchType === SearchTypes.video) {
-      query.orWhere('media.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
-    }
+          if (!searchType || searchType === SearchTypes.photo || searchType === SearchTypes.video) {
+            subQuery.orWhere('media.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
+          }
 
-    if (!searchType || searchType === SearchTypes.photo) {
-      query.orWhere('media.metadata.caption LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
-    }
+          if (!searchType || searchType === SearchTypes.photo) {
+            subQuery.orWhere('media.metadata.caption LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
+          }
+          if (!searchType || searchType === SearchTypes.person) {
+            subQuery
+              .leftJoin('media.metadata.faces', 'faces')
+              .leftJoin('faces.person', 'person')
+              .orWhere('person.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
+          }
 
-    if (!searchType || searchType === SearchTypes.position) {
-      query.orWhere('media.metadata.positionData.country LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-        .orWhere('media.metadata.positionData.state LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-        .orWhere('media.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
+          if (!searchType || searchType === SearchTypes.position) {
+            subQuery.orWhere('media.metadata.positionData.country LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+              .orWhere('media.metadata.positionData.state LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+              .orWhere('media.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
 
-    }
-    if (!searchType || searchType === SearchTypes.keyword) {
-      query.orWhere('media.metadata.keywords LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
-    }
+          }
+          if (!searchType || searchType === SearchTypes.keyword) {
+            subQuery.orWhere('media.metadata.keywords LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
+          }
 
-    result.media = await query
-      .limit(2001)
-      .getMany();
+          return subQuery;
+        },
+        'innerMedia',
+        'media.id=innerMedia.id')
+      .leftJoinAndSelect('media.directory', 'directory')
+      .leftJoinAndSelect('media.metadata.faces', 'faces')
+      .leftJoinAndSelect('faces.person', 'person');
+
+
+    result.media = await this.loadMediaWithFaces(query);
 
     if (result.media.length > 2000) {
       result.resultOverflow = true;
@@ -181,19 +210,29 @@ export class SearchManager implements ISearchManager {
       resultOverflow: false
     };
 
-    result.media = await connection
-      .getRepository(MediaEntity)
-      .createQueryBuilder('media')
-      .orderBy('media.metadata.creationDate', 'ASC')
-      .where('media.metadata.keywords LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .orWhere('media.metadata.positionData.country LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .orWhere('media.metadata.positionData.state LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .orWhere('media.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .orWhere('media.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .orWhere('media.metadata.caption LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .innerJoinAndSelect('media.directory', 'directory')
-      .limit(10)
-      .getMany();
+    const query = await connection.getRepository(MediaEntity).createQueryBuilder('media')
+      .innerJoin(q => q.from(MediaEntity, 'media')
+          .select('distinct media.id')
+          .limit(10)
+          .leftJoin('media.directory', 'directory')
+          .leftJoin('media.metadata.faces', 'faces')
+          .leftJoin('faces.person', 'person')
+          .where('media.metadata.keywords LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+          .orWhere('media.metadata.positionData.country LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+          .orWhere('media.metadata.positionData.state LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+          .orWhere('media.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+          .orWhere('media.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+          .orWhere('media.metadata.caption LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+          .orWhere('person.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+        ,
+        'innerMedia',
+        'media.id=innerMedia.id')
+      .leftJoinAndSelect('media.directory', 'directory')
+      .leftJoinAndSelect('media.metadata.faces', 'faces')
+      .leftJoinAndSelect('faces.person', 'person');
+
+
+    result.media = await this.loadMediaWithFaces(query);
 
 
     result.directories = await connection
@@ -212,5 +251,30 @@ export class SearchManager implements ISearchManager {
       res.push(new AutoCompleteItem(value, type));
     });
     return res;
+  }
+
+  private async loadMediaWithFaces(query: SelectQueryBuilder<MediaEntity>) {
+    const rawAndEntities = await query.orderBy('media.id').getRawAndEntities();
+    const media: MediaEntity[] = rawAndEntities.entities;
+
+    //  console.log(rawAndEntities.raw);
+    let rawIndex = 0;
+    for (let i = 0; i < media.length; i++) {
+      if (rawAndEntities.raw[rawIndex].faces_id === null ||
+        rawAndEntities.raw[rawIndex].media_id !== media[i].id) {
+        delete media[i].metadata.faces;
+        continue;
+      }
+      media[i].metadata.faces = [];
+
+      while (rawAndEntities.raw[rawIndex].media_id === media[i].id) {
+        media[i].metadata.faces.push(<any>FaceRegionEntry.fromRawToDTO(rawAndEntities.raw[rawIndex]));
+        rawIndex++;
+        if (rawIndex >= rawAndEntities.raw.length) {
+          return media;
+        }
+      }
+    }
+    return media;
   }
 }

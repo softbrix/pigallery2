@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {ShareService} from '../gallery/share.service';
-import {PhotoDTO} from '../../../common/entities/PhotoDTO';
 import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {QueryParams} from '../../../common/QueryParams';
 import {Utils} from '../../../common/Utils';

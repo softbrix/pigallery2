@@ -92,7 +92,7 @@ a {
   width: 100%;
 }
 
-.video-indicator{
+.video-indicator {
   font-size: large;
   padding: 5px;
   position: absolute;
@@ -102,12 +102,16 @@ a {
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
   transition: background-color .3s ease-out;
-  -moz-transition:  background-color .3s ease-out;
+  -moz-transition: background-color .3s ease-out;
   -webkit-transition: background-color .3s ease-out;
-  -o-transition:  background-color .3s ease-out;
-  -ms-transition:  background-color .3s ease-out;
+  -o-transition: background-color .3s ease-out;
+  -ms-transition: background-color .3s ease-out;
 }
 
-.photo-container:hover .video-indicator{
+.photo-container:hover .video-indicator {
   background-color: rgba(0, 0, 0, 0.8);
+}
+
+.photo-keywords .oi-person{
+  margin-right: 2px;
 }

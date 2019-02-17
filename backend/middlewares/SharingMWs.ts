@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from 'express';
 import {CreateSharingDTO, SharingDTO} from '../../common/entities/SharingDTO';
-import {ObjectManagerRepository} from '../model/ObjectManagerRepository';
+import {ObjectManagers} from '../model/ObjectManagers';
 import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
 import {Config} from '../../common/config/private/Config';
 import {QueryParams} from '../../common/QueryParams';
@@ -28,7 +28,7 @@ export class SharingMWs {
     const sharingKey = req.params[QueryParams.gallery.sharingKey_long];
 
     try {
-      req.resultPipe = await ObjectManagerRepository.getInstance().SharingManager.findOne({sharingKey: sharingKey});
+      req.resultPipe = await ObjectManagers.getInstance().SharingManager.findOne({sharingKey: sharingKey});
       return next();
 
     } catch (err) {
@@ -51,7 +51,7 @@ export class SharingMWs {
 
     while (true) {
       try {
-        await ObjectManagerRepository.getInstance().SharingManager.findOne({sharingKey: sharingKey});
+        await ObjectManagers.getInstance().SharingManager.findOne({sharingKey: sharingKey});
         sharingKey = this.generateKey();
       } catch (err) {
         break;
@@ -73,7 +73,7 @@ export class SharingMWs {
 
     try {
 
-      req.resultPipe = await ObjectManagerRepository.getInstance().SharingManager.createSharing(sharing);
+      req.resultPipe = await ObjectManagers.getInstance().SharingManager.createSharing(sharing);
       return next();
 
     } catch (err) {
@@ -103,7 +103,7 @@ export class SharingMWs {
     };
 
     try {
-      req.resultPipe = await ObjectManagerRepository.getInstance().SharingManager.updateSharing(sharing);
+      req.resultPipe = await ObjectManagers.getInstance().SharingManager.updateSharing(sharing);
       return next();
     } catch (err) {
       return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error during updating sharing link', err));

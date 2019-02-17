@@ -10,12 +10,13 @@ import {SearchResultDTO} from '../../../common/entities/SearchResultDTO';
 import {ShareService} from './share.service';
 import {NavigationService} from '../model/navigation.service';
 import {UserRoles} from '../../../common/entities/UserDTO';
-import {interval, Subscription, Observable} from 'rxjs';
+import {interval, Observable, Subscription} from 'rxjs';
 import {ContentWrapper} from '../../../common/entities/ConentWrapper';
 import {PageHelper} from '../model/page.helper';
 import {SortingMethods} from '../../../common/entities/SortingMethods';
 import {PhotoDTO} from '../../../common/entities/PhotoDTO';
 import {QueryParams} from '../../../common/QueryParams';
+import {SeededRandomService} from '../model/seededRandom.service';
 
 @Component({
   selector: 'app-gallery',
@@ -32,6 +33,9 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
   public directories: DirectoryDTO[] = [];
   public isPhotoWithLocation = false;
+  public countDown: { day: number, hour: number, minute: number, second: number } = null;
+  public mapEnabled = true;
+  readonly SearchTypes: typeof SearchTypes;
   private $counter: Observable<number>;
   private subscription: { [key: string]: Subscription } = {
     content: null,
@@ -39,16 +43,14 @@ export class GalleryComponent implements OnInit, OnDestroy {
     timer: null,
     sorting: null
   };
-  public countDown: { day: number, hour: number, minute: number, second: number } = null;
-  public mapEnabled = true;
-  readonly SearchTypes: typeof SearchTypes;
 
   constructor(public _galleryService: GalleryService,
               private _authService: AuthenticationService,
               private _router: Router,
               private shareService: ShareService,
               private _route: ActivatedRoute,
-              private _navigation: NavigationService) {
+              private _navigation: NavigationService,
+              private rndService: SeededRandomService) {
     this.mapEnabled = Config.Client.Map.enabled;
     this.SearchTypes = SearchTypes;
 
@@ -70,10 +72,50 @@ export class GalleryComponent implements OnInit, OnDestroy {
     this.countDown.second = t % 60;
   }
 
+  ngOnDestroy() {
+    if (this.subscription.content !== null) {
+      this.subscription.content.unsubscribe();
+    }
+    if (this.subscription.route !== null) {
+      this.subscription.route.unsubscribe();
+    }
+    if (this.subscription.timer !== null) {
+      this.subscription.timer.unsubscribe();
+    }
+    if (this.subscription.sorting !== null) {
+      this.subscription.sorting.unsubscribe();
+    }
+  }
+
+  async ngOnInit() {
+    await this.shareService.wait();
+    if (!this._authService.isAuthenticated() &&
+      (!this.shareService.isSharing() ||
+        (this.shareService.isSharing() && Config.Client.Sharing.passwordProtected === true))) {
+
+      return this._navigation.toLogin();
+    }
+    this.showSearchBar = Config.Client.Search.enabled && this._authService.isAuthorized(UserRoles.Guest);
+    this.showShare = Config.Client.Sharing.enabled && this._authService.isAuthorized(UserRoles.User);
+    this.showRandomPhotoBuilder = Config.Client.RandomPhoto.enabled && this._authService.isAuthorized(UserRoles.Guest);
+    this.subscription.content = this._galleryService.content.subscribe(this.onContentChange);
+    this.subscription.route = this._route.params.subscribe(this.onRoute);
+
+    if (this.shareService.isSharing()) {
+      this.$counter = interval(1000);
+      this.subscription.timer = this.$counter.subscribe((x) => this.updateTimer(x));
+    }
+
+    this.subscription.sorting = this._galleryService.sorting.subscribe(() => {
+      this.sortDirectories();
+    });
+
+  }
+
   private onRoute = async (params: Params) => {
     const searchText = params[QueryParams.gallery.searchText];
     if (searchText && searchText !== '') {
-      const typeString: string = params['type'];
+      const typeString: string = params[QueryParams.gallery.search.type];
       let type: SearchTypes = null;
       if (typeString && typeString !== '') {
         type = <any>SearchTypes[<any>typeString];
@@ -99,21 +141,6 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
 
   };
-
-  ngOnDestroy() {
-    if (this.subscription.content !== null) {
-      this.subscription.content.unsubscribe();
-    }
-    if (this.subscription.route !== null) {
-      this.subscription.route.unsubscribe();
-    }
-    if (this.subscription.timer !== null) {
-      this.subscription.timer.unsubscribe();
-    }
-    if (this.subscription.sorting !== null) {
-      this.subscription.sorting.unsubscribe();
-    }
-  }
 
   private onContentChange = (content: ContentWrapper) => {
     const ascdirSorter = (a: DirectoryDTO, b: DirectoryDTO) => {
@@ -169,32 +196,22 @@ export class GalleryComponent implements OnInit, OnDestroy {
           return 0;
         });
         break;
+      case SortingMethods.random:
+        this.rndService.setSeed(this.directories.length);
+        this.directories.sort((a: DirectoryDTO, b: DirectoryDTO) => {
+          if (a.name.toLowerCase() < b.name.toLowerCase()) {
+            return 1;
+          }
+          if (a.name.toLowerCase() > b.name.toLowerCase()) {
+            return -1;
+          }
+          return 0;
+        }).sort(() => {
+          return this.rndService.get() - 0.5;
+        });
+        break;
+
     }
-
-  }
-
-  async ngOnInit() {
-    await this.shareService.wait();
-    if (!this._authService.isAuthenticated() &&
-      (!this.shareService.isSharing() ||
-        (this.shareService.isSharing() && Config.Client.Sharing.passwordProtected === true))) {
-
-      return this._navigation.toLogin();
-    }
-    this.showSearchBar = Config.Client.Search.enabled && this._authService.isAuthorized(UserRoles.Guest);
-    this.showShare = Config.Client.Sharing.enabled && this._authService.isAuthorized(UserRoles.User);
-    this.showRandomPhotoBuilder = Config.Client.RandomPhoto.enabled && this._authService.isAuthorized(UserRoles.Guest);
-    this.subscription.content = this._galleryService.content.subscribe(this.onContentChange);
-    this.subscription.route = this._route.params.subscribe(this.onRoute);
-
-    if (this.shareService.isSharing()) {
-      this.$counter = interval(1000);
-      this.subscription.timer = this.$counter.subscribe((x) => this.updateTimer(x));
-    }
-
-    this.subscription.sorting = this._galleryService.sorting.subscribe(() => {
-      this.sortDirectories();
-    });
 
   }
 

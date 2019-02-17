@@ -4,7 +4,7 @@ import {AuthenticationService} from '../../model/network/authentication.service'
 import {NavigationService} from '../../model/navigation.service';
 import {NotificationService} from '../../model/notification.service';
 import {ErrorDTO} from '../../../../common/entities/Error';
-import {Observable, interval} from 'rxjs';
+import {interval, Observable} from 'rxjs';
 import {IndexingConfig, ReIndexingSensitivity} from '../../../../common/config/private/IPrivateConfig';
 import {SettingsComponent} from '../_abstract/abstract.settings.component';
 import {Utils} from '../../../../common/Utils';
@@ -23,15 +23,46 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
 
 
   types: { key: number; value: string }[] = [];
+  statistic: StatisticDTO;
   private subscription: { timer: any, settings: any } = {
     timer: null,
     settings: null
   };
-  statistic: StatisticDTO;
   private $counter: Observable<number> = null;
+
+  constructor(_authService: AuthenticationService,
+              _navigation: NavigationService,
+              _settingsService: IndexingSettingsService,
+              notification: NotificationService,
+              i18n: I18n) {
+
+    super(i18n('Indexing'),
+      _authService,
+      _navigation,
+      <any>_settingsService,
+      notification,
+      i18n,
+      s => s.Server.indexing);
+
+  }
+
+  get TimeLeft() {
+    const prg = this._settingsService.progress.value;
+    return (prg.time.current - prg.time.start) / prg.indexed * prg.left;
+  }
+
+  get TimeElapsed() {
+    const prg = this._settingsService.progress.value;
+    return (prg.time.current - prg.time.start);
+  }
+
   updateProgress = async () => {
     try {
+      const wasRunning = this._settingsService.progress.value !== null;
       await (<IndexingSettingsService>this._settingsService).getProgress();
+      if (wasRunning && this._settingsService.progress.value === null) {
+        this.notification.success(this.i18n('Folder indexed'), this.i18n('Success'));
+      }
     } catch (err) {
       if (this.subscription.timer != null) {
         this.subscription.timer.unsubscribe();
@@ -49,22 +80,6 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
       this.subscription.timer = null;
     }
   };
-
-  constructor(_authService: AuthenticationService,
-              _navigation: NavigationService,
-              _settingsService: IndexingSettingsService,
-              notification: NotificationService,
-              i18n: I18n) {
-
-    super(i18n('Indexing'),
-      _authService,
-      _navigation,
-      <any>_settingsService,
-      notification,
-      i18n,
-      s => s.Server.indexing);
-
-  }
 
   async ngOnInit() {
     super.ngOnInit();
@@ -105,7 +120,7 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
     try {
       await this._settingsService.index(createThumbnails);
       this.updateProgress();
-      this.notification.success(this.i18n('Folder indexed'), this.i18n('Success'));
+      this.notification.info(this.i18n('Folder indexing started'));
       this.inProgress = false;
       return true;
     } catch (err) {
@@ -119,21 +134,13 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
     return false;
   }
 
-  get TimeLeft() {
-    const prg = this._settingsService.progress.value;
-    return (prg.time.current - prg.time.start) / prg.indexed * prg.left;
-  }
-  get TimeElapsed() {
-    const prg = this._settingsService.progress.value;
-    return (prg.time.current - prg.time.start);
-  }
-
   async cancelIndexing() {
     this.inProgress = true;
     this.error = '';
     try {
       await (<IndexingSettingsService>this._settingsService).cancel();
-      this.notification.success(this.i18n('Folder indexed'), this.i18n('Success'));
+      this._settingsService.progress.next(null);
+      this.notification.info(this.i18n('Folder indexing interrupted'));
       this.inProgress = false;
       return true;
     } catch (err) {

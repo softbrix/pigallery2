@@ -5,6 +5,7 @@ import {LoginCredential} from '../../../../common/entities/LoginCredential';
 import {AuthenticationService} from './authentication.service';
 import {NetworkService} from './network.service';
 import {ErrorDTO} from '../../../../common/entities/Error';
+import {VersionService} from '../version.service';
 
 class MockUserService {
   public login(credential: LoginCredential): Promise<UserDTO> {
@@ -25,6 +26,7 @@ describe('AuthenticationService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
+        VersionService,
         {provide: NetworkService, useClass: MockNetworkService},
         {provide: UserService, useClass: MockUserService},
         AuthenticationService,

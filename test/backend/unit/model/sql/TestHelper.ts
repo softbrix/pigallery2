@@ -1,7 +1,8 @@
 import {MediaDimensionEntity} from '../../../../../backend/model/sql/enitites/MediaEntity';
 import {
   CameraMetadataEntity,
-  GPSMetadataEntity, PhotoEntity,
+  GPSMetadataEntity,
+  PhotoEntity,
   PhotoMetadataEntity,
   PositionMetaDataEntity
 } from '../../../../../backend/model/sql/enitites/PhotoEntity';
@@ -9,9 +10,8 @@ import * as path from 'path';
 import {OrientationTypes} from 'ts-exif-parser';
 import {DirectoryEntity} from '../../../../../backend/model/sql/enitites/DirectoryEntity';
 import {VideoEntity, VideoMetadataEntity} from '../../../../../backend/model/sql/enitites/VideoEntity';
-import {FileEntity} from '../../../../../backend/model/sql/enitites/FileEntity';
 import {MediaDimension} from '../../../../../common/entities/MediaDTO';
-import {CameraMetadata, GPSMetadata, PhotoDTO, PhotoMetadata, PositionMetaData} from '../../../../../common/entities/PhotoDTO';
+import {CameraMetadata, FaceRegion, GPSMetadata, PhotoDTO, PhotoMetadata, PositionMetaData} from '../../../../../common/entities/PhotoDTO';
 import {DirectoryDTO} from '../../../../../common/entities/DirectoryDTO';
 import {FileDTO} from '../../../../../common/entities/FileDTO';
 
@@ -104,6 +104,20 @@ export class TestHelper {
     p.metadata.positionData.city = 'Mos Eisley';
     p.metadata.positionData.country = 'Tatooine';
     p.name = 'sw1';
+
+    p.metadata.faces = [<any>{
+      box: {height: 10, width: 10, x: 10, y: 10},
+      name: 'Boba Fett'
+    }, <any>{
+      box: {height: 10, width: 10, x: 101, y: 101},
+      name: 'Luke Skywalker'
+    }, <any>{
+      box: {height: 10, width: 10, x: 101, y: 101},
+      name: 'Han Solo'
+    }, <any>{
+      box: {height: 10, width: 10, x: 101, y: 101},
+      name: 'Unkle Ben'
+    }];
     return p;
   }
 
@@ -121,6 +135,16 @@ export class TestHelper {
     p.metadata.positionData.state = 'Research City';
     p.metadata.positionData.country = 'Kamino';
     p.name = 'sw2';
+    p.metadata.faces = [<any>{
+      box: {height: 10, width: 10, x: 10, y: 10},
+      name: 'Padmé Amidala'
+    }, <any>{
+      box: {height: 10, width: 10, x: 101, y: 101},
+      name: 'Anakin Skywalker'
+    }, <any>{
+      box: {height: 10, width: 10, x: 101, y: 101},
+      name: 'Obivan Kenobi'
+    }];
     return p;
   }
 
@@ -157,13 +181,36 @@ export class TestHelper {
     return d;
   }
 
-  public static getRandomizedPhotoEntry(dir: DirectoryDTO, forceStr: string = null) {
+
+  public static getRandomizedFace(media: PhotoDTO, forceStr: string = null) {
+    const rndStr = () => {
+      return forceStr + '_' + Math.random().toString(36).substring(7);
+    };
+
+    const rndInt = (max = 5000) => {
+      return Math.floor(Math.random() * max);
+    };
+
+    const f: FaceRegion = {
+      name: rndStr() + '.jpg',
+      box: {
+        x: rndInt(),
+        y: rndInt(),
+        width: rndInt(),
+        height: rndInt()
+      }
+    };
+    media.metadata.faces = (media.metadata.faces || []);
+    media.metadata.faces.push(f);
+    return f;
+  }
+
+  public static getRandomizedPhotoEntry(dir: DirectoryDTO, forceStr: string = null, faces: number = 2): PhotoDTO {
 
 
     const rndStr = () => {
       return forceStr + '_' + Math.random().toString(36).substring(7);
     };
-
 
     const rndInt = (max = 5000) => {
       return Math.floor(Math.random() * max);
@@ -211,9 +258,13 @@ export class TestHelper {
       name: rndStr() + '.jpg',
       directory: dir,
       metadata: m,
-      readyThumbnails: null,
+      readyThumbnails: [],
       readyIcon: false
     };
+
+    for (let i = 0; i < faces; i++) {
+      this.getRandomizedFace(d, 'Person ' + i);
+    }
 
     dir.media.push(d);
     return d;

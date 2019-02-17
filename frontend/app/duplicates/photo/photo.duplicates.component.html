@@ -1,0 +1,15 @@
+<div class="photo-container">
+  <ng-template #popTemplate>
+    <img alt="{{media.name}}"
+         class="big-icon"
+         [src]="thumbnail.Src | fixOrientation:Orientation | async"
+         *ngIf="thumbnail.Available">
+  </ng-template>
+
+  <img alt="{{media.name}}"
+       class="icon"
+       [popover]="popTemplate"
+       triggers="mouseenter:mouseleave"
+       [src]="thumbnail.Src | fixOrientation:Orientation | async"
+       *ngIf="thumbnail.Available">
+</div>

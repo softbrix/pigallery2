@@ -1,4 +1,4 @@
-import {Injectable, ViewContainerRef} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {ToastrService} from 'ngx-toastr';
 import {NetworkService} from './network/network.service';
 import {AuthenticationService} from './network/authentication.service';

@@ -7,14 +7,19 @@ export module ClientConfig {
     OpenStreetMap, Mapbox, Custom
   }
 
+  export interface AutoCompleteConfig {
+    enabled: boolean;
+    maxItemsPerCategory: number;
+    cacheTimeout: number;
+  }
+
   export interface SearchConfig {
     enabled: boolean;
     instantSearchEnabled: boolean;
-    autocompleteEnabled: boolean;
     InstantSearchTimeout: number;
-    autocompleteCacheTimeout: number;
     instantSearchCacheTimeout: number;
     searchCacheTimeout: number;
+    AutoComplete: AutoCompleteConfig;
   }
 
   export interface SharingConfig {
@@ -35,7 +40,8 @@ export module ClientConfig {
 
   export interface ThumbnailConfig {
     iconSize: number;
-    thumbnailSizes: Array<number>;
+    personThumbnailSize: number;
+    thumbnailSizes: number[];
     concurrentThumbnailGenerations: number;
   }
 
@@ -60,6 +66,10 @@ export module ClientConfig {
     enabled: boolean;
   }
 
+  export interface FacesConfig {
+    enabled: boolean;
+    keywordsToPersons: boolean;
+  }
 
   export interface Config {
     applicationTitle: string;
@@ -76,6 +86,7 @@ export module ClientConfig {
     languages: string[];
     Video: VideoConfig;
     MetaFile: MetaFileConfig;
+    Faces: FacesConfig;
   }
 
 }
@@ -90,16 +101,20 @@ export class PublicConfigClass {
     Thumbnail: {
       concurrentThumbnailGenerations: 1,
       thumbnailSizes: [200, 400, 600],
-      iconSize: 45
+      iconSize: 45,
+      personThumbnailSize: 200
     },
     Search: {
       enabled: true,
       instantSearchEnabled: true,
-      autocompleteEnabled: true,
       InstantSearchTimeout: 3000,
-      autocompleteCacheTimeout: 1000 * 60 * 60,
       searchCacheTimeout: 1000 * 60 * 60,
-      instantSearchCacheTimeout: 1000 * 60 * 60
+      instantSearchCacheTimeout: 1000 * 60 * 60,
+      AutoComplete: {
+        enabled: true,
+        cacheTimeout: 1000 * 60 * 60,
+        maxItemsPerCategory: 5
+      }
     },
     Sharing: {
       enabled: true,
@@ -129,6 +144,10 @@ export class PublicConfigClass {
       NavBar: {
         showItemCount: true
       }
+    },
+    Faces: {
+      enabled: true,
+      keywordsToPersons: true
     },
     authenticationRequired: true,
     unAuthenticatedUserRole: UserRoles.Admin,

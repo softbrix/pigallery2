@@ -1,4 +1,3 @@
-import {PhotoDTO} from '../../../common/entities/PhotoDTO';
 import {Utils} from '../../../common/Utils';
 import {MediaIcon} from './MediaIcon';
 import {Config} from '../../../common/config/public/Config';

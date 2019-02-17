@@ -1,18 +1,19 @@
-import {Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique, Index} from 'typeorm';
+import {Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique} from 'typeorm';
 import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import {MediaEntity} from './MediaEntity';
 import {FileEntity} from './FileEntity';
+import {columnCharsetCS} from './EntityUtils';
 
 @Entity()
 @Unique(['name', 'path'])
 export class DirectoryEntity implements DirectoryDTO {
 
   @Index()
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({unsigned: true})
   id: number;
 
   @Index()
-  @Column()
+  @Column(columnCharsetCS)
   name: string;
 
   @Index()
@@ -22,18 +23,28 @@ export class DirectoryEntity implements DirectoryDTO {
   /**
    * last time the directory was modified (from outside, eg.: a new media was added)
    */
-  @Column('bigint')
+  @Column('bigint', {
+    unsigned: true, transformer: {
+      from: v => parseInt(v, 10),
+      to: v => v
+    }
+  })
   public lastModified: number;
 
   /**
    * Last time the directory was fully scanned, not only for a few media to create a preview
    */
-  @Column({type: 'bigint', nullable: true})
+  @Column({
+    type: 'bigint', nullable: true, unsigned: true, transformer: {
+      from: v => parseInt(v, 10) || null,
+      to: v => v
+    }
+  })
   public lastScanned: number;
 
   isPartial?: boolean;
 
-  @Column('smallint')
+  @Column('smallint', {unsigned: true})
   mediaCount: number;
 
   @Index()

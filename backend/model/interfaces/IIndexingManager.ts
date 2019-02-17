@@ -1,11 +1,5 @@
-import {IndexingProgressDTO} from '../../../common/entities/settings/IndexingProgressDTO';
+import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
 
 export interface IIndexingManager {
-  startIndexing(createThumbnails?: boolean): void;
-
-  getProgress(): IndexingProgressDTO;
-
-  cancelIndexing(): void;
-
-  reset(): Promise<void>;
+  indexDirectory(relativeDirectoryName: string): Promise<DirectoryDTO>;
 }

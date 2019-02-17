@@ -1,16 +1,17 @@
 import {Column, Entity, ManyToOne, PrimaryGeneratedColumn, Index} from 'typeorm';
 import {DirectoryEntity} from './DirectoryEntity';
 import {FileDTO} from '../../../../common/entities/FileDTO';
+import {columnCharsetCS} from './EntityUtils';
 
 
 @Entity()
 export class FileEntity implements FileDTO {
 
   @Index()
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({unsigned: true})
   id: number;
 
-  @Column('text')
+  @Column(columnCharsetCS)
   name: string;
 
   @Index()

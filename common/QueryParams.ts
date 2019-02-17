@@ -9,6 +9,9 @@ export const QueryParams = {
       minResolution: 'fromRes',
       maxResolution: 'toRes'
     },
+    search: {
+      type: 'type'
+    },
     photo: 'p',
     sharingKey_short: 'sk',
     sharingKey_long: 'sharingKey',

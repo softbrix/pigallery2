@@ -18,6 +18,8 @@ export class StringifySortingMethod implements PipeTransform {
         return this.i18n('ascending date');
       case SortingMethods.descDate:
         return this.i18n('descending date');
+      case SortingMethods.random:
+        return this.i18n('random');
     }
   }
 }

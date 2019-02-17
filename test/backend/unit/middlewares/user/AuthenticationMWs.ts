@@ -2,7 +2,7 @@ import {expect} from 'chai';
 import {AuthenticationMWs} from '../../../../../backend/middlewares/user/AuthenticationMWs';
 import {ErrorCodes, ErrorDTO} from '../../../../../common/entities/Error';
 import {UserDTO, UserRoles} from '../../../../../common/entities/UserDTO';
-import {ObjectManagerRepository} from '../../../../../backend/model/ObjectManagerRepository';
+import {ObjectManagers} from '../../../../../backend/model/ObjectManagers';
 import {UserManager} from '../../../../../backend/model/memory/UserManager';
 import {Config} from '../../../../../common/config/private/Config';
 import {IUserManager} from '../../../../../backend/model/interfaces/IUserManager';
@@ -11,7 +11,7 @@ import {IUserManager} from '../../../../../backend/model/interfaces/IUserManager
 describe('Authentication middleware', () => {
 
   beforeEach(() => {
-    ObjectManagerRepository.reset();
+    ObjectManagers.reset();
   });
 
   describe('authenticate', () => {
@@ -125,7 +125,7 @@ describe('Authentication middleware', () => {
 
   describe('login', () => {
     beforeEach(() => {
-      ObjectManagerRepository.reset();
+      ObjectManagers.reset();
     });
 
     describe('should call input ErrorDTO next on missing...', () => {
@@ -193,7 +193,7 @@ describe('Authentication middleware', () => {
         expect(err.code).to.be.eql(ErrorCodes.CREDENTIAL_NOT_FOUND);
         done();
       };
-      ObjectManagerRepository.getInstance().UserManager = <UserManager>{
+      ObjectManagers.getInstance().UserManager = <UserManager>{
         findOne: (filter): Promise<UserDTO> => {
           return Promise.reject(null);
         }
@@ -220,7 +220,7 @@ describe('Authentication middleware', () => {
         expect(req.session.user).to.be.eql('test user');
         done();
       };
-      ObjectManagerRepository.getInstance().UserManager = <IUserManager>{
+      ObjectManagers.getInstance().UserManager = <IUserManager>{
         findOne: (filter) => {
           return Promise.resolve(<any>'test user');
         }
