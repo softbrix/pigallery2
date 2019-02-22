@@ -27,6 +27,9 @@ export module UserDTO {
     }
     for (let i = 0; i < permissions.length; i++) {
       let permission = permissions[i];
+      if (permissions[i] === separator + '*') {
+        return true;
+      }
       if (permission[permission.length - 1] === '*') {
         permission = permission.slice(0, -1);
         if (path.startsWith(permission) && (!path[permission.length] || path[permission.length] === separator)) {

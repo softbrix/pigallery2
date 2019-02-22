@@ -1,7 +1,8 @@
 import {UserDTO, UserRoles} from '../../../../common/entities/UserDTO';
-import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
+import {Column, Entity, PrimaryGeneratedColumn, Unique} from 'typeorm';
 
 @Entity()
+@Unique(['name'])
 export class UserEntity implements UserDTO {
 
   @PrimaryGeneratedColumn()
