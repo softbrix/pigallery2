@@ -43,7 +43,7 @@
           </td>
           <td>
             <button [disabled]="!canModifyUser(user)" (click)="deleteUser(user)"
-                    [ngClass]="canModifyUser(user)? 'btn-danger':'btn-default'"
+                    [ngClass]="canModifyUser(user)? 'btn-danger':'btn-secondary'"
                     class="btn float-right">
               <span class="oi oi-trash" aria-hidden="true" aria-label="Delete"></span>
             </button>
@@ -84,7 +84,7 @@
           </select>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" (click)="userModal.hide()" i18n>Close</button>
+          <button type="button" class="btn btn-secondary" (click)="userModal.hide()" i18n>Close</button>
           <button type="button" class="btn btn-primary" data-dismiss="modal"
                   (click)="addNewUser()"
                   [disabled]="!NewUserForm.form.valid" i18n>Add User

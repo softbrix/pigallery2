@@ -71,11 +71,6 @@ export class UserMangerSettingsComponent implements OnInit {
     return currentUser.name !== user.name && currentUser.role >= user.role;
   }
 
-  private async getSettings() {
-    this.enabled = await this._userSettings.getSettings();
-  }
-
-
   async switched(event: { previousValue: false, currentValue: true }) {
     this.inProgress = true;
     this.error = '';
@@ -105,9 +100,14 @@ export class UserMangerSettingsComponent implements OnInit {
   }
 
   async addNewUser() {
-    await this._userSettings.createUser(this.newUser);
-    await this.getUsersList();
-    this.childModal.hide();
+    try {
+      await this._userSettings.createUser(this.newUser);
+      await this.getUsersList();
+      this.childModal.hide();
+    } catch (e) {
+      const err: ErrorDTO = e;
+      this.notification.error(err.message + ', ' + err.details, 'User creation error!');
+    }
   }
 
   async updateRole(user: UserDTO) {
@@ -120,6 +120,10 @@ export class UserMangerSettingsComponent implements OnInit {
     await this._userSettings.deleteUser(user);
     await this.getUsersList();
     this.childModal.hide();
+  }
+
+  private async getSettings() {
+    this.enabled = await this._userSettings.getSettings();
   }
 
   private async getUsersList() {

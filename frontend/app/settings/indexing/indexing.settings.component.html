@@ -54,7 +54,7 @@
                 [disabled]="!settingsForm.form.valid || !changed || inProgress"
                 (click)="save()" i18n>Save
         </button>
-        <button class="btn btn-default float-right"
+        <button class="btn btn-secondary float-right"
                 (click)="reset()" i18n>Reset
         </button>
         <br/>
@@ -102,7 +102,7 @@
                 [disabled]="inProgress"
                 (click)="index(true)" i18n>Index with Thumbnails
         </button>
-        <button class="btn btn-default"
+        <button class="btn btn-secondary"
                 *ngIf="_settingsService.progress.value != null"
                 [disabled]="inProgress"
                 (click)="cancelIndexing()" i18n>Cancel

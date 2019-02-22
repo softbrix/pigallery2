@@ -29,7 +29,7 @@
     <div class="divider" *ngIf="ItemCount > 0 && config.Client.Other.NavBar.showItemCount">&nbsp;</div>
     <div class="btn-group" dropdown placement="bottom right">
       <button id="button-alignment" dropdownToggle type="button"
-              class="btn btn-default dropdown-toggle"
+              class="btn btn-secondary dropdown-toggle"
               [ngClass]="{'btn-secondary':galleryService.sorting.value !== DefaultSorting}"
               aria-controls="dropdown-alignment"
               [innerHTML]="galleryService.sorting.value| iconizeSorting">
