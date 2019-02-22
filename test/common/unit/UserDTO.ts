@@ -5,14 +5,14 @@ describe('UserDTO', () => {
 
 
   it('should check available path', () => {
-    expect(UserDTO.isPathAvailable('/', ['/'])).to.be.equals(true);
-    expect(UserDTO.isPathAvailable('/', ['/subfolder', '/'])).to.be.equals(true);
-    expect(UserDTO.isPathAvailable('/abc', ['/subfolder', '/'])).to.be.equals(false);
-    expect(UserDTO.isPathAvailable('/abc', ['/subfolder', '/*'])).to.be.equals(true);
-    expect(UserDTO.isPathAvailable('/abc', ['/subfolder'])).to.be.equals(false);
-    expect(UserDTO.isPathAvailable('/abc/two', ['/subfolder'])).to.be.equals(false);
-    expect(UserDTO.isPathAvailable('/abc/two', ['/'])).to.be.equals(false);
-    expect(UserDTO.isPathAvailable('/abc/two', ['/*'])).to.be.equals(true);
+    expect(UserDTO.isDirectoryPathAvailable('/', ['/'])).to.be.equals(true);
+    expect(UserDTO.isDirectoryPathAvailable('/', ['/subfolder', '/'])).to.be.equals(true);
+    expect(UserDTO.isDirectoryPathAvailable('/abc', ['/subfolder', '/'])).to.be.equals(false);
+    expect(UserDTO.isDirectoryPathAvailable('/abc', ['/subfolder', '/*'])).to.be.equals(true);
+    expect(UserDTO.isDirectoryPathAvailable('/abc', ['/subfolder'])).to.be.equals(false);
+    expect(UserDTO.isDirectoryPathAvailable('/abc/two', ['/subfolder'])).to.be.equals(false);
+    expect(UserDTO.isDirectoryPathAvailable('/abc/two', ['/'])).to.be.equals(false);
+    expect(UserDTO.isDirectoryPathAvailable('/abc/two', ['/*'])).to.be.equals(true);
   });
 
   it('should check directory', () => {

@@ -70,7 +70,7 @@ export class GalleryNavigatorComponent implements OnChanges {
     if (dirs.length === 0) {
       arr.push({name: this.RootFolderName, route: null});
     } else {
-      arr.push({name: this.RootFolderName, route: UserDTO.isPathAvailable('/', user.permissions) ? '/' : null});
+      arr.push({name: this.RootFolderName, route: UserDTO.isDirectoryPathAvailable('/', user.permissions) ? '/' : null});
     }
 
     // create rest navigation
@@ -79,7 +79,7 @@ export class GalleryNavigatorComponent implements OnChanges {
       if (dirs.length - 1 === index) {
         arr.push({name: name, route: null});
       } else {
-        arr.push({name: name, route: UserDTO.isPathAvailable(route, user.permissions) ? route : null});
+        arr.push({name: name, route: UserDTO.isDirectoryPathAvailable(route, user.permissions) ? route : null});
       }
     });
 

@@ -18,8 +18,8 @@ export class SQLTestHelper {
   dbPath: string;
 
   constructor(public dbType: DatabaseType) {
-    this.tempDir = path.resolve(__dirname, './tmp');
-    this.dbPath = path.resolve(__dirname, './tmp', 'test.db');
+    this.tempDir = path.join(__dirname, './tmp');
+    this.dbPath = path.join(__dirname, './tmp', 'test.db');
 
   }
 

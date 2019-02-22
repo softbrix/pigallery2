@@ -1,5 +1,5 @@
 import {AuthenticationMWs} from '../middlewares/user/AuthenticationMWs';
-import {Express, NextFunction, Request, Response} from 'express';
+import {Express} from 'express';
 import {GalleryMWs} from '../middlewares/GalleryMWs';
 import {RenderingMWs} from '../middlewares/RenderingMWs';
 import {ThumbnailGeneratorMWs} from '../middlewares/thumbnail/ThumbnailGeneratorMWs';
@@ -28,7 +28,8 @@ export class GalleryRouter {
   private static addDirectoryList(app: Express) {
     app.get(['/api/gallery/content/:directory(*)', '/api/gallery/', '/api/gallery//'],
       AuthenticationMWs.authenticate,
-      AuthenticationMWs.authoriseDirectory,
+      AuthenticationMWs.normalizePathParam('directory'),
+      AuthenticationMWs.authorisePath('directory', true),
       VersionMWs.injectGalleryVersion,
       GalleryMWs.listDirectory,
       ThumbnailGeneratorMWs.addThumbnailInformation,
@@ -41,7 +42,8 @@ export class GalleryRouter {
   private static addGetImage(app: Express) {
     app.get(['/api/gallery/content/:mediaPath(*\.(jpg|jpeg|jpe|webp|png|gif|svg))'],
       AuthenticationMWs.authenticate,
-      // TODO: authorize path
+      AuthenticationMWs.normalizePathParam('mediaPath'),
+      AuthenticationMWs.authorisePath('mediaPath', false),
       GalleryMWs.loadFile,
       RenderingMWs.renderFile
     );
@@ -50,7 +52,8 @@ export class GalleryRouter {
   private static addGetVideo(app: Express) {
     app.get(['/api/gallery/content/:mediaPath(*\.(mp4|ogg|ogv|webm))'],
       AuthenticationMWs.authenticate,
-      // TODO: authorize path
+      AuthenticationMWs.normalizePathParam('mediaPath'),
+      AuthenticationMWs.authorisePath('mediaPath', false),
       GalleryMWs.loadFile,
       RenderingMWs.renderFile
     );
@@ -59,7 +62,8 @@ export class GalleryRouter {
   private static addGetMetaFile(app: Express) {
     app.get(['/api/gallery/content/:mediaPath(*\.(gpx))'],
       AuthenticationMWs.authenticate,
-      // TODO: authorize path
+      AuthenticationMWs.normalizePathParam('mediaPath'),
+      AuthenticationMWs.authorisePath('mediaPath', false),
       GalleryMWs.loadFile,
       RenderingMWs.renderFile
     );
@@ -68,8 +72,8 @@ export class GalleryRouter {
   private static addRandom(app: Express) {
     app.get(['/api/gallery/random'],
       AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(UserRoles.Guest),
       VersionMWs.injectGalleryVersion,
-      // TODO: authorize path
       GalleryMWs.getRandomImage,
       GalleryMWs.loadFile,
       RenderingMWs.renderFile
@@ -79,7 +83,8 @@ export class GalleryRouter {
   private static addGetImageThumbnail(app: Express) {
     app.get('/api/gallery/content/:mediaPath(*\.(jpg|jpeg|jpe|webp|png|gif|svg))/thumbnail/:size?',
       AuthenticationMWs.authenticate,
-      // TODO: authorize path
+      AuthenticationMWs.normalizePathParam('mediaPath'),
+      AuthenticationMWs.authorisePath('mediaPath', false),
       GalleryMWs.loadFile,
       ThumbnailGeneratorMWs.generateThumbnailFactory(ThumbnailSourceType.Image),
       RenderingMWs.renderFile
@@ -89,7 +94,8 @@ export class GalleryRouter {
   private static addGetVideoThumbnail(app: Express) {
     app.get('/api/gallery/content/:mediaPath(*\.(mp4|ogg|ogv|webm))/thumbnail/:size?',
       AuthenticationMWs.authenticate,
-      // TODO: authorize path
+      AuthenticationMWs.normalizePathParam('mediaPath'),
+      AuthenticationMWs.authorisePath('mediaPath', false),
       GalleryMWs.loadFile,
       ThumbnailGeneratorMWs.generateThumbnailFactory(ThumbnailSourceType.Video),
       RenderingMWs.renderFile
@@ -100,7 +106,8 @@ export class GalleryRouter {
   private static addGetVideoIcon(app: Express) {
     app.get('/api/gallery/content/:mediaPath(*\.(mp4|ogg|ogv|webm))/icon',
       AuthenticationMWs.authenticate,
-      // TODO: authorize path
+      AuthenticationMWs.normalizePathParam('mediaPath'),
+      AuthenticationMWs.authorisePath('mediaPath', false),
       GalleryMWs.loadFile,
       ThumbnailGeneratorMWs.generateIconFactory(ThumbnailSourceType.Video),
       RenderingMWs.renderFile
@@ -110,7 +117,8 @@ export class GalleryRouter {
   private static addGetImageIcon(app: Express) {
     app.get('/api/gallery/content/:mediaPath(*\.(jpg|jpeg|jpe|webp|png|gif|svg))/icon',
       AuthenticationMWs.authenticate,
-      // TODO: authorize path
+      AuthenticationMWs.normalizePathParam('mediaPath'),
+      AuthenticationMWs.authorisePath('mediaPath', false),
       GalleryMWs.loadFile,
       ThumbnailGeneratorMWs.generateIconFactory(ThumbnailSourceType.Image),
       RenderingMWs.renderFile

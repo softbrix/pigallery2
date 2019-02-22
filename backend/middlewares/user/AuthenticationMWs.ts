@@ -7,6 +7,7 @@ import {Config} from '../../../common/config/private/Config';
 import {PasswordHelper} from '../../model/PasswordHelper';
 import {Utils} from '../../../common/Utils';
 import {QueryParams} from '../../../common/QueryParams';
+import * as path from 'path';
 
 export class AuthenticationMWs {
 
@@ -54,20 +55,29 @@ export class AuthenticationMWs {
     return next();
   }
 
-  public static authoriseDirectory(req: Request, res: Response, next: NextFunction) {
-    if (req.session.user.permissions == null ||
-      req.session.user.permissions.length === 0 ||
-      req.session.user.permissions[0] === '/*') {
-      return next();
-    }
 
-    const directoryName = req.params.directory || '/';
-    if (UserDTO.isPathAvailable(directoryName, req.session.user.permissions) === true) {
+  public static normalizePathParam(paramName: string) {
+    return (req: Request, res: Response, next: NextFunction) => {
+      req.params[paramName] = path.normalize(req.params[paramName] || path.sep).replace(/^(\.\.[\/\\])+/, '');
       return next();
-    }
-
-    return next(new ErrorDTO(ErrorCodes.PERMISSION_DENIED));
+    };
   }
+
+  public static authorisePath(paramName: string, isDirectory: boolean) {
+    return (req: Request, res: Response, next: NextFunction) => {
+      let p: string = req.params[paramName];
+      if (!isDirectory) {
+        p = path.dirname(p);
+      }
+
+      if (!UserDTO.isDirectoryPathAvailable(p, req.session.user.permissions, path.sep)) {
+        return res.sendStatus(403);
+      }
+
+      return next();
+    };
+  }
+
 
   public static authorise(role: UserRoles) {
     return (req: Request, res: Response, next: NextFunction) => {
@@ -102,12 +112,12 @@ export class AuthenticationMWs {
         return next(new ErrorDTO(ErrorCodes.CREDENTIAL_NOT_FOUND));
       }
 
-      let path = sharing.path;
+      let sharingPath = sharing.path;
       if (sharing.includeSubfolders === true) {
-        path += '*';
+        sharingPath += '*';
       }
 
-      req.session.user = <UserDTO>{name: 'Guest', role: UserRoles.LimitedGuest, permissions: [path]};
+      req.session.user = <UserDTO>{name: 'Guest', role: UserRoles.LimitedGuest, permissions: [sharingPath]};
       return next();
 
     } catch (err) {
@@ -152,6 +162,12 @@ export class AuthenticationMWs {
 
   }
 
+  public static logout(req: Request, res: Response, next: NextFunction) {
+    delete req.session.user;
+    delete req.session.rememberMe;
+    return next();
+  }
+
   private static async getSharingUser(req: Request) {
     if (Config.Client.Sharing.enabled === true &&
       (!!req.params[QueryParams.gallery.sharingKey_short] || !!req.params[QueryParams.gallery.sharingKey_long])) {
@@ -166,20 +182,19 @@ export class AuthenticationMWs {
         return null;
       }
 
-      let path = sharing.path;
+      let sharingPath = sharing.path;
       if (sharing.includeSubfolders === true) {
-        path += '*';
+        sharingPath += '*';
       }
-      return <UserDTO>{name: 'Guest', role: UserRoles.LimitedGuest, permissions: [path]};
+      return <UserDTO>{
+        name: 'Guest',
+        role: UserRoles.LimitedGuest,
+        permissions: [sharingPath],
+        usedSharingKey: sharing.sharingKey
+      };
 
     }
     return null;
-  }
-
-  public static logout(req: Request, res: Response, next: NextFunction) {
-    delete req.session.user;
-    delete req.session.rememberMe;
-    return next();
   }
 
 }

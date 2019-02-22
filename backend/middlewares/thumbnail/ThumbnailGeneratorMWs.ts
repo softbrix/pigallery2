@@ -85,7 +85,7 @@ export class ThumbnailGeneratorMWs {
     }
 
     // load parameters
-    const mediaPath = path.resolve(ProjectPath.ImageFolder, photo.directory.path, photo.directory.name, photo.name);
+    const mediaPath = path.join(ProjectPath.ImageFolder, photo.directory.path, photo.directory.name, photo.name);
     const size: number = Config.Client.Thumbnail.personThumbnailSize;
     const personName = photo.metadata.faces[0].name;
     // generate thumbnail path

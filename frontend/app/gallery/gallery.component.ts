@@ -53,7 +53,6 @@ export class GalleryComponent implements OnInit, OnDestroy {
               private rndService: SeededRandomService) {
     this.mapEnabled = Config.Client.Map.enabled;
     this.SearchTypes = SearchTypes;
-
     PageHelper.showScrollY();
   }
 

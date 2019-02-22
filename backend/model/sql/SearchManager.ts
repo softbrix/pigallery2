@@ -257,7 +257,6 @@ export class SearchManager implements ISearchManager {
     const rawAndEntities = await query.orderBy('media.id').getRawAndEntities();
     const media: MediaEntity[] = rawAndEntities.entities;
 
-    //  console.log(rawAndEntities.raw);
     let rawIndex = 0;
     for (let i = 0; i < media.length; i++) {
       if (rawAndEntities.raw[rawIndex].faces_id === null ||

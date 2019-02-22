@@ -28,7 +28,7 @@ export class NavigationService {
   public async toGallery() {
     await this._shareService.wait();
     if (this._shareService.isSharing()) {
-      return this._router.navigate(['gallery', ''], {queryParams: {sk: this._shareService.getSharingKey()}});
+      return this._router.navigate(['share', this._shareService.getSharingKey()]);
     } else {
       return this._router.navigate(['gallery', '']);
     }

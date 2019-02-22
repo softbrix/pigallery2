@@ -69,7 +69,7 @@ export class DiskMangerWorker {
         try {
           for (let i = 0; i < list.length; i++) {
             const file = list[i];
-            const fullFilePath = path.normalize(path.resolve(absoluteDirectoryName, file));
+            const fullFilePath = path.normalize(path.join(absoluteDirectoryName, file));
             if (fs.statSync(fullFilePath).isDirectory()) {
               if (photosOnly === true) {
                 continue;

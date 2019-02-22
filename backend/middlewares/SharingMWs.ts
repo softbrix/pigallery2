@@ -4,21 +4,11 @@ import {ObjectManagers} from '../model/ObjectManagers';
 import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
 import {Config} from '../../common/config/private/Config';
 import {QueryParams} from '../../common/QueryParams';
+import * as path from 'path';
 
 const LOG_TAG = '[SharingMWs]';
 
 export class SharingMWs {
-
-
-  private static generateKey(): string {
-    function s4() {
-      return Math.floor((1 + Math.random()) * 0x10000)
-        .toString(16)
-        .substring(1);
-    }
-
-    return s4() + s4();
-  }
 
 
   public static async getSharing(req: Request, res: Response, next: NextFunction) {
@@ -59,7 +49,7 @@ export class SharingMWs {
     }
 
 
-    const directoryName = req.params.directory || '/';
+    const directoryName = path.normalize(req.params.directory || '/');
     const sharing: SharingDTO = {
       id: null,
       sharingKey: sharingKey,
@@ -90,7 +80,7 @@ export class SharingMWs {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'updateSharing filed is missing'));
     }
     const updateSharing: CreateSharingDTO = req.body.updateSharing;
-    const directoryName = req.params.directory || '/';
+    const directoryName = path.normalize(req.params.directory || '/');
     const sharing: SharingDTO = {
       id: updateSharing.id,
       path: directoryName,
@@ -109,5 +99,15 @@ export class SharingMWs {
       return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error during updating sharing link', err));
     }
 
+  }
+
+  private static generateKey(): string {
+    function s4() {
+      return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    }
+
+    return s4() + s4();
   }
 }

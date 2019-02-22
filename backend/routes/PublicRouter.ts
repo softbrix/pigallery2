@@ -44,7 +44,7 @@ export class PublicRouter {
     };
 
     const renderIndex = (req: Request, res: Response, next: Function) => {
-      ejs.renderFile(path.resolve(ProjectPath.FrontendFolder, req['localePath'], 'index.html'),
+      ejs.renderFile(path.join(ProjectPath.FrontendFolder, req['localePath'], 'index.html'),
         res.tpl, (err, str) => {
           if (err) {
             return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, err.message));
@@ -79,7 +79,7 @@ export class PublicRouter {
       });
 
 
-      app.get(['/', '/login', '/gallery*', '/share*', '/admin', '/duplicates', '/faces', '/search*'],
+    app.get(['/', '/login', '/gallery*', '/share*', '/admin', '/duplicates', '/faces', '/search*'],
       AuthenticationMWs.tryAuthenticate,
       setLocale,
       renderIndex
@@ -90,28 +90,26 @@ export class PublicRouter {
       );
     });
 
+    const renderFile = (subDir: string = '') => {
+      return (req: Request, res: Response) => {
+        const file = path.join(ProjectPath.FrontendFolder, req['localePath'], subDir, req.params.file);
+        fs.exists(file, (exists: boolean) => {
+          if (!exists) {
+            return res.sendStatus(404);
+          }
+          res.sendFile(file);
+        });
+      };
+    };
+
     app.get('/assets/:file(*)',
       setLocale,
-      (req: Request, res: Response) => {
-        const file = path.resolve(ProjectPath.FrontendFolder, req['localePath'], 'assets', req.params.file);
-        fs.exists(file, (exists: boolean) => {
-          if (!exists) {
-            return res.sendStatus(404);
-          }
-          res.sendFile(file);
-        });
-      });
+      AuthenticationMWs.normalizePathParam('file'),
+      renderFile('assets'));
     app.get('/:file',
       setLocale,
-      (req: Request, res: Response) => {
-        const file = path.resolve(ProjectPath.FrontendFolder, req['localePath'], req.params.file);
-        fs.exists(file, (exists: boolean) => {
-          if (!exists) {
-            return res.sendStatus(404);
-          }
-          res.sendFile(file);
-        });
-      });
+      AuthenticationMWs.normalizePathParam('file'),
+      renderFile());
   }
 
 }

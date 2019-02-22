@@ -18,6 +18,9 @@ export class GalleryService {
 
   public content: BehaviorSubject<ContentWrapper>;
   public sorting: BehaviorSubject<SortingMethods>;
+  lastRequest: { directory: string } = {
+    directory: null
+  };
   private lastDirectory: DirectoryDTO;
   private searchId: any;
   private ongoingSearch: {
@@ -37,10 +40,6 @@ export class GalleryService {
     this.content = new BehaviorSubject<ContentWrapper>(new ContentWrapper());
     this.sorting = new BehaviorSubject<SortingMethods>(Config.Client.Other.defaultPhotoSortingMethod);
   }
-
-  lastRequest: { directory: string } = {
-    directory: null
-  };
 
   setSorting(sorting: SortingMethods): void {
     this.sorting.next(sorting);

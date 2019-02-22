@@ -114,13 +114,13 @@
     "run-sequence": "2.2.1",
     "rxjs": "6.4.0",
     "rxjs-compat": "6.4.0",
+    "terser": "3.16.1",
     "ts-helpers": "1.1.2",
     "ts-node": "8.0.2",
     "tslint": "5.12.1",
     "typescript": "3.2.4",
     "xlf-google-translate": "1.0.0-beta.13",
-    "zone.js": "0.8.29",
-    "terser": "3.16.1"
+    "zone.js": "0.8.29"
   },
   "//": [
     "TODO: remove terser version lock once webpack is fixed"

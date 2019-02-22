@@ -11,7 +11,7 @@ export class Localizations {
   public static init() {
     const notLanguage = ['assets'];
     const dirCont = fs.readdirSync(ProjectPath.FrontendFolder)
-      .filter(f => fs.statSync(path.resolve(ProjectPath.FrontendFolder, f)).isDirectory());
+      .filter(f => fs.statSync(path.join(ProjectPath.FrontendFolder, f)).isDirectory());
     Config.Client.languages = dirCont.filter(d => notLanguage.indexOf(d) === -1);
     Config.Client.languages.push('en');
   }

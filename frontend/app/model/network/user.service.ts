@@ -29,7 +29,7 @@ export class UserService {
     await this._shareService.wait();
     if (Config.Client.Sharing.enabled === true) {
       if (this._shareService.isSharing()) {
-        return this._networkService.getJson<UserDTO>('/user/login?sk=' + this._shareService.getSharingKey());
+        return this._networkService.getJson<UserDTO>('/user/login', {sk: this._shareService.getSharingKey()});
       }
     }
     return this._networkService.getJson<UserDTO>('/user/login');
