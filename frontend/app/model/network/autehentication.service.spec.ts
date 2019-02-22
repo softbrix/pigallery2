@@ -6,6 +6,7 @@ import {AuthenticationService} from './authentication.service';
 import {NetworkService} from './network.service';
 import {ErrorDTO} from '../../../../common/entities/Error';
 import {VersionService} from '../version.service';
+import {ShareService} from '../../gallery/share.service';
 
 class MockUserService {
   public login(credential: LoginCredential): Promise<UserDTO> {
@@ -22,6 +23,11 @@ class MockNetworkService {
   }
 }
 
+class MockShareService {
+  setUserObs(user: any) {
+  }
+}
+
 describe('AuthenticationService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -29,6 +35,7 @@ describe('AuthenticationService', () => {
         VersionService,
         {provide: NetworkService, useClass: MockNetworkService},
         {provide: UserService, useClass: MockUserService},
+        {provide: ShareService, useClass: MockShareService},
         AuthenticationService,
       ]
     });
