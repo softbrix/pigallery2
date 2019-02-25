@@ -19,7 +19,7 @@ Live Demo @ heroku: https://pigallery2.herokuapp.com/
 1. [Getting started](#1-getting-started-on-raspberry-pi)
 2. [Translate the page to your own language](#2-translate-the-page-to-your-own-language)
 3. [Feature list](#3-feature-list)
-4. [Suggest a new feature](#4-suggest-a-feature)
+4. [Suggest/endorse new features](#4-Suggest-endorse-new-features)
 5. [Known errors](#5-known-errors)
 6. [Credits](#6-credits) 
 
@@ -188,8 +188,8 @@ apt-get install build-essential  libkrb5-dev gcc g++
  * bug free :) - `In progress`
  
  
-## 4. Suggest a feature
-  You are welcome to suggest no feature to the application via [github issues](https://github.com/bpatrik/pigallery2/issues).
+## 4. Suggest/endorse new features
+  You are welcome to suggest new features to the application via [github issues](https://github.com/bpatrik/pigallery2/issues).
   I cannot garantie any dealine with the development of a new feature. (I usually fix bugs within week/weeks.)
   I will give a higher priority to a feature that has more 'likes' (i.e.: `+1`-s or thumbs ups) on it.
 
