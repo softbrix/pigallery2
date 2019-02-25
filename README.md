@@ -189,7 +189,7 @@ apt-get install build-essential  libkrb5-dev gcc g++
  
  
 ## 4. Suggest a feature
-  You are welcome to suggest no feature to the application via (github issues)[https://github.com/bpatrik/pigallery2/issues].
+  You are welcome to suggest no feature to the application via [github issues](https://github.com/bpatrik/pigallery2/issues).
   I cannot garantie any dealine with the development of a new feature. (I usually fix bugs within week/weeks.)
   I will give a higher priority to a feature that has more 'likes' (i.e.: `+1`-s or thumbs ups) on it.
 
