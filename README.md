@@ -19,7 +19,7 @@ Live Demo @ heroku: https://pigallery2.herokuapp.com/
 1. [Getting started](#1-getting-started-on-raspberry-pi)
 2. [Translate the page to your own language](#2-translate-the-page-to-your-own-language)
 3. [Feature list](#3-feature-list)
-4. [Suggest/endorse new features](4-suggestendorse-new-features)
+4. [Suggest/endorse new features](#4-suggestendorse-new-features)
 5. [Known errors](#5-known-errors)
 6. [Credits](#6-credits) 
 
