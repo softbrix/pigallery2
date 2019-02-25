@@ -19,8 +19,9 @@ Live Demo @ heroku: https://pigallery2.herokuapp.com/
 1. [Getting started](#1-getting-started-on-raspberry-pi)
 2. [Translate the page to your own language](#2-translate-the-page-to-your-own-language)
 3. [Feature list](#3-feature-list)
-4. [Known errors](#4-known-errors)
-5. [Credits](#5-credits) 
+4. [Suggest a new feature](#4-suggest-a-feature)
+5. [Known errors](#5-known-errors)
+6. [Credits](#6-credits) 
 
 
 
@@ -185,14 +186,20 @@ apt-get install build-essential  libkrb5-dev gcc g++
  * **Markdown based blogging support** - `future plan`
    * you can write some note in the blog.md for every directory
  * bug free :) - `In progress`
+ 
+ 
+## 4. Suggest a feature
+  You are welcome to suggest no feature to the application via (github issues)[https://github.com/bpatrik/pigallery2/issues].
+  I cannot garantie any dealine with the development of a new feature. (I usually fix bugs within week/weeks.)
+  I will give a higher priority to a feature that has more 'likes' (i.e.: `+1`-s or thumbs ups) on it.
 
-## 4. Known errors
+## 5. Known errors
 * EXIF orientation tag:
   *  There is no nice way to handle EXIF orientation tag properly.
 The page handles these photos, but might cause same error in the user experience (e.g.: the pages loads those photos slower. See issue [#11](https://github.com/bpatrik/pigallery2/issues/11))
 * Video support on weak servers (like raspberry pi) with low upload rate
   * video playback may use up too much resources and the server might not response for a while. A solution might be to down scale / convert the video files to lower bitrate. 
-## 5. Credits
+## 6. Credits
 Crossbrowser testing sponsored by [Browser Stack](https://www.browserstack.com)
 [<img src="https://camo.githubusercontent.com/a7b268f2785656ab3ca7b1cbb1633ee5affceb8f/68747470733a2f2f64677a6f7139623561736a67312e636c6f756466726f6e742e6e65742f70726f64756374696f6e2f696d616765732f6c61796f75742f6c6f676f2d6865616465722e706e67" alt="Browser Stack" height="31px" style="background: cornflowerblue;">](https://www.browserstack.com)
 
