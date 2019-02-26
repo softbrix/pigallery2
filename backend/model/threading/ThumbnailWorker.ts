@@ -66,7 +66,7 @@ export class VideoRendererFactory {
 
         ffmpeg(input.mediaPath).ffprobe((err: any, data: FfprobeData) => {
           if (!!err || data === null) {
-            return reject(err.toString());
+            return reject('[FFmpeg] ' + err.toString());
           }
           /// console.log(data);
           let width = null;
@@ -79,7 +79,7 @@ export class VideoRendererFactory {
             }
           }
           if (!width || !height) {
-            return reject('Can not read video dimension');
+            return reject('[FFmpeg] Can not read video dimension');
           }
           const ratio = height / width;
           const command: FfmpegCommand = ffmpeg(input.mediaPath);
@@ -94,7 +94,7 @@ export class VideoRendererFactory {
               resolve();
             })
             .on('error', (e) => {
-              reject(e.toString() + ' executed: ' + executedCmd);
+              reject('[FFmpeg] ' + e.toString() + ' executed: ' + executedCmd);
             })
             .outputOptions(['-qscale:v 4']);
           if (input.makeSquare === false) {
@@ -168,7 +168,7 @@ export class ImageRendererFactory {
       await new Promise((resolve, reject) => {
         image.write(input.thPath, (err: Error | null) => { // save
           if (err) {
-            return reject(err);
+            return reject('[JimpThRenderer] ' + err.toString());
           }
           resolve();
         });
@@ -233,7 +233,7 @@ export class ImageRendererFactory {
         let image: State = gm(input.mediaPath);
         image.size((err, value: Dimensions) => {
           if (err) {
-            return reject(err);
+            return reject('[GMThRenderer] ' + err.toString());
           }
 
           /**
@@ -259,12 +259,12 @@ export class ImageRendererFactory {
             }
             image.write(input.thPath, (e) => {
               if (e) {
-                return reject(e);
+                return reject('[GMThRenderer] ' + e.toString());
               }
               return resolve();
             });
           } catch (err) {
-            return reject(err);
+            return reject('[GMThRenderer] ' + err.toString());
           }
         });
       });

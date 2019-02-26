@@ -53,7 +53,6 @@ export class ShareService {
   public setUserObs(userOB: Observable<UserDTO>) {
 
     userOB.subscribe((user) => {
-      console.log(user);
       if (user && !!user.usedSharingKey) {
         if (user.usedSharingKey !== this.sharingKey) {
           this.sharingKey = user.usedSharingKey;

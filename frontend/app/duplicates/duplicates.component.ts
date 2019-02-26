@@ -95,6 +95,10 @@ export class DuplicateComponent implements OnDestroy {
       this.renderTimer = null;
     }
 
+    if (this.directoryGroups.length === 0) {
+      return;
+    }
+
     if (this.renderedIndex.group === this.directoryGroups.length - 1 &&
       this.renderedIndex.pairs >=
       this.directoryGroups[this.renderedIndex.group].duplicates.length) {

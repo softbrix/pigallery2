@@ -11,10 +11,9 @@ import {Config} from '../../../common/config/private/Config';
 import {ThumbnailProcessingLib} from '../../../common/config/private/IPrivateConfig';
 import {ThumbnailTH} from '../../model/threading/ThreadPool';
 import {RendererInput, ThumbnailSourceType, ThumbnailWorker} from '../../model/threading/ThumbnailWorker';
-
 import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {ITaskExecuter, TaskExecuter} from '../../model/threading/TaskExecuter';
-import {PhotoDTO} from '../../../common/entities/PhotoDTO';
+import {FaceRegion, PhotoDTO} from '../../../common/entities/PhotoDTO';
 
 
 export class ThumbnailGeneratorMWs {
@@ -87,17 +86,17 @@ export class ThumbnailGeneratorMWs {
     // load parameters
     const mediaPath = path.join(ProjectPath.ImageFolder, photo.directory.path, photo.directory.name, photo.name);
     const size: number = Config.Client.Thumbnail.personThumbnailSize;
-    const personName = photo.metadata.faces[0].name;
     // generate thumbnail path
-    const thPath = path.join(ProjectPath.ThumbnailFolder, ThumbnailGeneratorMWs.generatePersonThumbnailName(mediaPath, personName, size));
+    const thPath = path.join(ProjectPath.ThumbnailFolder,
+      ThumbnailGeneratorMWs.generatePersonThumbnailName(mediaPath, photo.metadata.faces[0], size));
 
 
     req.resultPipe = thPath;
 
     // check if thumbnail already exist
     if (fs.existsSync(thPath) === true) {
-        return next();
-      }
+      return next();
+    }
 
     // create thumbnail folder if not exist
     if (!fs.existsSync(ProjectPath.ThumbnailFolder)) {
@@ -170,8 +169,9 @@ export class ThumbnailGeneratorMWs {
     return crypto.createHash('md5').update(mediaPath).digest('hex') + '_' + size + '.jpg';
   }
 
-  public static generatePersonThumbnailName(mediaPath: string, personName: string, size: number): string {
-    return crypto.createHash('md5').update(mediaPath + '_' + personName).digest('hex') + '_' + size + '.jpg';
+  public static generatePersonThumbnailName(mediaPath: string, faceRegion: FaceRegion, size: number): string {
+    return crypto.createHash('md5').update(mediaPath + '_' + faceRegion.name + '_' + faceRegion.box.x + '_' + faceRegion.box.y)
+      .digest('hex') + '_' + size + '.jpg';
   }
 
   private static addThInfoTODir(directory: DirectoryDTO) {
