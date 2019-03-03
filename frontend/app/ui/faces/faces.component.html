@@ -1,6 +1,6 @@
 <app-frame>
 
-  <div body class="container-fluid">
+  <div body #container class="container-fluid">
      <app-face *ngFor="let person of facesService.persons.value"
                [person]="person"
                [size]="size"></app-face>

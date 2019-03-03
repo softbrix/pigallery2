@@ -22,7 +22,6 @@ export class DirectoriesComponent implements OnChanges {
     const size = 220 + 5;
     const containerWidth = this.container.nativeElement.parentElement.clientWidth;
     this.size = (containerWidth / Math.round((containerWidth / size))) - 5;
-    console.log(containerWidth, this.size);
   }
 
 }

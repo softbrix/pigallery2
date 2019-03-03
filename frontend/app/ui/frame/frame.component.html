@@ -11,6 +11,16 @@
   </button>
 
   <div class="collapse navbar-collapse" id="navbarNav" [collapse]="collapsed">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item" [routerLinkActive]="['active']">
+        <a class="nav-link"
+           [routerLink]="['/gallery']"
+           [queryParams]="queryService.getParams()">Gallery</a>
+      </li>
+      <li class="nav-item" [routerLinkActive]="['active']">
+        <a class="nav-link" [routerLink]="['/faces']">Faces</a>
+      </li>
+    </ul>
     <ul class="navbar-nav navbar-right ml-auto">
       <ng-content select="[navbar]"></ng-content>
       <li class="nav-item divider-vertical">

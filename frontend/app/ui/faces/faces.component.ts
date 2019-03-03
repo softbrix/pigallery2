@@ -1,4 +1,4 @@
-import {Component, ElementRef} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FacesService} from './faces.service';
 import {QueryService} from '../../model/query.service';
 
@@ -8,27 +8,25 @@ import {QueryService} from '../../model/query.service';
   templateUrl: './faces.component.html',
   styleUrls: ['./faces.component.css']
 })
-export class FacesComponent {
-
-
-  size: number;
+export class FacesComponent implements OnInit {
+  @ViewChild('container') container: ElementRef;
+  public size: number;
 
   constructor(public facesService: FacesService,
-              public queryService: QueryService,
-              private container: ElementRef) {
+              public queryService: QueryService) {
     this.facesService.getPersons().catch(console.error);
   }
 
 
-  ngOnChanges() {
+  ngOnInit() {
     this.updateSize();
   }
 
   private updateSize() {
     const size = 220 + 5;
-    const containerWidth = this.container.nativeElement.parentElement.clientWidth;
+    // body - container margin
+    const containerWidth = this.container.nativeElement.clientWidth - 30;
     this.size = (containerWidth / Math.round((containerWidth / size))) - 5;
-    console.log(containerWidth, this.size);
   }
 
 
