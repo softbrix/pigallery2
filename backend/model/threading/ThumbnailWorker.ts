@@ -48,8 +48,8 @@ export interface RendererInput {
   thPath: string;
   qualityPriority: boolean;
   cut?: {
-    x: number,
-    y: number,
+    left: number,
+    top: number,
     width: number,
     height: number
   };
@@ -149,8 +149,8 @@ export class ImageRendererFactory {
 
       if (input.cut) {
         image.crop(
-          input.cut.x,
-          input.cut.y,
+          input.cut.left,
+          input.cut.top,
           input.cut.width,
           input.cut.height
         );
@@ -199,12 +199,7 @@ export class ImageRendererFactory {
       const kernel = input.qualityPriority === true ? sharp.kernel.lanczos3 : sharp.kernel.nearest;
 
       if (input.cut) {
-        image.extract({
-          top: input.cut.y,
-          left: input.cut.x,
-          width: input.cut.width,
-          height: input.cut.height
-        });
+        image.extract(input.cut);
       }
       if (input.makeSquare === false) {
         const newWidth = Math.round(Math.sqrt((input.size * input.size) / ratio));

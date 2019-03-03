@@ -141,6 +141,8 @@ export class ThumbnailGeneratorMWs {
       x: Math.round(photo.metadata.faces[0].box.width * (Config.Server.thumbnail.personFaceMargin)),
       y: Math.round(photo.metadata.faces[0].box.height * (Config.Server.thumbnail.personFaceMargin))
     };
+
+
     // run on other thread
     const input = <RendererInput>{
       type: ThumbnailSourceType.Image,
@@ -149,13 +151,15 @@ export class ThumbnailGeneratorMWs {
       thPath: thPath,
       makeSquare: false,
       cut: {
-        x: Math.round(Math.max(0, photo.metadata.faces[0].box.x - margin.x / 2)),
-        y: Math.round(Math.max(0, photo.metadata.faces[0].box.y - margin.y / 2)),
+        left: Math.round(Math.max(0, photo.metadata.faces[0].box.x - margin.x / 2)),
+        top: Math.round(Math.max(0, photo.metadata.faces[0].box.y - margin.y / 2)),
         width: photo.metadata.faces[0].box.width + margin.x,
         height: photo.metadata.faces[0].box.height + margin.y
       },
       qualityPriority: Config.Server.thumbnail.qualityPriority
     };
+    input.cut.width = Math.min(input.cut.width, photo.metadata.size.width - input.cut.left);
+    input.cut.height = Math.min(input.cut.height, photo.metadata.size.height - input.cut.top);
     try {
       await ThumbnailGeneratorMWs.taskQue.execute(input);
       return next();
