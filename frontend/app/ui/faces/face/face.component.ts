@@ -4,6 +4,9 @@ import {PersonDTO} from '../../../../../common/entities/PersonDTO';
 import {SearchTypes} from '../../../../../common/entities/AutoCompleteItem';
 import {DomSanitizer} from '@angular/platform-browser';
 import {PersonThumbnail, ThumbnailManagerService} from '../../gallery/thumbnailManager.service';
+import {FacesService} from '../faces.service';
+import {AuthenticationService} from '../../../model/network/authentication.service';
+import {Config} from '../../../../../common/config/public/Config';
 
 @Component({
   selector: 'app-face',
@@ -19,8 +22,14 @@ export class FaceComponent implements OnInit, OnDestroy {
   SearchTypes = SearchTypes;
 
   constructor(private thumbnailService: ThumbnailManagerService,
-              private _sanitizer: DomSanitizer) {
+              private _sanitizer: DomSanitizer,
+              private faceService: FacesService,
+              public  authenticationService: AuthenticationService) {
 
+  }
+
+  get CanUpdate(): boolean {
+    return this.authenticationService.user.getValue().role >= Config.Client.Faces.writeAccessMinRole;
   }
 
   ngOnInit() {
@@ -42,5 +51,11 @@ export class FaceComponent implements OnInit, OnDestroy {
     }
   }
 
+  async toggleFavourite($event: MouseEvent) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    await this.faceService.setFavourite(this.person, !this.person.isFavourite).catch(console.error);
+    this.faceService.getPersons();
+  }
 }
 

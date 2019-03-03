@@ -1,11 +1,11 @@
-<a class="button btn btn-secondary"
-   [routerLink]="['/search', person.name, {type: SearchTypes[SearchTypes.person]}]"
+<a [routerLink]="['/search', person.name, {type: SearchTypes[SearchTypes.person]}]"
    style="display: inline-block;">
 
 
   <div class="photo-container"
        [style.width.px]="size"
        [style.height.px]="size">
+
     <div class="photo"
          *ngIf="thumbnail && thumbnail.Available"
          [style.background-image]="getSanitizedThUrl()"></div>
@@ -18,7 +18,10 @@
 
   <!--Info box -->
   <div class="info">
-    <div class="person-name">{{person.name}} ({{person.count}})</div>
+      <span (click)="CanUpdate && toggleFavourite($event)"
+            class="star oi oi-star"
+            [ngClass]="{'favourite':person.isFavourite, 'clickable':CanUpdate}"></span>
+    {{person.name}} ({{person.count}})
 
   </div>
 </a>

@@ -5,11 +5,33 @@ import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {PhotoDTO} from '../../../common/entities/PhotoDTO';
 import {MediaEntity} from './enitites/MediaEntity';
 import {FaceRegionEntry} from './enitites/FaceRegionEntry';
+import {PersonDTO} from '../../../common/entities/PersonDTO';
 
 const LOG_TAG = '[PersonManager]';
 
 export class PersonManager implements IPersonManager {
   persons: PersonEntry[] = [];
+
+  async updatePerson(name: string, partialPerson: PersonDTO): Promise<PersonEntry> {
+    const connection = await SQLConnection.getConnection();
+    const repository = connection.getRepository(PersonEntry);
+    const person = await repository.createQueryBuilder('person')
+      .limit(1)
+      .where('person.name LIKE :name COLLATE utf8_general_ci', {name: name}).getOne();
+
+
+    if (typeof partialPerson.name !== 'undefined') {
+      person.name = partialPerson.name;
+    }
+    if (typeof partialPerson.isFavourite !== 'undefined') {
+      person.isFavourite = partialPerson.isFavourite;
+    }
+    await repository.save(person);
+
+    await this.loadAll();
+
+    return person;
+  }
 
   async getSamplePhoto(name: string): Promise<PhotoDTO> {
     const connection = await SQLConnection.getConnection();
@@ -18,7 +40,7 @@ export class PersonManager implements IPersonManager {
       .leftJoinAndSelect('media.directory', 'directory')
       .leftJoinAndSelect('media.metadata.faces', 'faces')
       .leftJoinAndSelect('faces.person', 'person')
-      .where('person.name LIKE :name COLLATE utf8_general_ci', {name: '%' + name + '%'}).getRawAndEntities();
+      .where('person.name LIKE :name COLLATE utf8_general_ci', {name: name}).getRawAndEntities();
 
     if (rawAndEntities.entities.length === 0) {
       return null;

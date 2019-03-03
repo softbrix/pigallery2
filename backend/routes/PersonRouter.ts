@@ -5,12 +5,28 @@ import {UserRoles} from '../../common/entities/UserDTO';
 import {PersonMWs} from '../middlewares/PersonMWs';
 import {ThumbnailGeneratorMWs} from '../middlewares/thumbnail/ThumbnailGeneratorMWs';
 import {VersionMWs} from '../middlewares/VersionMWs';
+import {Config} from '../../common/config/private/Config';
 
 export class PersonRouter {
   public static route(app: Express) {
 
+    this.updatePerson(app);
     this.addPersons(app);
     this.getPersonThumbnail(app);
+  }
+
+
+  private static updatePerson(app: Express) {
+    app.post(['/api/person/:name'],
+      // common part
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(Config.Client.Faces.writeAccessMinRole),
+      VersionMWs.injectGalleryVersion,
+
+      // specific part
+      PersonMWs.updatePerson,
+      RenderingMWs.renderResult
+    );
   }
 
   private static addPersons(app: Express) {

@@ -16,6 +16,9 @@ export class PersonEntry implements PersonDTO {
   @Column('int', {unsigned: true, default: 0})
   count: number;
 
+  @Column({default: false})
+  isFavourite: boolean;
+
   @OneToMany(type => FaceRegionEntry, faceRegion => faceRegion.person)
   public faces: FaceRegionEntry[];
 

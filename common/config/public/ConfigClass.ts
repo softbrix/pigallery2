@@ -69,6 +69,7 @@ export module ClientConfig {
   export interface FacesConfig {
     enabled: boolean;
     keywordsToPersons: boolean;
+    writeAccessMinRole: UserRoles;
   }
 
   export interface Config {
@@ -147,7 +148,8 @@ export class PublicConfigClass {
     },
     Faces: {
       enabled: true,
-      keywordsToPersons: true
+      keywordsToPersons: true,
+      writeAccessMinRole: UserRoles.Admin
     },
     authenticationRequired: true,
     unAuthenticatedUserRole: UserRoles.Admin,

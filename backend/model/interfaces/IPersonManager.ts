@@ -1,6 +1,7 @@
 import {PersonEntry} from '../sql/enitites/PersonEntry';
 import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {PhotoDTO} from '../../../common/entities/PhotoDTO';
+import {PersonDTO} from '../../../common/entities/PersonDTO';
 
 export interface IPersonManager {
   getAll(): Promise<PersonEntry[]>;
@@ -14,4 +15,6 @@ export interface IPersonManager {
   keywordsToPerson(media: MediaDTO[]): Promise<void>;
 
   updateCounts(): Promise<void>;
+
+  updatePerson(name: string, partialPerson: PersonDTO): Promise<PersonEntry>;
 }

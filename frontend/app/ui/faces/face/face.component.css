@@ -1,3 +1,25 @@
+.star {
+  margin: 2px;
+  color: #888;
+  cursor: default;
+
+}
+
+.star.favourite {
+  color: white;
+}
+
+.star.clickable {
+  cursor: pointer;
+  transition: all .05s ease-in-out;
+  transform: scale(1.0, 1.0);
+}
+
+.star.clickable:hover {
+  transform: scale(1.4, 1.4);
+}
+
+
 a {
   position: relative;
 }
@@ -51,6 +73,7 @@ a:hover .photo-container {
 }
 
 .person-name {
+  display: inline-block;
   width: 180px;
   white-space: normal;
 }

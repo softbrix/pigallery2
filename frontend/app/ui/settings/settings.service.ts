@@ -69,7 +69,8 @@ export class SettingsService {
         },
         Faces: {
           enabled: true,
-          keywordsToPersons: true
+          keywordsToPersons: true,
+          writeAccessMinRole: UserRoles.Admin
         },
         urlBase: '',
         publicUrl: '',

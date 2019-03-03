@@ -1,10 +1,11 @@
 import {IPersonManager} from '../interfaces/IPersonManager';
 import {MediaDTO} from '../../../common/entities/MediaDTO';
-import {PersonEntry} from '../sql/enitites/PersonEntry';
 import {PhotoDTO} from '../../../common/entities/PhotoDTO';
+import {PersonDTO} from '../../../common/entities/PersonDTO';
 
 export class PersonManager implements IPersonManager {
-  getAll(): Promise<PersonEntry[]> {
+
+  getAll(): Promise<any[]> {
     throw new Error('Method not implemented.');
   }
 
@@ -25,6 +26,10 @@ export class PersonManager implements IPersonManager {
   }
 
   updateCounts(): Promise<void> {
+    throw new Error('not supported by memory DB');
+  }
+
+  updatePerson(name: string, partialPerson: PersonDTO): Promise<any> {
     throw new Error('not supported by memory DB');
   }
 }
