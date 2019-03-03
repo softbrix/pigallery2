@@ -14,6 +14,7 @@ import {RendererInput, ThumbnailSourceType, ThumbnailWorker} from '../../model/t
 import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {ITaskExecuter, TaskExecuter} from '../../model/threading/TaskExecuter';
 import {FaceRegion, PhotoDTO} from '../../../common/entities/PhotoDTO';
+import {PersonWithPhoto} from '../PersonMWs';
 
 
 export class ThumbnailGeneratorMWs {
@@ -62,6 +63,39 @@ export class ThumbnailGeneratorMWs {
       }
       if (cw.searchResult && cw.searchResult.media) {
         ThumbnailGeneratorMWs.addThInfoToPhotos(cw.searchResult.media);
+      }
+
+    } catch (error) {
+      return next(new ErrorDTO(ErrorCodes.SERVER_ERROR, 'error during postprocessing result (adding thumbnail info)', error.toString()));
+
+    }
+
+    return next();
+
+  }
+
+
+  public static addThumbnailInfoForPersons(req: Request, res: Response, next: NextFunction) {
+    if (!req.resultPipe) {
+      return next();
+    }
+
+    try {
+      const size: number = Config.Client.Thumbnail.personThumbnailSize;
+
+      const persons: PersonWithPhoto[] = req.resultPipe;
+      for (let i = 0; i < persons.length; i++) {
+
+        // load parameters
+        const mediaPath = path.join(ProjectPath.ImageFolder,
+          persons[i].samplePhoto.directory.path,
+          persons[i].samplePhoto.directory.name, persons[i].samplePhoto.name);
+
+        // generate thumbnail path
+        const thPath = path.join(ProjectPath.ThumbnailFolder,
+          ThumbnailGeneratorMWs.generatePersonThumbnailName(mediaPath, persons[i].samplePhoto.metadata.faces[0], size));
+
+        persons[i].readyThumbnail = fs.existsSync(thPath);
       }
 
     } catch (error) {

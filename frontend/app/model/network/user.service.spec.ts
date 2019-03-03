@@ -4,7 +4,7 @@ import {NetworkService} from './network.service';
 import {UserService} from './user.service';
 import {LoginCredential} from '../../../../common/entities/LoginCredential';
 import {SlimLoadingBarService} from 'ng2-slim-loading-bar';
-import {ShareService} from '../../gallery/share.service';
+import {ShareService} from '../../ui/gallery/share.service';
 import {VersionService} from '../version.service';
 
 class MockShareService {

@@ -14,6 +14,7 @@
     "test": "ng test && mocha --recursive test/backend/unit && mocha --recursive test/backend/integration  && mocha --recursive test/common/unit ",
     "start": "node ./backend/index",
     "run-dev": "ng build --aot --watch --output-path=./dist --i18n-locale en --i18n-file frontend/translate/messages.en.xlf --i18n-missing-translation warning",
+    "build-stats": "ng build --aot --prod --stats-json --output-path=./dist --i18n-locale en --i18n-file frontend/translate/messages.en.xlf --i18n-missing-translation warning",
     "update-translation": "gulp update-translation",
     "add-translation": "gulp add-translation"
   },
@@ -123,7 +124,8 @@
     "zone.js": "0.8.29"
   },
   "//": [
-    "TODO: remove terser version lock once webpack is fixed"
+    "TODO: remove terser version lock once webpack is fixed",
+    "TODO: check i18n-pollify once angular 8 is out"
   ],
   "resolutions": {
     "natives": "1.1.3"

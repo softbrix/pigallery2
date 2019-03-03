@@ -15,19 +15,28 @@ export class PersonRouter {
 
   private static addPersons(app: Express) {
     app.get(['/api/person'],
+      // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.User),
       VersionMWs.injectGalleryVersion,
+
+      // specific part
       PersonMWs.listPersons,
+      PersonMWs.addSamplePhotoForAll,
+      ThumbnailGeneratorMWs.addThumbnailInfoForPersons,
+      PersonMWs.removeSamplePhotoForAll,
       RenderingMWs.renderResult
     );
   }
 
   private static getPersonThumbnail(app: Express) {
     app.get(['/api/person/:name/thumbnail'],
+      // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.User),
       VersionMWs.injectGalleryVersion,
+
+      // specific part
       PersonMWs.getSamplePhoto,
       ThumbnailGeneratorMWs.generatePersonThumbnail,
       RenderingMWs.renderFile

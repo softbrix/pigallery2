@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
-import {ShareService} from '../gallery/share.service';
+import {ShareService} from '../ui/gallery/share.service';
 import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {QueryParams} from '../../../common/QueryParams';
 import {Utils} from '../../../common/Utils';
-import {GalleryService} from '../gallery/gallery.service';
+import {GalleryService} from '../ui/gallery/gallery.service';
 import {Config} from '../../../common/config/public/Config';
 import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
 

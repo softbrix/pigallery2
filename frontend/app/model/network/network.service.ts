@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Message} from '../../../../common/entities/Message';
 import {SlimLoadingBarService} from 'ng2-slim-loading-bar';
-import 'rxjs/Rx';
 import {ErrorCodes, ErrorDTO} from '../../../../common/entities/Error';
 import {Config} from '../../../../common/config/public/Config';
 import {Utils} from '../../../../common/Utils';

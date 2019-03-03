@@ -1,0 +1,24 @@
+<a class="button btn btn-secondary"
+   [routerLink]="['/gallery', getDirectoryPath()]"
+   [queryParams]="queryService.getParams()"
+   style="display: inline-block;">
+
+
+  <div class="photo-container"
+       [style.width.px]="size"
+       [style.height.px]="size">
+    <div [ngClass]="'photo photo-orientation-'+Orientation"
+         *ngIf="thumbnail && thumbnail.Available"
+         [style.background-image]="getSanitizedThUrl()"></div>
+
+    <span *ngIf="!thumbnail || !thumbnail.Available" class="oi oi-folder no-image"
+          aria-hidden="true">
+    </span>
+  </div>
+  <!--Info box -->
+  <div class="info">
+    <div class="directory-name">{{directory.name}}</div>
+
+  </div>
+</a>
+

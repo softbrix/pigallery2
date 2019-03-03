@@ -1,0 +1,25 @@
+<a class="button btn btn-secondary"
+   [routerLink]="['/search', person.name, {type: SearchTypes[SearchTypes.person]}]"
+   style="display: inline-block;">
+
+
+  <div class="photo-container"
+       [style.width.px]="size"
+       [style.height.px]="size">
+    <div class="photo"
+         *ngIf="thumbnail && thumbnail.Available"
+         [style.background-image]="getSanitizedThUrl()"></div>
+
+    <span *ngIf="!thumbnail || !thumbnail.Available" class="oi oi-person no-image"
+          aria-hidden="true">
+    </span>
+  </div>
+
+
+  <!--Info box -->
+  <div class="info">
+    <div class="person-name">{{person.name}} ({{person.count}})</div>
+
+  </div>
+</a>
+

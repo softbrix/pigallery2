@@ -1,12 +1,12 @@
 import {ModuleWithProviders} from '@angular/core';
 import {RouterModule, Routes, UrlMatchResult, UrlSegment} from '@angular/router';
-import {LoginComponent} from './login/login.component';
-import {GalleryComponent} from './gallery/gallery.component';
-import {AdminComponent} from './admin/admin.component';
-import {ShareLoginComponent} from './sharelogin/share-login.component';
+import {LoginComponent} from './ui/login/login.component';
+import {GalleryComponent} from './ui/gallery/gallery.component';
+import {AdminComponent} from './ui/admin/admin.component';
+import {ShareLoginComponent} from './ui/sharelogin/share-login.component';
 import {QueryParams} from '../../common/QueryParams';
-import {DuplicateComponent} from './duplicates/duplicates.component';
-import {FacesComponent} from './faces/faces.component';
+import {DuplicateComponent} from './ui/duplicates/duplicates.component';
+import {FacesComponent} from './ui/faces/faces.component';
 
 export function galleryMatcherFunction(
   segments: UrlSegment[]): UrlMatchResult | null {

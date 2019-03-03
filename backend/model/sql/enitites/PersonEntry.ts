@@ -18,4 +18,7 @@ export class PersonEntry implements PersonDTO {
 
   @OneToMany(type => FaceRegionEntry, faceRegion => faceRegion.person)
   public faces: FaceRegionEntry[];
+
+
+  readyThumbnail: boolean;
 }

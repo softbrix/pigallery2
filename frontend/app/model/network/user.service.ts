@@ -3,7 +3,7 @@ import {LoginCredential} from '../../../../common/entities/LoginCredential';
 import {NetworkService} from './network.service';
 import {UserDTO} from '../../../../common/entities/UserDTO';
 import {Config} from '../../../../common/config/public/Config';
-import {ShareService} from '../../gallery/share.service';
+import {ShareService} from '../../ui/gallery/share.service';
 
 @Injectable()
 export class UserService {

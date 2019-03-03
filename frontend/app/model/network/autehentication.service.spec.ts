@@ -6,7 +6,7 @@ import {AuthenticationService} from './authentication.service';
 import {NetworkService} from './network.service';
 import {ErrorDTO} from '../../../../common/entities/Error';
 import {VersionService} from '../version.service';
-import {ShareService} from '../../gallery/share.service';
+import {ShareService} from '../../ui/gallery/share.service';
 
 class MockUserService {
   public login(credential: LoginCredential): Promise<UserDTO> {

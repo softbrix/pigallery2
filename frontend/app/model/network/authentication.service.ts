@@ -8,7 +8,7 @@ import {Config} from '../../../../common/config/public/Config';
 import {NetworkService} from './network.service';
 import {ErrorCodes, ErrorDTO} from '../../../../common/entities/Error';
 import {CookieNames} from '../../../../common/CookieNames';
-import {ShareService} from '../../gallery/share.service';
+import {ShareService} from '../../ui/gallery/share.service';
 
 declare module ServerInject {
   export let user: UserDTO;

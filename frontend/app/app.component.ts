@@ -4,7 +4,7 @@ import {UserDTO} from '../../common/entities/UserDTO';
 import {Router} from '@angular/router';
 import {Config} from '../../common/config/public/Config';
 import {Title} from '@angular/platform-browser';
-import {ShareService} from './gallery/share.service';
+import {ShareService} from './ui/gallery/share.service';
 import 'hammerjs';
 import {Subscription} from 'rxjs';
 

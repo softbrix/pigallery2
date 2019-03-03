@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 
 import {Router} from '@angular/router';
-import {ShareService} from '../gallery/share.service';
+import {ShareService} from '../ui/gallery/share.service';
 
 @Injectable()
 export class NavigationService {
