@@ -23,5 +23,4 @@ export class PersonEntry implements PersonDTO {
   public faces: FaceRegionEntry[];
 
 
-  readyThumbnail: boolean;
 }

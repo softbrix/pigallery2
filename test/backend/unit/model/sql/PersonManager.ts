@@ -14,8 +14,8 @@ describe('PersonManager', () => {
   it('should upgrade keywords to person', async () => {
     const pm = new PersonManager();
     pm.loadAll = () => Promise.resolve();
-    pm.persons = [{name: 'Han Solo', id: 0, faces: [], count: 0},
-      {name: 'Anakin', id: 2, faces: [], count: 0}];
+    pm.persons = [{name: 'Han Solo', id: 0, faces: [], count: 0, isFavourite: false},
+      {name: 'Anakin', id: 2, faces: [], count: 0, isFavourite: false}];
 
     const p_noFaces = <PhotoDTO>{
       metadata: {
