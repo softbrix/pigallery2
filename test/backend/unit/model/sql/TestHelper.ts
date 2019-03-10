@@ -105,19 +105,19 @@ export class TestHelper {
     p.metadata.positionData.country = 'Tatooine';
     p.name = 'sw1';
 
-    p.metadata.faces = [<any>{
-      box: {height: 10, width: 10, x: 10, y: 10},
+    p.metadata.faces = [<FaceRegion>{
+      box: {height: 10, width: 10, left: 10, top: 10},
       name: 'Boba Fett'
-    }, <any>{
-      box: {height: 10, width: 10, x: 101, y: 101},
+    }, <FaceRegion>{
+      box: {height: 10, width: 10, left: 101, top: 101},
       name: 'Luke Skywalker'
-    }, <any>{
-      box: {height: 10, width: 10, x: 101, y: 101},
+    }, <FaceRegion>{
+      box: {height: 10, width: 10, left: 101, top: 101},
       name: 'Han Solo'
-    }, <any>{
-      box: {height: 10, width: 10, x: 101, y: 101},
+    }, <FaceRegion>{
+      box: {height: 10, width: 10, left: 101, top: 101},
       name: 'Unkle Ben'
-    }];
+    }] as any[];
     return p;
   }
 
