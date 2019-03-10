@@ -25,7 +25,7 @@ export class PersonManager implements IPersonManager {
     throw new Error('not supported by memory DB');
   }
 
-  updateCounts(): Promise<void> {
+  onGalleryIndexUpdate(): Promise<void> {
     throw new Error('not supported by memory DB');
   }
 

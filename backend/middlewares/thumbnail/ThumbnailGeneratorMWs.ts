@@ -85,7 +85,6 @@ export class ThumbnailGeneratorMWs {
 
       const persons: PersonWithPhoto[] = req.resultPipe;
       for (let i = 0; i < persons.length; i++) {
-
         // load parameters
         const mediaPath = path.join(ProjectPath.ImageFolder,
           persons[i].samplePhoto.directory.path,
@@ -151,8 +150,8 @@ export class ThumbnailGeneratorMWs {
       thPath: thPath,
       makeSquare: false,
       cut: {
-        left: Math.round(Math.max(0, photo.metadata.faces[0].box.x - margin.x / 2)),
-        top: Math.round(Math.max(0, photo.metadata.faces[0].box.y - margin.y / 2)),
+        left: Math.round(Math.max(0, photo.metadata.faces[0].box.left - margin.x / 2)),
+        top: Math.round(Math.max(0, photo.metadata.faces[0].box.top - margin.y / 2)),
         width: photo.metadata.faces[0].box.width + margin.x,
         height: photo.metadata.faces[0].box.height + margin.y
       },
@@ -208,7 +207,7 @@ export class ThumbnailGeneratorMWs {
   }
 
   public static generatePersonThumbnailName(mediaPath: string, faceRegion: FaceRegion, size: number): string {
-    return crypto.createHash('md5').update(mediaPath + '_' + faceRegion.name + '_' + faceRegion.box.x + '_' + faceRegion.box.y)
+    return crypto.createHash('md5').update(mediaPath + '_' + faceRegion.name + '_' + faceRegion.box.left + '_' + faceRegion.box.top)
       .digest('hex') + '_' + size + '.jpg';
   }
 

@@ -26,6 +26,9 @@ export class GridMedia extends Media {
   get Video(): VideoDTO {
     return <VideoDTO>this.media;
   }
+  get Photo(): PhotoDTO {
+    return <PhotoDTO>this.media;
+  }
 
 
 }

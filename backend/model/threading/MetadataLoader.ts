@@ -211,12 +211,12 @@ export class MetadataLoader {
                     const box = {
                       width: Math.round(regionBox['stArea:w'] * metadata.size.width),
                       height: Math.round(regionBox['stArea:h'] * metadata.size.height),
-                      x: Math.round(regionBox['stArea:x'] * metadata.size.width),
-                      y: Math.round(regionBox['stArea:y'] * metadata.size.height)
+                      left: Math.round(regionBox['stArea:x'] * metadata.size.width),
+                      top: Math.round(regionBox['stArea:y'] * metadata.size.height)
                     };
                     // convert center base box to corner based box
-                    box.x = Math.max(0, box.x - box.width / 2);
-                    box.y = Math.max(0, box.y - box.height / 2);
+                    box.left = Math.max(0, box.left - box.width / 2);
+                    box.top = Math.max(0, box.top - box.height / 2);
                     faces.push({name: name, box: box});
                   }
                 }

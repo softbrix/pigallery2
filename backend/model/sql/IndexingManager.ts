@@ -260,8 +260,8 @@ export class IndexingManager implements IIndexingManager {
       for (let j = 0; j < indexedFaces.length; j++) {
         if (indexedFaces[j].box.height === scannedFaces[i].box.height &&
           indexedFaces[j].box.width === scannedFaces[i].box.width &&
-          indexedFaces[j].box.x === scannedFaces[i].box.x &&
-          indexedFaces[j].box.y === scannedFaces[i].box.y &&
+          indexedFaces[j].box.left === scannedFaces[i].box.left &&
+          indexedFaces[j].box.top === scannedFaces[i].box.top &&
           indexedFaces[j].person.name === scannedFaces[i].name) {
           face = indexedFaces[j];
           indexedFaces.splice(j, 1);
@@ -289,7 +289,7 @@ export class IndexingManager implements IIndexingManager {
       await this.saveChildDirs(connection, currentDirId, scannedDirectory);
       await this.saveMedia(connection, currentDirId, scannedDirectory.media);
       await this.saveMetaFiles(connection, currentDirId, scannedDirectory);
-      await ObjectManagers.getInstance().PersonManager.updateCounts();
+      await ObjectManagers.getInstance().PersonManager.onGalleryIndexUpdate();
       await ObjectManagers.getInstance().VersionManager.updateDataVersion();
     } catch (e) {
       throw e;

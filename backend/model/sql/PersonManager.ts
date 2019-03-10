@@ -6,10 +6,12 @@ import {PhotoDTO} from '../../../common/entities/PhotoDTO';
 import {MediaEntity} from './enitites/MediaEntity';
 import {FaceRegionEntry} from './enitites/FaceRegionEntry';
 import {PersonDTO} from '../../../common/entities/PersonDTO';
+import {Utils} from '../../../common/Utils';
 
 const LOG_TAG = '[PersonManager]';
 
 export class PersonManager implements IPersonManager {
+  samplePhotos: { [key: string]: PhotoDTO } = {};
   persons: PersonEntry[] = [];
 
   async updatePerson(name: string, partialPerson: PersonDTO): Promise<PersonEntry> {
@@ -34,22 +36,25 @@ export class PersonManager implements IPersonManager {
   }
 
   async getSamplePhoto(name: string): Promise<PhotoDTO> {
-    const connection = await SQLConnection.getConnection();
-    const rawAndEntities = await connection.getRepository(MediaEntity).createQueryBuilder('media')
-      .limit(1)
-      .leftJoinAndSelect('media.directory', 'directory')
-      .leftJoinAndSelect('media.metadata.faces', 'faces')
-      .leftJoinAndSelect('faces.person', 'person')
-      .where('person.name LIKE :name COLLATE utf8_general_ci', {name: name}).getRawAndEntities();
+    if (!this.samplePhotos[name]) {
+      const connection = await SQLConnection.getConnection();
+      const rawAndEntities = await connection.getRepository(MediaEntity).createQueryBuilder('media')
+        .limit(1)
+        .leftJoinAndSelect('media.directory', 'directory')
+        .leftJoinAndSelect('media.metadata.faces', 'faces')
+        .leftJoin('faces.person', 'person')
+        .where('person.name LIKE :name COLLATE utf8_general_ci', {name: name}).getRawAndEntities();
 
-    if (rawAndEntities.entities.length === 0) {
-      return null;
+      if (rawAndEntities.entities.length === 0) {
+        return null;
+      }
+      const media: PhotoDTO = Utils.clone(rawAndEntities.entities[0]);
+
+      media.metadata.faces = [FaceRegionEntry.fromRawToDTO(rawAndEntities.raw[0])];
+
+      this.samplePhotos[name] = media;
     }
-    const media: PhotoDTO = rawAndEntities.entities[0];
-
-    media.metadata.faces = [FaceRegionEntry.fromRawToDTO(rawAndEntities.raw[0])];
-
-    return media;
+    return this.samplePhotos[name];
 
   }
 
@@ -127,6 +132,12 @@ export class PersonManager implements IPersonManager {
       this.persons = await personRepository.find();
     }
 
+  }
+
+
+  public async onGalleryIndexUpdate() {
+    await this.updateCounts();
+    this.samplePhotos = {};
   }
 
   public async updateCounts() {

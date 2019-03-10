@@ -274,8 +274,8 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
           directory: dir.id
         })
         .leftJoinAndSelect('face.person', 'person')
-        .select(['face.id', 'face.box.x',
-          'face.box.y', 'face.box.width', 'face.box.height',
+        .select(['face.id', 'face.box.left',
+          'face.box.top', 'face.box.width', 'face.box.height',
           'media.id', 'person.name', 'person.id'])
         .getMany();
       for (let i = 0; i < dir.media.length; i++) {

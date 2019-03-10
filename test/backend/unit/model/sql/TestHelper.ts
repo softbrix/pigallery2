@@ -194,8 +194,8 @@ export class TestHelper {
     const f: FaceRegion = {
       name: rndStr() + '.jpg',
       box: {
-        x: rndInt(),
-        y: rndInt(),
+        left: rndInt(),
+        top: rndInt(),
         width: rndInt(),
         height: rndInt()
       }

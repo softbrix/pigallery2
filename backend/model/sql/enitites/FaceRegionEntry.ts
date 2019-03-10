@@ -9,9 +9,9 @@ export class FaceRegionBoxEntry implements FaceRegionBox {
   @Column('int')
   width: number;
   @Column('int')
-  x: number;
+  left: number;
   @Column('int')
-  y: number;
+  top: number;
 }
 
 /**
@@ -42,13 +42,13 @@ export class FaceRegionEntry {
     faces_personId: number,
     faces_boxHeight: number,
     faces_boxWidth: number,
-    faces_boxX: number,
-    faces_boxY: number,
+    faces_boxLeft: number,
+    faces_boxTop: number,
     person_id: number,
     person_name: string
   }): FaceRegion {
     return {
-      box: {width: raw.faces_boxWidth, height: raw.faces_boxHeight, x: raw.faces_boxX, y: raw.faces_boxY},
+      box: {width: raw.faces_boxWidth, height: raw.faces_boxHeight, left: raw.faces_boxLeft, top: raw.faces_boxTop},
       name: raw.person_name
     };
   }

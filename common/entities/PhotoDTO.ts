@@ -14,8 +14,8 @@ export interface PhotoDTO extends MediaDTO {
 export interface FaceRegionBox {
   width: number;
   height: number;
-  x: number;
-  y: number;
+  left: number;
+  top: number;
 }
 
 export interface FaceRegion {

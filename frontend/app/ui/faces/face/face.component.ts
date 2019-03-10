@@ -55,7 +55,6 @@ export class FaceComponent implements OnInit, OnDestroy {
     $event.preventDefault();
     $event.stopPropagation();
     await this.faceService.setFavourite(this.person, !this.person.isFavourite).catch(console.error);
-    this.faceService.getPersons();
   }
 }
 

@@ -11,7 +11,7 @@ export class PersonRouter {
   public static route(app: Express) {
 
     this.updatePerson(app);
-    this.addPersons(app);
+    this.addGetPersons(app);
     this.getPersonThumbnail(app);
   }
 
@@ -29,7 +29,7 @@ export class PersonRouter {
     );
   }
 
-  private static addPersons(app: Express) {
+  private static addGetPersons(app: Express) {
     app.get(['/api/person'],
       // common part
       AuthenticationMWs.authenticate,
