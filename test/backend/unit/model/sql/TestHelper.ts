@@ -135,16 +135,16 @@ export class TestHelper {
     p.metadata.positionData.state = 'Research City';
     p.metadata.positionData.country = 'Kamino';
     p.name = 'sw2';
-    p.metadata.faces = [<any>{
-      box: {height: 10, width: 10, x: 10, y: 10},
+    p.metadata.faces = [<FaceRegion>{
+      box: {height: 10, width: 10, left: 10, top: 10},
       name: 'Padmé Amidala'
-    }, <any>{
-      box: {height: 10, width: 10, x: 101, y: 101},
+    }, <FaceRegion>{
+      box: {height: 10, width: 10, left: 101, top: 101},
       name: 'Anakin Skywalker'
-    }, <any>{
-      box: {height: 10, width: 10, x: 101, y: 101},
+    }, <FaceRegion>{
+      box: {height: 10, width: 10, left: 101, top: 101},
       name: 'Obivan Kenobi'
-    }];
+    }] as any[];
     return p;
   }
 
