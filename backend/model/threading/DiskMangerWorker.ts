@@ -116,7 +116,7 @@ export class DiskMangerWorker {
 
           return resolve(directory);
         } catch (err) {
-          return reject({error: err.toString()});
+          return reject({error: err});
         }
 
       });
