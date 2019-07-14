@@ -40,10 +40,8 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit {
   public controllersDimmed = false;
   public controllersAlwaysOn = false;
   public controllersVisible = true;
-  visibilityTimer: number = null;
-  // delayedMediaShow: string = null;
   public drag = {x: 0, y: 0};
-
+  private visibilityTimer: number = null;
   private timer: Observable<number>;
   private timerSub: Subscription;
   private prevDrag = {x: 0, y: 0};

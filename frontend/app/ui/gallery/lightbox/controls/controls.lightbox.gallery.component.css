@@ -1,33 +1,3 @@
-.lightbox {
-  position: fixed; /* Stay in place */
-  z-index: 1100; /* Sit on top */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: hidden;
-  cursor: pointer;
-}
-
-app-gallery-lightbox-photo {
-  overflow: hidden;
-}
-
-.blackCanvas {
-  position: fixed; /* Stay in place */
-  z-index: 1099; /* Sit on top */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  background-color: black;
-  transition: all 0.3s ease-in-out;
-  -o-transition: all 0.3s ease-in-out;
-  -ms-transition: all 0.3s ease-in-out;
-  -webkit-transition: all 0.3s ease-in-out;
-  -moz-transition: all 0.3s ease-in-out;
-}
-
 .navigation-arrow {
   width: 30px;
   min-width: 60px;
@@ -186,19 +156,6 @@ app-gallery-lightbox-photo {
   animation: blink 3s ease-in-out infinite;
 }
 
-app-info-panel {
-  z-index: 1100; /* Sit on top */
-  position: fixed;
-  height: 100vh;
-  max-width: 100vw;
-  right: 0;
-  top: 0;
-  transition: all 0.3s ease-in-out;
-  -o-transition: all 0.3s ease-in-out;
-  -ms-transition: all 0.3s ease-in-out;
-  -moz-transition: all 0.3s ease-in-out;
-  -webkit-transition: all 0.3s ease-in-out;
-}
 
 .controls-zoom {
   bottom: 0;
@@ -216,8 +173,6 @@ app-info-panel {
 }
 
 
-
-
 input[type="range"].zoom-progress {
   height: 11px;
   margin-top: 3px;
@@ -233,8 +188,6 @@ input[type="range"].zoom-progress::-webkit-slider-runnable-track {
 input[type="range"].zoom-progress::-moz-range-track {
   background: transparent;
 }
-
-
 
 
 .controls-zoom .oi {

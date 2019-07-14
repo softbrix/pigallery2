@@ -40,11 +40,11 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   public infoPanelVisible = false;
   public infoPanelWidth = 0;
   public animating = false;
-  startPhotoDimension: Dimension = <Dimension>{top: 0, left: 0, width: 0, height: 0};
-  iPvisibilityTimer: number = null;
-  visibilityTimer: number = null;
-  delayedMediaShow: string = null;
   public photoFrameDim = {width: 1, height: 1, aspect: 1};
+  private startPhotoDimension: Dimension = <Dimension>{top: 0, left: 0, width: 0, height: 0};
+  private iPvisibilityTimer: number = null;
+  private visibilityTimer: number = null;
+  private delayedMediaShow: string = null;
   private activePhotoId: number = null;
   private gridPhotoQL: QueryList<GalleryPhotoComponent>;
   private subscription: {
