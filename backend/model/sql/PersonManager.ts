@@ -54,8 +54,8 @@ export class PersonManager implements IPersonManager {
 
       this.samplePhotos[name] = media;
     }
-    return this.samplePhotos[name];
 
+    return this.samplePhotos[name];
   }
 
   async loadAll(): Promise<void> {

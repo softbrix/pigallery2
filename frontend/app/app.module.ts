@@ -79,6 +79,7 @@ import {FacesService} from './ui/faces/faces.service';
 import {FaceComponent} from './ui/faces/face/face.component';
 import {VersionService} from './model/version.service';
 import { DirectoriesComponent } from './ui/gallery/directories/directories.component';
+import {ControlsLightboxComponent} from './ui/gallery/lightbox/controls/controls.lightbox.gallery.component';
 
 
 @Injectable()
@@ -162,6 +163,7 @@ export function translationsFactory(locale: string) {
     GalleryPhotoComponent,
     AdminComponent,
     InfoPanelLightboxComponent,
+    ControlsLightboxComponent,
     RandomQueryBuilderGalleryComponent,
     // Face
     FaceComponent,
