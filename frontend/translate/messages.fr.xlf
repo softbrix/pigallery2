@@ -951,7 +951,7 @@
           <context context-type="sourcefile">app/ui/settings/search/search.settings.component.html</context>
           <context context-type="linenumber">42</context>
         </context-group>
-        <target>Afficher des astuces lors de la saisie d'une requête de recherche/target>
+        <target>Afficher des astuces lors de la saisie d'une requête de recherche</target>
       </trans-unit>
       <trans-unit id="4f3e132bcb74ee7c0a19eff3915163699c249340" datatype="html">
         <source>Instant search</source>
@@ -1559,22 +1559,6 @@
           <context context-type="linenumber">134</context>
         </context-group>
         <target>Taille</target>
-      </trans-unit>
-      <trans-unit id="b042925fa99951de62f0889093fd2cc59a68e864" datatype="html">
-        <source>
-          
-        Listing  duplicates ( photos).
-      
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>
-          <x id="INTERPOLATION" equiv-text="{{duplicateCount.pairs}}"/>
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>
-          <x id="INTERPOLATION_1" equiv-text="{{duplicateCount.photos}}"/>
-        </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/duplicates/duplicates.component.html</context>
-          <context context-type="linenumber">5</context>
-        </context-group>
-        <target>[objet Objet]</target>
       </trans-unit>
       <trans-unit id="291dbda8eb9bfe6de93991c3472307c9af46f48d" datatype="html">
         <source>
