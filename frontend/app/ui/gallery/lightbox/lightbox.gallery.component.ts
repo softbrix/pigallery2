@@ -158,11 +158,11 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
 //noinspection JSUnusedGlobalSymbols
   @HostListener('window:resize', ['$event'])
   onResize() {
+    this.updatePhotoFrameDim();
     if (this.activePhoto) {
       this.animateLightbox();
       this.updateActivePhoto(this.activePhotoId);
     }
-    this.updatePhotoFrameDim();
   }
 
   public nextImage() {
