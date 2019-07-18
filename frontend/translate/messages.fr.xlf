@@ -1539,7 +1539,7 @@
           <context context-type="sourcefile">frontend/app/model/notification.service.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Server error</target>
+        <target>Erreur serveur</target>
       </trans-unit>
       <trans-unit id="f8e38165d83447ee7596b6d2986e16abe7bb42a6" datatype="html">
         <source>Server info</source>
@@ -1547,7 +1547,7 @@
           <context context-type="sourcefile">frontend/app/model/notification.service.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Server info</target>
+        <target>Info serveur</target>
       </trans-unit>
       <trans-unit id="69f5c8276a390f22d64236a3d4849b1f2c308ef1" datatype="html">
         <source>h</source>
@@ -1582,7 +1582,7 @@
           <context context-type="sourcefile">frontend/app/pipes/StringifySortingMethod.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>ascending name</target>
+        <target>Nom croissant</target>
       </trans-unit>
       <trans-unit id="5f6c10fa70a64acf16325e813e3cd6485df01b7c" datatype="html">
         <source>descending name</source>
@@ -1590,7 +1590,7 @@
           <context context-type="sourcefile">frontend/app/pipes/StringifySortingMethod.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>descending name</target>
+        <target>Nom décroissant</target>
       </trans-unit>
       <trans-unit id="33cbb9be635d087d7ec1a4827bdc938ee785bb96" datatype="html">
         <source>ascending date</source>
@@ -1598,7 +1598,7 @@
           <context context-type="sourcefile">frontend/app/pipes/StringifySortingMethod.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>ascending date</target>
+        <target>date croissant</target>
       </trans-unit>
       <trans-unit id="de879950dc2e77b3d8e9b4efe9d6c0051fba37d4" datatype="html">
         <source>descending date</source>
@@ -1606,7 +1606,7 @@
           <context context-type="sourcefile">frontend/app/pipes/StringifySortingMethod.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>descending date</target>
+        <target>date décroissant</target>
       </trans-unit>
       <trans-unit id="63b8a172f11bb90da8fbca54f34f2c71a205225b" datatype="html">
         <source>random</source>
@@ -1614,7 +1614,7 @@
           <context context-type="sourcefile">frontend/app/pipes/StringifySortingMethod.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>random</target>
+        <target>aléatoire</target>
       </trans-unit>
       <trans-unit id="bc2e854e111ecf2bd7db170da5e3c2ed08181d88" datatype="html">
         <source>Advanced</source>
@@ -1622,7 +1622,7 @@
           <context context-type="sourcefile">frontend/app/ui/admin/admin.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Advanced</target>
+        <target>Avancé</target>
       </trans-unit>
       <trans-unit id="7ef95cdc2fd0292d525e7de7dfafa5e182a26cbf" datatype="html">
         <source>Simplified</source>
@@ -1630,7 +1630,7 @@
           <context context-type="sourcefile">frontend/app/ui/admin/admin.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Simplified</target>
+        <target>Simplifié</target>
       </trans-unit>
       <trans-unit id="b73f7f5060fb22a1e9ec462b1bb02493fa3ab866" datatype="html">
         <source>Images</source>
@@ -1650,7 +1650,7 @@
           <context context-type="sourcefile">frontend/app/ui/gallery/share/share.gallery.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Yes</target>
+        <target>Oui</target>
       </trans-unit>
       <trans-unit id="3d3ae7deebc5949b0c1c78b9847886a94321d9fd" datatype="html">
         <source>No</source>
@@ -1662,7 +1662,7 @@
           <context context-type="sourcefile">frontend/app/ui/gallery/share/share.gallery.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>No</target>
+        <target>Non</target>
       </trans-unit>
       <trans-unit id="867c1b6839b592cec2156dd0b8a0009fe1557bfa" datatype="html">
         <source>Url has been copied to clipboard</source>
@@ -1674,7 +1674,7 @@
           <context context-type="sourcefile">frontend/app/ui/gallery/share/share.gallery.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Url has been copied to clipboard</target>
+        <target>l'URL a été copiée dans le presse-papier</target>
       </trans-unit>
       <trans-unit id="381b3a21fe4e53a0ca52dbc6e07073c172489230" datatype="html">
         <source>loading..</source>
@@ -1686,7 +1686,7 @@
           <context context-type="sourcefile">frontend/app/ui/gallery/share/share.gallery.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>loading..</target>
+        <target>chargement ...</target>
       </trans-unit>
       <trans-unit id="f50a33d3c339f8f4a465141f8caa5d2d8c005251" datatype="html">
         <source>Enabled</source>
@@ -1698,7 +1698,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/usermanager/usermanager.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Enabled</target>
+        <target>Activé</target>
       </trans-unit>
       <trans-unit id="f39256070bfc0714020dfee08895421fc1527014" datatype="html">
         <source>Disabled</source>
@@ -1710,7 +1710,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/usermanager/usermanager.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Disabled</target>
+        <target>Désactivé</target>
       </trans-unit>
       <trans-unit id="9556266f0a2b1762a44b686f2bb21dbfefb01c12" datatype="html">
         <source>Low</source>
@@ -1722,7 +1722,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/usermanager/usermanager.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Low</target>
+        <target>Faible</target>
       </trans-unit>
       <trans-unit id="72279141a67cc042d9864102b703216cc8a428a3" datatype="html">
         <source>High</source>
@@ -1734,7 +1734,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/usermanager/usermanager.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>High</target>
+        <target>Elevé</target>
       </trans-unit>
       <trans-unit id="04e4b67fdc5f633a81e0ab32c1751ab20e6e3034" datatype="html">
         <source>settings saved</source>
@@ -1742,7 +1742,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/_abstract/abstract.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>settings saved</target>
+        <target>paramètres sauvegardés</target>
       </trans-unit>
       <trans-unit id="1e035e6ccfab771cad4226b2ad230cb0d4a88cba" datatype="html">
         <source>Success</source>
@@ -1766,7 +1766,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/usermanager/usermanager.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Success</target>
+        <target>Succès</target>
       </trans-unit>
       <trans-unit id="380ab580741bec31346978e7cab8062d6970408d" datatype="html">
         <source>Basic</source>
@@ -1786,7 +1786,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/other/other.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Restart the server to apply the new settings</target>
+        <target>Redémarrez le serveur afin d'appliquer les nouveaux paramètres</target>
       </trans-unit>
       <trans-unit id="f53ab04e9d8449445abf482bf44b521e2e695c3c" datatype="html">
         <source>Indexing</source>
@@ -1794,7 +1794,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Indexing</target>
+        <target>Indexation</target>
       </trans-unit>
       <trans-unit id="f2504b9d9286a871bf4d56d08df05d6a16894592" datatype="html">
         <source>Folder indexed</source>
@@ -1802,7 +1802,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Folder indexed</target>
+        <target>Dossier indexé</target>
       </trans-unit>
       <trans-unit id="03b2c27d0f1dd0ebdf6eb756bd43914d5127ca8a" datatype="html">
         <source>low</source>
@@ -1810,7 +1810,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>low</target>
+        <target>faible</target>
       </trans-unit>
       <trans-unit id="c611dbfd81ae6fd4d7e5332f85ee78f9740fe000" datatype="html">
         <source>medium</source>
@@ -1818,7 +1818,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>medium</target>
+        <target>moyen</target>
       </trans-unit>
       <trans-unit id="fef2f6e70c3eaa2f29dbec8069e13bca1b75b222" datatype="html">
         <source>high</source>
@@ -1826,7 +1826,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>high</target>
+        <target>élevé</target>
       </trans-unit>
       <trans-unit id="44876e25a81487f655dff4340f89b1b259b19587" datatype="html">
         <source>Folder indexing started</source>
@@ -1834,7 +1834,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Folder indexing started</target>
+        <target>Indexation du dossier démarrée</target>
       </trans-unit>
       <trans-unit id="c5a3929b71a7b8090a763cc3434f8756184effdc" datatype="html">
         <source>Folder indexing interrupted</source>
@@ -1842,7 +1842,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Folder indexing interrupted</target>
+        <target>Indexation du dossier interrompue</target>
       </trans-unit>
       <trans-unit id="d779a223dd103570b842451d8d721ee1d3d700e4" datatype="html">
         <source>Database reset</source>
@@ -1850,7 +1850,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Database reset</target>
+        <target>Réinitialisation de la base de données</target>
       </trans-unit>
       <trans-unit id="d2a2915d79ff31439a174fc3a147004542291e29" datatype="html">
         <source>Map</source>
@@ -1858,7 +1858,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/map/map.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Map</target>
+        <target>Carte</target>
       </trans-unit>
       <trans-unit id="3610ff97c9b9af9a23aa02a1a05d561c8fa03f42" datatype="html">
         <source>Meta file</source>
@@ -1866,7 +1866,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/metafiles/metafile.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Meta file</target>
+        <target>Fichier meta</target>
       </trans-unit>
       <trans-unit id="c2a9de3714f5767b174d0424bc8abe2dc37acc41" datatype="html">
         <source>Other</source>
@@ -1874,7 +1874,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/other/other.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Other</target>
+        <target>Autre</target>
       </trans-unit>
       <trans-unit id="e636143d733fa6a21fa62ffdff2fd76c221e6cac" datatype="html">
         <source>Random Media</source>
@@ -1882,7 +1882,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/random-photo/random-photo.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Random Media</target>
+        <target>Média aléatoire</target>
       </trans-unit>
       <trans-unit id="45dda89cf029b7d7b457a8dff01dc4b9a6485816" datatype="html">
         <source>Thumbnail</source>
@@ -1890,7 +1890,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/thumbnail/thumbanil.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Thumbnail</target>
+        <target>Vignette</target>
       </trans-unit>
       <trans-unit id="ed3fc8103cfe2c6b999115b6d5dcbe7a2528a477" datatype="html">
         <source>(recommended)</source>
@@ -1906,7 +1906,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/thumbnail/thumbanil.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>(deprecated)</target>
+        <target>(déprécié)</target>
       </trans-unit>
       <trans-unit id="0028f40243cb1360bc3d7cb9d4512219bcbd428f" datatype="html">
         <source>Password protection enabled</source>
@@ -1914,7 +1914,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/usermanager/usermanager.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Password protection enabled</target>
+        <target>Protection par mot de passe activée</target>
       </trans-unit>
       <trans-unit id="c76b3ba44c5b7ab363729f81f763b29ef5d7a641" datatype="html">
         <source>Server restart is recommended.</source>
@@ -1922,7 +1922,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/usermanager/usermanager.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Server restart is recommended.</target>
+        <target>Le redémarrage du serveur est recommandé.</target>
       </trans-unit>
       <trans-unit id="00de5dcd17a5ebd17e67e0688bc638e01bc510a4" datatype="html">
         <source>Password protection disabled</source>
@@ -1930,7 +1930,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/usermanager/usermanager.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Password protection disabled</target>
+        <target>Protection par mot de passe désactivée</target>
       </trans-unit>
       <trans-unit id="2d1ea268a6a9f483dbc2cbfe19bf4256a57a6af4" datatype="html">
         <source>Video</source>
@@ -1938,7 +1938,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/video/video.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Video</target>
+        <target>Vidéo</target>
       </trans-unit>
     </body>
   </file>
