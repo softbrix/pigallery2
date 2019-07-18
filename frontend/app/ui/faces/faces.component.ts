@@ -11,7 +11,7 @@ import {Observable} from 'rxjs/Observable';
   styleUrls: ['./faces.component.css']
 })
 export class FacesComponent implements OnInit {
-  @ViewChild('container') container: ElementRef;
+  @ViewChild('container', {static: true}) container: ElementRef;
   public size: number;
   favourites: Observable<PersonDTO[]>;
   nonFavourites: Observable<PersonDTO[]>;

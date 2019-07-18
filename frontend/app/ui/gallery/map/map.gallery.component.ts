@@ -15,11 +15,11 @@ export class GalleryMapComponent implements OnChanges, IRenderable, AfterViewIni
 
   @Input() photos: PhotoDTO[];
   @Input() metaFiles: FileDTO[];
-  @ViewChild(GalleryMapLightboxComponent) mapLightbox: GalleryMapLightboxComponent;
+  @ViewChild(GalleryMapLightboxComponent, {static: false}) mapLightbox: GalleryMapLightboxComponent;
 
   mapPhotos: Array<{ lat: number, lng: number }> = [];
-  @ViewChild('map') mapElement: ElementRef;
-  @ViewChild('yagaMap') yagaMap: MapComponent;
+  @ViewChild('map', {static: false}) mapElement: ElementRef;
+  @ViewChild('yagaMap', {static: false}) yagaMap: MapComponent;
   height: number = null;
 
 

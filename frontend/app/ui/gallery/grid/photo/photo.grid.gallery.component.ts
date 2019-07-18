@@ -16,9 +16,9 @@ import {PhotoDTO, PhotoMetadata} from '../../../../../../common/entities/PhotoDT
 })
 export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
   @Input() gridPhoto: GridMedia;
-  @ViewChild('img') imageRef: ElementRef;
-  @ViewChild('info') infoDiv: ElementRef;
-  @ViewChild('photoContainer') container: ElementRef;
+  @ViewChild('img', {static: false}) imageRef: ElementRef;
+  @ViewChild('info', {static: false}) infoDiv: ElementRef;
+  @ViewChild('photoContainer', {static: true}) container: ElementRef;
 
   thumbnail: Thumbnail;
   keywords: { value: string, type: SearchTypes }[] = null;

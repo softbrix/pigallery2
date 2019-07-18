@@ -25,7 +25,7 @@ import {SeededRandomService} from '../../model/seededRandom.service';
 })
 export class GalleryComponent implements OnInit, OnDestroy {
 
-  @ViewChild(GalleryGridComponent) grid: GalleryGridComponent;
+  @ViewChild(GalleryGridComponent, {static: false}) grid: GalleryGridComponent;
 
   public showSearchBar = false;
   public showShare = false;

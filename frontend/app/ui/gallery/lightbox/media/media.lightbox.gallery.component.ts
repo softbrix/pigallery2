@@ -17,7 +17,7 @@ export class GalleryLightboxMediaComponent implements OnChanges {
   @Input() zoom = 1;
   @Input() drag = {x: 0, y: 0};
 
-  @ViewChild('video') video: ElementRef<HTMLVideoElement>;
+  @ViewChild('video', {static: false}) video: ElementRef<HTMLVideoElement>;
 
   prevGirdPhoto: GridMedia = null;
 

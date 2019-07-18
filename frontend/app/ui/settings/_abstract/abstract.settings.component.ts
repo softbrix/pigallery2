@@ -17,7 +17,7 @@ export abstract class SettingsComponent<T extends { [key: string]: any }, S exte
   @Input()
   public simplifiedMode = true;
 
-  @ViewChild('settingsForm')
+  @ViewChild('settingsForm', {static: false})
   form: HTMLFormElement;
 
   @Output()
@@ -26,18 +26,16 @@ export abstract class SettingsComponent<T extends { [key: string]: any }, S exte
   public inProgress = false;
   public error: string = null;
   public changed = false;
-  private _subscription: Subscription = null;
-  private readonly _settingsSubscription: Subscription = null;
-
   public settings: T = <any>{};
   public original: T = <any>{};
-
   text = {
     Enabled: 'Enabled',
     Disabled: 'Disabled',
     Low: 'Low',
     High: 'High'
   };
+  private _subscription: Subscription = null;
+  private readonly _settingsSubscription: Subscription = null;
 
   protected constructor(private name: string,
                         private _authService: AuthenticationService,
@@ -120,15 +118,9 @@ export abstract class SettingsComponent<T extends { [key: string]: any }, S exte
     }
   }
 
-  private async getSettings() {
-    await this._settingsService.getSettings();
-    this.changed = false;
-  }
-
   public reset() {
     this.getSettings();
   }
-
 
   public async save() {
     this.inProgress = true;
@@ -148,6 +140,11 @@ export abstract class SettingsComponent<T extends { [key: string]: any }, S exte
 
     this.inProgress = false;
     return false;
+  }
+
+  private async getSettings() {
+    await this._settingsService.getSettings();
+    this.changed = false;
   }
 
 }

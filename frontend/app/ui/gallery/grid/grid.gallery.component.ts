@@ -36,7 +36,7 @@ import {SeededRandomService} from '../../../model/seededRandom.service';
 })
 export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, OnDestroy {
 
-  @ViewChild('gridContainer') gridContainer: ElementRef;
+  @ViewChild('gridContainer', {static: false}) gridContainer: ElementRef;
   @ViewChildren(GalleryPhotoComponent) gridPhotoQL: QueryList<GalleryPhotoComponent>;
   @Input() media: MediaDTO[];
   @Input() lightbox: GalleryLightboxComponent;

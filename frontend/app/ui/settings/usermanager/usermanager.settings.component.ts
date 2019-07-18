@@ -17,7 +17,7 @@ import {I18n} from '@ngx-translate/i18n-polyfill';
   providers: [UserManagerSettingsService],
 })
 export class UserMangerSettingsComponent implements OnInit {
-  @ViewChild('userModal') public childModal: ModalDirective;
+  @ViewChild('userModal', {static: false}) public childModal: ModalDirective;
   public newUser = <UserDTO>{};
   public userRoles: Array<any> = [];
   public users: Array<UserDTO> = [];

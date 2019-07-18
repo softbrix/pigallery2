@@ -28,10 +28,10 @@ export enum LightboxStates {
 })
 export class GalleryLightboxComponent implements OnDestroy, OnInit {
 
-  @ViewChild('photo') mediaElement: GalleryLightboxMediaComponent;
-  @ViewChild('controls') controls: ControlsLightboxComponent;
-  @ViewChild('lightbox') lightboxElement: ElementRef;
-  @ViewChild('root') root: ElementRef;
+  @ViewChild('photo', {static: false}) mediaElement: GalleryLightboxMediaComponent;
+  @ViewChild('controls', {static: false}) controls: ControlsLightboxComponent;
+  @ViewChild('lightbox', {static: false}) lightboxElement: ElementRef;
+  @ViewChild('root', {static: false}) root: ElementRef;
 
   public navigation = {hasPrev: true, hasNext: true};
   public blackCanvasOpacity = 0;
