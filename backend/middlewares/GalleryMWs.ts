@@ -167,7 +167,7 @@ export class GalleryMWs {
 
     // check if thumbnail already exist
     if (fs.existsSync(fullMediaPath) === false) {
-      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'no such file:' + fullMediaPath));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'no such file:' + req.params.mediaPath, 'can\'t find file: ' + fullMediaPath));
     }
     if (fs.statSync(fullMediaPath).isDirectory()) {
       return next();
