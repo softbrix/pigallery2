@@ -209,10 +209,10 @@ export class MetadataLoader {
                     }
                     const name = region.attributes['mwg-rs:Name'];
                     const box = {
-                      width: Math.round(parseInt('' + regionBox['stArea:w'], 10) * metadata.size.width),
-                      height: Math.round(parseInt('' + regionBox['stArea:h'], 10) * metadata.size.height),
-                      left: Math.round(parseInt('' + regionBox['stArea:x'], 10) * metadata.size.width),
-                      top: Math.round(parseInt('' + regionBox['stArea:y'], 10) * metadata.size.height)
+                      width: Math.round(parseFloat('' + regionBox['stArea:w']) * metadata.size.width),
+                      height: Math.round(parseFloat('' + regionBox['stArea:h']) * metadata.size.height),
+                      left: Math.round(parseFloat('' + regionBox['stArea:x']) * metadata.size.width),
+                      top: Math.round(parseFloat('' + regionBox['stArea:y']) * metadata.size.height)
                     };
                     // convert center base box to corner based box
                     box.left = Math.max(0, box.left - box.width / 2);
