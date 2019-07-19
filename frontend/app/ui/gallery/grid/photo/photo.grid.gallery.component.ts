@@ -15,18 +15,13 @@ import {PhotoDTO, PhotoMetadata} from '../../../../../../common/entities/PhotoDT
   providers: [RouterLink]
 })
 export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
-  @Input() gridPhoto: GridMedia;
+  @Input() gridMedia: GridMedia;
   @ViewChild('img', {static: false}) imageRef: ElementRef;
-  @ViewChild('info', {static: false}) infoDiv: ElementRef;
   @ViewChild('photoContainer', {static: true}) container: ElementRef;
 
   thumbnail: Thumbnail;
   keywords: { value: string, type: SearchTypes }[] = null;
-  infoBar = {
-    marginTop: 0,
-    visible: false,
-    background: 'rgba(0,0,0,0.0)'
-  };
+  infoBarVisible = false;
   animationTimer: number = null;
 
   readonly SearchTypes: typeof SearchTypes;
@@ -46,20 +41,20 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
 
   get Title(): string {
     if (Config.Client.Other.captionFirstNaming === false) {
-      return this.gridPhoto.media.name;
+      return this.gridMedia.media.name;
     }
-    if ((<PhotoDTO>this.gridPhoto.media).metadata.caption) {
-      if ((<PhotoDTO>this.gridPhoto.media).metadata.caption.length > 20) {
-        return (<PhotoDTO>this.gridPhoto.media).metadata.caption.substring(0, 17) + '...';
+    if ((<PhotoDTO>this.gridMedia.media).metadata.caption) {
+      if ((<PhotoDTO>this.gridMedia.media).metadata.caption.length > 20) {
+        return (<PhotoDTO>this.gridMedia.media).metadata.caption.substring(0, 17) + '...';
       }
-      return (<PhotoDTO>this.gridPhoto.media).metadata.caption;
+      return (<PhotoDTO>this.gridMedia.media).metadata.caption;
     }
-    return this.gridPhoto.media.name;
+    return this.gridMedia.media.name;
   }
 
   ngOnInit() {
-    this.thumbnail = this.thumbnailService.getThumbnail(this.gridPhoto);
-    const metadata = this.gridPhoto.media.metadata as PhotoMetadata;
+    this.thumbnail = this.thumbnailService.getThumbnail(this.gridMedia);
+    const metadata = this.gridMedia.media.metadata as PhotoMetadata;
     if ((metadata.keywords && metadata.keywords.length > 0) ||
       (metadata.faces && metadata.faces.length > 0)) {
       const names: string[] = (metadata.faces || []).map(f => f.name);
@@ -95,34 +90,20 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
   }
 
   getPositionText(): string {
-    if (!this.gridPhoto || !this.gridPhoto.isPhoto()) {
+    if (!this.gridMedia || !this.gridMedia.isPhoto()) {
       return '';
     }
-    return (<PhotoDTO>this.gridPhoto.media).metadata.positionData.city ||
-      (<PhotoDTO>this.gridPhoto.media).metadata.positionData.state ||
-      (<PhotoDTO>this.gridPhoto.media).metadata.positionData.country;
+    return (<PhotoDTO>this.gridMedia.media).metadata.positionData.city ||
+      (<PhotoDTO>this.gridMedia.media).metadata.positionData.state ||
+      (<PhotoDTO>this.gridMedia.media).metadata.positionData.country;
   }
 
   mouseOver() {
-    this.infoBar.visible = true;
+    this.infoBarVisible = true;
     if (this.animationTimer != null) {
       clearTimeout(this.animationTimer);
+      this.animationTimer = null;
     }
-    this.animationTimer = window.setTimeout(() => {
-      this.infoBar.background = 'rgba(0,0,0,0.8)';
-      if (!this.infoDiv) {
-        this.animationTimer = window.setTimeout(() => {
-          if (!this.infoDiv) {
-            this.infoBar.marginTop = -50;
-            return;
-          }
-          this.infoBar.marginTop = -this.infoDiv.nativeElement.clientHeight;
-        }, 10);
-        return;
-      }
-      this.infoBar.marginTop = -this.infoDiv.nativeElement.clientHeight;
-    }, 1);
-
   }
 
   mouseOut() {
@@ -130,23 +111,11 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
       clearTimeout(this.animationTimer);
     }
     this.animationTimer = window.setTimeout(() => {
-      this.infoBar.marginTop = 0;
-      this.infoBar.background = 'rgba(0,0,0,0.0)';
-      if (this.animationTimer != null) {
-        clearTimeout(this.animationTimer);
-      }
-      this.animationTimer = window.setTimeout(() => {
-        this.infoBar.visible = false;
-      }, 500);
-    }, 100);
-
+      this.animationTimer = null;
+      this.infoBarVisible = false;
+    }, 500);
   }
 
-  /*
-   onImageLoad() {
-   this.loading.show = false;
-   }
-   */
   public getDimension(): Dimension {
     if (!this.imageRef) {
       return <Dimension>{

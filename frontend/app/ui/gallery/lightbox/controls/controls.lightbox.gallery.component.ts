@@ -61,7 +61,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   }
 
   public set Zoom(zoom: number) {
-    if (!this.activePhoto || this.activePhoto.gridPhoto.isVideo()) {
+    if (!this.activePhoto || this.activePhoto.gridMedia.isVideo()) {
       return;
     }
     if (zoom < 1) {
@@ -86,7 +86,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
     if (!this.activePhoto) {
       return null;
     }
-    return (<PhotoDTO>this.activePhoto.gridPhoto.media).metadata.caption;
+    return (<PhotoDTO>this.activePhoto.gridMedia.media).metadata.caption;
   }
 
   public containerWidth() {
@@ -117,7 +117,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
 
 
   pan($event: { deltaY: number, deltaX: number, isFinal: boolean }) {
-    if (!this.activePhoto || this.activePhoto.gridPhoto.isVideo()) {
+    if (!this.activePhoto || this.activePhoto.gridMedia.isVideo()) {
       return;
     }
     if (this.zoom === 1) {
@@ -135,7 +135,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   }
 
   wheel($event: { deltaY: number }) {
-    if (!this.activePhoto || this.activePhoto.gridPhoto.isVideo()) {
+    if (!this.activePhoto || this.activePhoto.gridMedia.isVideo()) {
       return;
     }
     if ($event.deltaY < 0) {
@@ -147,7 +147,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
 
   @HostListener('pinch', ['$event'])
   pinch($event: { scale: number }) {
-    if (!this.activePhoto || this.activePhoto.gridPhoto.isVideo()) {
+    if (!this.activePhoto || this.activePhoto.gridMedia.isVideo()) {
       return;
     }
     this.showControls();
@@ -156,7 +156,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
 
   @HostListener('pinchend', ['$event'])
   pinchend($event: { scale: number }) {
-    if (!this.activePhoto || this.activePhoto.gridPhoto.isVideo()) {
+    if (!this.activePhoto || this.activePhoto.gridMedia.isVideo()) {
       return;
     }
     this.showControls();
@@ -165,7 +165,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   }
 
   tap($event: any) {
-    if (!this.activePhoto || this.activePhoto.gridPhoto.isVideo()) {
+    if (!this.activePhoto || this.activePhoto.gridMedia.isVideo()) {
       return;
     }
     if ($event.tapCount < 2) {
@@ -231,7 +231,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
         this.closed.emit();
         break;
       case ' ': // space
-        if (this.activePhoto && this.activePhoto.gridPhoto.isVideo()) {
+        if (this.activePhoto && this.activePhoto.gridMedia.isVideo()) {
           this.mediaElement.playPause();
         }
         break;
@@ -246,7 +246,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
         return;
       }
       // do not skip video if its playing
-      if (this.activePhoto && this.activePhoto.gridPhoto.isVideo() &&
+      if (this.activePhoto && this.activePhoto.gridMedia.isVideo() &&
         !this.mediaElement.Paused) {
         return;
       }
@@ -262,7 +262,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
       if (this.mediaElement.imageLoadFinished === false) {
         return;
       }
-      if (this.activePhoto && this.activePhoto.gridPhoto.isVideo() &&
+      if (this.activePhoto && this.activePhoto.gridMedia.isVideo() &&
         !this.mediaElement.Paused) {
         return;
       }
@@ -308,7 +308,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
         return;
       }
 
-      const photoAspect = MediaDTO.calcRotatedAspectRatio(this.activePhoto.gridPhoto.media);
+      const photoAspect = MediaDTO.calcRotatedAspectRatio(this.activePhoto.gridMedia.media);
       const widthFilled = photoAspect > this.photoFrameDim.aspect;
       const divWidth = this.photoFrameDim.width;
       const divHeight = this.photoFrameDim.height;
@@ -369,7 +369,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
     }
 
 
-    const photoAspect = MediaDTO.calcRotatedAspectRatio(this.activePhoto.gridPhoto.media);
+    const photoAspect = MediaDTO.calcRotatedAspectRatio(this.activePhoto.gridMedia.media);
 
     if (photoAspect < this.photoFrameDim.aspect) {
       this.faceContainerDim.height = this.photoFrameDim.height;

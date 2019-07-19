@@ -5,7 +5,7 @@
   </div>
 
   <div class="lightbox" #lightbox>
-    <app-gallery-lightbox-media [gridMedia]="activePhoto ? activePhoto.gridPhoto : null"
+    <app-gallery-lightbox-media [gridMedia]="activePhoto ? activePhoto.gridMedia : null"
                                 [loadMedia]="!animating"
                                 [zoom]="controls ? controls.Zoom : 1"
                                 [drag]="controls ? controls.drag : {x:0,y:0}"
@@ -13,6 +13,7 @@
                                 #photo>
     </app-gallery-lightbox-media>
     <app-lightbox-controls
+      *ngIf="isOpen()"
       #controls
       [activePhoto]="activePhoto"
       (closed)="hide()"
@@ -29,8 +30,7 @@
   <app-info-panel *ngIf="activePhoto && infoPanelVisible"
                   id="info-panel"
                   [style.width.px]="infoPanelWidth"
-                  [media]="activePhoto.gridPhoto.media"
+                  [media]="activePhoto.gridMedia.media"
                   (closed)="hideInfoPanel()">
-
   </app-info-panel>
 </div>

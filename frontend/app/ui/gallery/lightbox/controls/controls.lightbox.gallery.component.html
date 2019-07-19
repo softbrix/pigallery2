@@ -1,12 +1,12 @@
 <div id="controllers-container"
-     [ngClass]="(controllersDimmed && !controllersAlwaysOn) ? (activePhoto && activePhoto.gridPhoto.isVideo() ? 'dim-controls-video' :'dim-controls'):  ''"
+     [ngClass]="(controllersDimmed && !controllersAlwaysOn) ? (activePhoto && activePhoto.gridMedia.isVideo() ? 'dim-controls-video' :'dim-controls'):  ''"
      #root>
   <div class="controls-caption" *ngIf="Title">{{Title}}</div>
   <div class="controls controls-top">
     <a class="highlight control-button"
        *ngIf="activePhoto"
-       [href]="activePhoto.gridPhoto.getPhotoPath()"
-       [download]="activePhoto.gridPhoto.media.name">
+       [href]="activePhoto.gridMedia.getPhotoPath()"
+       [download]="activePhoto.gridMedia.media.name">
         <span class="oi oi-data-transfer-download"
               title="download" i18n-title></span>
     </a>
@@ -59,11 +59,11 @@
       <a
         class="face"
         [routerLink]="['/search', face.name, {type: SearchTypes[SearchTypes.person]}]"
-        [style.top.%]="face.box.top / activePhoto.gridPhoto.Photo.metadata.size.height*100"
-        [style.left.%]="face.box.left / activePhoto.gridPhoto.Photo.metadata.size.width*100"
-        [style.height.%]="face.box.height / activePhoto.gridPhoto.Photo.metadata.size.height*100"
-        [style.width.%]="face.box.width / activePhoto.gridPhoto.Photo.metadata.size.width*100"
-        *ngFor="let face of activePhoto.gridPhoto.Photo.metadata.faces">
+        [style.top.%]="face.box.top / activePhoto.gridMedia.Photo.metadata.size.height*100"
+        [style.left.%]="face.box.left / activePhoto.gridMedia.Photo.metadata.size.width*100"
+        [style.height.%]="face.box.height / activePhoto.gridMedia.Photo.metadata.size.height*100"
+        [style.width.%]="face.box.width / activePhoto.gridMedia.Photo.metadata.size.width*100"
+        *ngFor="let face of activePhoto.gridMedia.Photo.metadata.faces">
         <div class="face-box"></div>
         <span class="face-name">{{face.name}}</span>
       </a>
@@ -97,7 +97,7 @@
 
 
   <div class="controls controls-playback"
-       *ngIf="zoom == 1 && activePhoto && activePhoto.gridPhoto.isPhoto()">
+       *ngIf="zoom == 1 && activePhoto && activePhoto.gridMedia.isPhoto()">
       <span class="oi oi-media-pause highlight control-button"
             [ngClass]="playBackState == PlayBackStates.Paused ? 'button-disabled':''"
             (click)="pause()"
@@ -114,11 +114,11 @@
   </div>
 
   <div class="controls controls-big-play"
-       *ngIf="activePhoto && activePhoto.gridPhoto.isVideo() && mediaElement.Paused">
+       *ngIf="activePhoto && activePhoto.gridMedia.isVideo() && mediaElement.Paused">
     <span class="oi oi-media-play"></span>
   </div>
 
-  <div class="controls controls-video row" *ngIf="activePhoto && activePhoto.gridPhoto.isVideo()">
+  <div class="controls controls-video row" *ngIf="activePhoto && activePhoto.gridMedia.isVideo()">
       <span class="oi  col-1"
             [ngClass]="!mediaElement.Paused ? 'oi-media-pause':'oi-media-play'"
             (click)="mediaElement.playPause()"></span>

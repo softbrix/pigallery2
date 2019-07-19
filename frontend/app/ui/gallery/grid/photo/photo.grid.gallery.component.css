@@ -49,7 +49,37 @@ img {
   }
 }
 
+.photo-container:hover .info {
+  animation: show-info .3s forwards;
+}
+
+@keyframes show-info {
+  0% {
+    transform: translateY(0);
+    background-color: transparent;
+  }
+
+  100% {
+    transform: translateY(-100%);
+    background: rgba(0,0,0,0.8);
+  }
+}
+
+@keyframes hide-info {
+
+  0% {
+    transform: translateY(-100%);
+    background: rgba(0,0,0,0.8);
+  }
+  100% {
+    transform: translateY(0);
+    background-color: transparent;
+  }
+}
+
 .info {
+  animation: hide-info .3s forwards;
+  transform: translateY(0);
   background-color: transparent;
   color: white;
   font-size: medium;
@@ -58,11 +88,11 @@ img {
   padding: 5px;
   margin-top: 0;
 
-  transition: margin .3s ease-out, background-color .3s ease-out;
-  -moz-transition: margin .3s ease-out, background-color .3s ease-out;
-  -webkit-transition: margin .3s ease-out, background-color .3s ease-out;
-  -o-transition: margin .3s ease-out, background-color .3s ease-out;
-  -ms-transition: margin .3s ease-out, background-color .3s ease-out;
+  transition: transform .3s ease-out, background-color .3s ease-out;
+  -moz-transition: transform .3s ease-out, background-color .3s ease-out;
+  -webkit-transition: transform .3s ease-out, background-color .3s ease-out;
+  -o-transition: transform .3s ease-out, background-color .3s ease-out;
+  -ms-transition: transform .3s ease-out, background-color .3s ease-out;
 }
 
 .photo-container {
@@ -112,6 +142,6 @@ a {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
-.photo-keywords .oi-person{
+.photo-keywords .oi-person {
   margin-right: 2px;
 }

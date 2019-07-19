@@ -1,7 +1,7 @@
 <div #photoContainer class="photo-container" (mouseover)="mouseOver()" (mouseout)="mouseOut()">
 
 
-  <img alt="{{gridPhoto.media.name}}" #img [src]="thumbnail.Src | fixOrientation:gridPhoto.Orientation | async"
+  <img alt="{{gridMedia.media.name}}" #img [src]="thumbnail.Src | fixOrientation:gridMedia.Orientation | async"
        *ngIf="thumbnail.Available">
 
   <app-gallery-grid-photo-loading
@@ -11,21 +11,19 @@
   </app-gallery-grid-photo-loading>
 
 
-  <div *ngIf="gridPhoto.isVideo()" class="video-indicator"
+  <div *ngIf="gridMedia.isVideo()" class="video-indicator"
        [style.marginTop.px]="-container.nativeElement.offsetHeight"
        [style.marginLeft.px]="container.nativeElement.offsetWidth">
-    {{gridPhoto.Video.metadata.duration  | duration}} <span class="oi oi-video"></span></div>
+    {{gridMedia.Video.metadata.duration  | duration}} <span class="oi oi-video"></span></div>
 
 
   <!--Info box -->
-  <div #info class="info"
-       *ngIf="infoBar.visible"
-       [style.margin-top.px]="infoBar.marginTop"
-       [style.background]="infoBar.background"
+  <div class="info"
+       *ngIf="infoBarVisible"
        [style.width.px]="container.nativeElement.offsetWidth">
     <div class="photo-name">{{Title}}</div>
 
-    <div class="photo-position" *ngIf="gridPhoto.hasPositionData()">
+    <div class="photo-position" *ngIf="gridMedia.hasPositionData()">
       <span class="oi oi-map-marker"></span>
       <ng-template [ngIf]="getPositionText()">
         <a [routerLink]="['/search', getPositionText(), {type:SearchTypes[SearchTypes.position]}]"
@@ -47,7 +45,7 @@
           <ng-template [ngSwitchCase]="SearchTypes.keyword">#</ng-template><!--
        --><ng-template [ngSwitchCase]="SearchTypes.person"><span class="oi oi-person"></span></ng-template><!--
        -->{{keyword.value}}</span>
-        <ng-template [ngIf]="!last">,</ng-template>
+        <ng-template [ngIf]="!last">,&#160;</ng-template>
       </ng-template>
 
     </div>

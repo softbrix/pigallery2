@@ -2,7 +2,7 @@
   <app-gallery-grid-photo
     *ngFor="let gridPhoto of photosToRender"
     (click)="photoClicked(gridPhoto.media)"
-    [gridPhoto]="gridPhoto"
+    [gridMedia]="gridPhoto"
     [style.width.px]="gridPhoto.renderWidth"
     [style.height.px]="gridPhoto.renderHeight"
     [style.marginLeft.px]="IMAGE_MARGIN"
