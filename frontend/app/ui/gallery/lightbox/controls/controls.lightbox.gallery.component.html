@@ -1,4 +1,6 @@
-<div id="controllers-container" #root>
+<div id="controllers-container"
+     [ngClass]="(controllersDimmed && !controllersAlwaysOn) ? (activePhoto && activePhoto.gridPhoto.isVideo() ? 'dim-controls-video' :'dim-controls'):  ''"
+     #root>
   <div class="controls-caption" *ngIf="Title">{{Title}}</div>
   <div class="controls controls-top">
     <a class="highlight control-button"
@@ -32,7 +34,7 @@
     </div>
 
     <div class="highlight control-button"
-         (click)="closed.emit()"
+         (click)="closeLightbox()"
          title="close, key: Escape" i18n-title>
         <span class="oi oi-x">
 
@@ -47,6 +49,26 @@
        (pan)="pan($event)"
        (wheel)="wheel($event)"
        (click)="mediaElement.playPause()">
+
+    <div class="faces-container"
+         [style.top.px]="photoFrameDim.height/2"
+         [style.left.px]="photoFrameDim.width/2"
+         [style.width.px]="faceContainerDim.width"
+         [style.height.px]="faceContainerDim.height"
+         *ngIf="activePhoto && zoom == 1">
+      <a
+        class="face"
+        [routerLink]="['/search', face.name, {type: SearchTypes[SearchTypes.person]}]"
+        [style.top.%]="face.box.top / activePhoto.gridPhoto.Photo.metadata.size.height*100"
+        [style.left.%]="face.box.left / activePhoto.gridPhoto.Photo.metadata.size.width*100"
+        [style.height.%]="face.box.height / activePhoto.gridPhoto.Photo.metadata.size.height*100"
+        [style.width.%]="face.box.width / activePhoto.gridPhoto.Photo.metadata.size.width*100"
+        *ngFor="let face of activePhoto.gridPhoto.Photo.metadata.faces">
+        <div class="face-box"></div>
+        <span class="face-name">{{face.name}}</span>
+      </a>
+    </div>
+
 
   </div>
 
@@ -109,17 +131,6 @@
            [(ngModel)]="mediaElement.VideoVolume" min="0" max="1" step="0.1"
            value="1" class="col-2 col-md-1 volume">
   </div>
- <!-- <div class="faces"
-       *ngIf="activePhoto">
-    <div
-      [style.top.%]="face.box.top / activePhoto.gridPhoto.Photo.metadata.size.height*100"
-      [style.left.%]="face.box.left / activePhoto.gridPhoto.Photo.metadata.size.width*100"
-      [style.height.%]="face.box.height / activePhoto.gridPhoto.Photo.metadata.size.height*100"
-      [style.width.%]="face.box.width / activePhoto.gridPhoto.Photo.metadata.size.width*100"
-      style="background-color: red"
-      *ngFor="let face of activePhoto.gridPhoto.Photo.metadata.faces">
 
-    </div>
-  </div> -->
 
 </div>

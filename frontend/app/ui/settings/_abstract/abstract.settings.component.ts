@@ -17,7 +17,7 @@ export abstract class SettingsComponent<T extends { [key: string]: any }, S exte
   @Input()
   public simplifiedMode = true;
 
-  @ViewChild('settingsForm', {static: false})
+  @ViewChild('settingsForm', {static: true})
   form: HTMLFormElement;
 
   @Output()

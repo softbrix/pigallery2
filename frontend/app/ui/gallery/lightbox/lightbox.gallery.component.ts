@@ -28,7 +28,7 @@ export enum LightboxStates {
 })
 export class GalleryLightboxComponent implements OnDestroy, OnInit {
 
-  @ViewChild('photo', {static: false}) mediaElement: GalleryLightboxMediaComponent;
+  @ViewChild('photo', {static: true}) mediaElement: GalleryLightboxMediaComponent;
   @ViewChild('controls', {static: false}) controls: ControlsLightboxComponent;
   @ViewChild('lightbox', {static: false}) lightboxElement: ElementRef;
   @ViewChild('root', {static: false}) root: ElementRef;

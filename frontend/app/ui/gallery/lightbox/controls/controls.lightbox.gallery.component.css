@@ -2,6 +2,7 @@
   width: 30px;
   min-width: 60px;
   height: 100px;
+  z-index: 3;
   position: absolute;
   top: calc(50% - 50px);
   display: inline-block;
@@ -40,7 +41,10 @@
 }
 
 #swipeable-container {
+  z-index: 2;
+  position: absolute;
   height: 100%;
+  width: 100%;
 }
 
 #rightArrow {
@@ -72,6 +76,8 @@
 }
 
 .controls-top {
+  position: absolute;
+  z-index: 4;
   top: 0;
 }
 
@@ -89,6 +95,7 @@
 .controls-playback {
   padding-right: 15px;
   bottom: 0;
+  z-index: 3;
   position: absolute;
 }
 
@@ -193,3 +200,35 @@ input[type="range"].zoom-progress::-moz-range-track {
 .controls-zoom .oi {
   cursor: pointer;
 }
+
+
+.faces-container {
+  z-index: 1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.face {
+  opacity: 0.5;
+  position: absolute;
+  transition: opacity 0.5s;
+}
+
+.face-name {
+  white-space: nowrap;
+  color: white;
+}
+
+.face-box {
+  height: 100%;
+  border: 2px solid #FFF;
+  border-radius: 5px !important;
+}
+
+.face:hover {
+  opacity: 1.0;
+  text-decoration: none;
+}
+

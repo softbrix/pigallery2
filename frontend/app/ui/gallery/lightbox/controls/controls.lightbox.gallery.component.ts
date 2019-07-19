@@ -1,4 +1,4 @@
-import {Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {MediaDTO} from '../../../../../../common/entities/MediaDTO';
 import {FullScreenService} from '../../fullscreen.service';
 import {GalleryPhotoComponent} from '../../grid/photo/photo.grid.gallery.component';
@@ -6,6 +6,7 @@ import {Observable, Subscription, timer} from 'rxjs';
 import {filter} from 'rxjs/operators';
 import {PhotoDTO} from '../../../../../../common/entities/PhotoDTO';
 import {GalleryLightboxMediaComponent} from '../media/media.lightbox.gallery.component';
+import {SearchTypes} from '../../../../../../common/entities/AutoCompleteItem';
 
 export enum PlayBackStates {
   Paused = 1,
@@ -18,9 +19,11 @@ export enum PlayBackStates {
   styleUrls: ['./controls.lightbox.gallery.component.css', './inputrange.css'],
   templateUrl: './controls.lightbox.gallery.component.html',
 })
-export class ControlsLightboxComponent implements OnDestroy, OnInit {
+export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
 
   readonly MAX_ZOOM = 10;
+
+  @ViewChild('root', {static: false}) root: ElementRef;
 
   @Output() closed = new EventEmitter();
   @Output() toggleInfoPanel = new EventEmitter();
@@ -46,6 +49,9 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit {
   private timerSub: Subscription;
   private prevDrag = {x: 0, y: 0};
   private prevZoom = 1;
+  private faceContainerDim = {width: 0, height: 0};
+
+  public SearchTypes = SearchTypes;
 
   constructor(public fullScreenService: FullScreenService) {
   }
@@ -83,6 +89,16 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit {
     return (<PhotoDTO>this.activePhoto.gridPhoto.media).metadata.caption;
   }
 
+  public containerWidth() {
+    console.log(this.photoFrameDim);
+    return this.root.nativeElement.width;
+  }
+
+  public containerHeight() {
+    console.log(this.photoFrameDim);
+    return this.root.nativeElement.height;
+  }
+
   ngOnInit(): void {
     this.timer = timer(1000, 2000);
   }
@@ -93,6 +109,10 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit {
     if (this.visibilityTimer != null) {
       clearTimeout(this.visibilityTimer);
     }
+  }
+
+  ngOnChanges(): void {
+    this.updateFaceContainerDim();
   }
 
 
@@ -272,6 +292,11 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit {
     this.checkZoomAndDrag();
   }
 
+  public closeLightbox() {
+    this.hideControls();
+    this.closed.emit();
+  }
+
   private checkZoomAndDrag() {
     const fixDrag = (drag: { x: number, y: number }) => {
       if (this.zoom === 1) {
@@ -337,5 +362,23 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit {
   private hideControls = () => {
     this.controllersDimmed = true;
   };
+
+  private updateFaceContainerDim() {
+    if (!this.activePhoto) {
+      return;
+    }
+
+
+    const photoAspect = MediaDTO.calcRotatedAspectRatio(this.activePhoto.gridPhoto.media);
+
+    if (photoAspect < this.photoFrameDim.aspect) {
+      this.faceContainerDim.height = this.photoFrameDim.height;
+      this.faceContainerDim.width = this.photoFrameDim.height * photoAspect;
+    } else {
+      this.faceContainerDim.height = this.photoFrameDim.width / photoAspect;
+      this.faceContainerDim.width = this.photoFrameDim.width;
+    }
+  }
+
 }
 
