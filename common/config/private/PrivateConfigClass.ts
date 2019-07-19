@@ -74,6 +74,7 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
   }
 
   public load() {
+    this.addComment();
     ConfigLoader.loadBackendConfig(this,
       path.join(__dirname, './../../../config.json'),
       [['PORT', 'Server-port'],
@@ -81,6 +82,7 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
         ['MYSQL_PASSWORD', 'Server-database-mysql-password'],
         ['MYSQL_USERNAME', 'Server-database-mysql-username'],
         ['MYSQL_DATABASE', 'Server-database-mysql-database']]);
+    this.removeComment();
 
     if (Utils.enumToArray(UserRoles).map(r => r.key).indexOf(this.Client.unAuthenticatedUserRole) === -1) {
       throw new Error('Unknown user role for Client.unAuthenticatedUserRole, found: ' + this.Client.unAuthenticatedUserRole);
@@ -96,7 +98,9 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
 
   public save() {
     try {
+      this.addComment();
       ConfigLoader.saveConfigFile(path.join(__dirname, './../../../config.json'), this);
+      this.removeComment();
     } catch (e) {
       throw new Error('Error during saving config: ' + e.toString());
     }
@@ -106,6 +110,15 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
     const cfg = new PrivateConfigClass();
     cfg.load();
     return cfg;
+  }
+
+  private addComment() {
+    (<any>this)['__NOTE'] = 'NOTE: this config is not intended for manual edit, ' +
+      'use the app UI instead as it has comments and descriptions.';
+  }
+
+  private removeComment() {
+    delete (<any>this)['__NOTE'];
   }
 }
 
