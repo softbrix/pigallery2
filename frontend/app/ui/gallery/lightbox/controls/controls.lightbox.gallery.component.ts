@@ -90,12 +90,10 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   }
 
   public containerWidth() {
-    console.log(this.photoFrameDim);
     return this.root.nativeElement.width;
   }
 
   public containerHeight() {
-    console.log(this.photoFrameDim);
     return this.root.nativeElement.height;
   }
 

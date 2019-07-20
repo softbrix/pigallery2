@@ -4,29 +4,26 @@ import {FileDTO} from '../../../../../common/entities/FileDTO';
 import {Utils} from '../../../../../common/Utils';
 import {Config} from '../../../../../common/config/public/Config';
 import {ClientConfig} from '../../../../../common/config/public/ConfigClass';
+import MapLayers = ClientConfig.MapLayers;
 
 @Injectable()
 export class MapService {
-
+  private static readonly OSMLAYERS = [{name: 'street', url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'}];
+  private static MAPBOXLAYERS: MapLayers[] = [];
 
   constructor(private networkService: NetworkService) {
-  }
-
-
-  public async getMapPath(file: FileDTO): Promise<MapPath[]> {
-    const filePath = Utils.concatUrls(file.directory.path, file.directory.name, file.name);
-    const gpx = await this.networkService.getXML('/gallery/content/' + filePath);
-    const elements = gpx.getElementsByTagName('trkpt');
-    const points: MapPath[] = [];
-    for (let i = 0; i < elements.length; i++) {
-      points.push({
-        lat: parseFloat(elements[i].getAttribute('lat')),
-        lng: parseFloat(elements[i].getAttribute('lon'))
-      });
+    MapService.MAPBOXLAYERS = [{
+      name: 'street', url: 'https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token='
+        + Config.Client.Map.mapboxAccessToken
+    }, {
+      name: 'satellite', url: 'https://api.tiles.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.png?access_token='
+        + Config.Client.Map.mapboxAccessToken
+    }, {
+      name: 'hybrid', url: 'https://api.tiles.mapbox.com/v4/mapbox.streets-satellite/{z}/{x}/{y}.png?access_token='
+        + Config.Client.Map.mapboxAccessToken
     }
-    return points;
+    ];
   }
-
 
   public get ShortAttributions(): string[] {
     const yaga = '<a href="https://yagajs.org" title="YAGA">YAGA</a>';
@@ -62,14 +59,33 @@ export class MapService {
   }
 
   public get MapLayer(): string {
-    if (Config.Client.Map.mapProvider === ClientConfig.MapProviders.Custom) {
-      return Config.Client.Map.tileUrl;
+    return this.Layers[0].url;
+  }
+
+  public get Layers(): { name: string, url: string }[] {
+    switch (Config.Client.Map.mapProvider) {
+      case ClientConfig.MapProviders.Custom:
+        return Config.Client.Map.customLayers;
+      case ClientConfig.MapProviders.Mapbox:
+        return MapService.MAPBOXLAYERS;
+      case ClientConfig.MapProviders.OpenStreetMap:
+        return MapService.OSMLAYERS;
     }
-    if (Config.Client.Map.mapProvider === ClientConfig.MapProviders.Mapbox) {
-      return 'https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token='
-        + Config.Client.Map.mapboxAccessToken;
+  }
+
+
+  public async getMapPath(file: FileDTO): Promise<MapPath[]> {
+    const filePath = Utils.concatUrls(file.directory.path, file.directory.name, file.name);
+    const gpx = await this.networkService.getXML('/gallery/content/' + filePath);
+    const elements = gpx.getElementsByTagName('trkpt');
+    const points: MapPath[] = [];
+    for (let i = 0; i < elements.length; i++) {
+      points.push({
+        lat: parseFloat(elements[i].getAttribute('lat')),
+        lng: parseFloat(elements[i].getAttribute('lon'))
+      });
     }
-    return 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    return points;
   }
 
 }

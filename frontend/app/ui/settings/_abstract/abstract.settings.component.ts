@@ -67,6 +67,9 @@ export abstract class SettingsComponent<T extends { [key: string]: any }, S exte
     if (!newSettings) {
       return false;
     }
+    if (Array.isArray(original) && original.length !== newSettings.length) {
+      return false;
+    }
     const keys = Object.keys(newSettings);
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];

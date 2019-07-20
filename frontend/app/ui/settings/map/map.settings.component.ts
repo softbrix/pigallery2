@@ -32,6 +32,16 @@ export class MapSettingsComponent extends SettingsComponent<ClientConfig.MapConf
   }
 
 
+  addNewLayer() {
+    this.settings.customLayers.push({
+      name: 'Layer-' + this.settings.customLayers.length,
+      url: ''
+    });
+  }
+
+  removeLayer(layer: ClientConfig.MapLayers) {
+    this.settings.customLayers.splice(this.settings.customLayers.indexOf(layer), 1);
+  }
 }
 
 

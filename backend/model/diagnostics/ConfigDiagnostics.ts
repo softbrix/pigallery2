@@ -163,8 +163,15 @@ export class ConfigDiagnostics {
       throw new Error('Mapbox needs a valid api key.');
     }
     if (map.mapProvider === ClientConfig.MapProviders.Custom &&
-      (!map.tileUrl || map.tileUrl.length === 0)) {
-      throw new Error('Custom maps need a valid tile url');
+      (!map.customLayers || map.customLayers.length === 0)) {
+      throw new Error('Custom maps need at least one valid layer');
+    }
+    if (map.mapProvider === ClientConfig.MapProviders.Custom) {
+      map.customLayers.forEach(l => {
+        if (!l.url || l.url.length === 0) {
+          throw new Error('Custom maps url need to be a valid layer');
+        }
+      });
     }
   }
 

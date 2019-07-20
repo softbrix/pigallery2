@@ -1,4 +1,4 @@
-import {Component, ElementRef, HostListener, Input, OnChanges, ViewChild, AfterViewInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, HostListener, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
 import {PhotoDTO} from '../../../../../../common/entities/PhotoDTO';
 import {Dimension} from '../../../../model/IRenderable';
 import {FullScreenService} from '../../fullscreen.service';
@@ -23,9 +23,9 @@ import {FixOrientationPipe} from '../../../../pipes/FixOrientationPipe';
 })
 export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
 
+
   @Input() photos: PhotoDTO[];
   @Input() gpxFiles: FileDTO[];
-  private startPosition: Dimension = null;
   public lightboxDimension: Dimension = <Dimension>{top: 0, left: 0, width: 0, height: 0};
   public mapDimension: Dimension = <Dimension>{top: 0, left: 0, width: 0, height: 0};
   public visible = false;
@@ -33,27 +33,34 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
   public opacity = 1.0;
   mapPhotos: MapPhoto[] = [];
   paths: LatLng[][] = [];
-
-  @ViewChild('root', {static: false}) elementRef: ElementRef;
-  @ViewChild('yagaMap', {static: false}) yagaMap: MapComponent;
-
+  @ViewChild('root', {static: true}) elementRef: ElementRef;
+  @ViewChild('yagaMap', {static: true}) yagaMap: MapComponent;
   public smallIconSize = new Point(Config.Client.Thumbnail.iconSize * 0.75, Config.Client.Thumbnail.iconSize * 0.75);
   public iconSize = new Point(Config.Client.Thumbnail.iconSize, Config.Client.Thumbnail.iconSize);
+  private startPosition: Dimension = null;
 
   constructor(public fullScreenService: FullScreenService,
               private thumbnailService: ThumbnailManagerService,
               public mapService: MapService) {
   }
 
+
   ngOnChanges() {
     if (this.visible === false) {
       return;
     }
     this.showImages();
+
   }
 
   ngAfterViewInit() {
-
+    let i = 0;
+    this.yagaMap.eachLayer(l => {
+      if (i >= 3 || (this.paths.length === 0 && i >= 2)) {
+        this.yagaMap.removeLayer(l);
+      }
+      ++i;
+    });
   }
 
   @HostListener('window:resize', ['$event'])
@@ -73,7 +80,6 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
     await Utils.wait(0);
     this.yagaMap.invalidateSize();
   }
-
 
 
   public async show(position: Dimension) {
@@ -145,6 +151,7 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
       const iconTh = this.thumbnailService.getIcon(new MediaIcon(p));
       iconTh.Visible = true;
       const obj: MapPhoto = {
+        name: p.name,
         lat: p.metadata.positionData.GPSData.latitude,
         lng: p.metadata.positionData.GPSData.longitude,
         iconThumbnail: iconTh,
@@ -175,29 +182,6 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
 
   }
 
-  private centerMap() {
-    if (this.mapPhotos.length > 0) {
-      this.yagaMap.fitBounds(<any>this.mapPhotos);
-    }
-  }
-
-
-  private async loadGPXFiles(): Promise<void> {
-    this.paths = [];
-    for (let i = 0; i < this.gpxFiles.length; i++) {
-      const file = this.gpxFiles[i];
-      const path = await this.mapService.getMapPath(file);
-      if (file !== this.gpxFiles[i]) { // check race condition
-        return;
-      }
-      if (path.length === 0) {
-        continue;
-      }
-      this.paths.push(<LatLng[]>path);
-    }
-  }
-
-
   public loadPreview(mp: MapPhoto) {
     mp.preview.thumbnail.load();
     mp.preview.thumbnail.CurrentlyWaiting = true;
@@ -209,15 +193,6 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
       mp.preview.thumbnail.destroy();
     });
     this.mapPhotos = [];
-  }
-
-
-  private getScreenWidth() {
-    return window.innerWidth;
-  }
-
-  private getScreenHeight() {
-    return window.innerHeight;
   }
 
   @HostListener('window:keydown', ['$event'])
@@ -241,10 +216,40 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
     }
   }
 
+  private centerMap() {
+    if (this.mapPhotos.length > 0) {
+      this.yagaMap.fitBounds(<any>this.mapPhotos);
+    }
+  }
+
+  private async loadGPXFiles(): Promise<void> {
+    this.paths = [];
+    for (let i = 0; i < this.gpxFiles.length; i++) {
+      const file = this.gpxFiles[i];
+      const path = await this.mapService.getMapPath(file);
+      if (file !== this.gpxFiles[i]) { // check race condition
+        return;
+      }
+      if (path.length === 0) {
+        continue;
+      }
+      this.paths.push(<LatLng[]>path);
+    }
+  }
+
+  private getScreenWidth() {
+    return window.innerWidth;
+  }
+
+  private getScreenHeight() {
+    return window.innerHeight;
+  }
+
 
 }
 
 export interface MapPhoto {
+  name: string;
   lat: number;
   lng: number;
   iconUrl?: string;

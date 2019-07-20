@@ -46,7 +46,7 @@ export class SettingsService {
           enabled: true,
           mapProvider: ClientConfig.MapProviders.OpenStreetMap,
           mapboxAccessToken: '',
-          tileUrl: ''
+          customLayers: [{name: 'street', url: ''}]
         },
         RandomPhoto: {
           enabled: true

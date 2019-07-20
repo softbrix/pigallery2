@@ -31,11 +31,16 @@ export module ClientConfig {
     enabled: boolean;
   }
 
+  export interface MapLayers {
+    name: string;
+    url: string;
+  }
+
   export interface MapConfig {
     enabled: boolean;
     mapProvider: MapProviders;
     mapboxAccessToken: string;
-    tileUrl: string;
+    customLayers: MapLayers[];
   }
 
   export interface ThumbnailConfig {
@@ -125,7 +130,7 @@ export class PublicConfigClass {
       enabled: true,
       mapProvider: ClientConfig.MapProviders.OpenStreetMap,
       mapboxAccessToken: '',
-      tileUrl: ''
+      customLayers: [{name: 'street', url: ''}]
     },
     RandomPhoto: {
       enabled: true
