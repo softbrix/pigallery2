@@ -21,21 +21,27 @@
       </div>
     </div>
     <div class="form-horizontal">
-      <div class="form-group d-flex justify-content-end">
-        <label class="control-label align-self-end mr-2" for="simplifiedMode" i18n>Mode</label>
-        <bSwitch
-          id="simplifiedMode"
-          class="switch"
-          name="simplifiedMode"
-          [switch-off-color]="'warning'"
-          [switch-on-color]="'primary'"
-          [switch-inverse]="'inverse'"
-          [switch-off-text]="text.Advanced"
-          [switch-on-text]="text.Simplified"
-          [switch-handle-width]="'100'"
-          [switch-label-width]="'20'"
-          [(ngModel)]="simplifiedMode">
-        </bSwitch>
+      <div class="d-flex justify-content-between">
+        <a class="version" href="https://github.com/bpatrik/pigallery2/releases">
+          <span i18n>App version:</span>&nbsp;
+          v<span>{{appVersion}}</span>
+        </a>
+        <div class="form-group">
+          <label class="control-label align-self-end mr-2" for="simplifiedMode" i18n>Mode</label>
+          <bSwitch
+            id="simplifiedMode"
+            class="switch"
+            name="simplifiedMode"
+            [switch-off-color]="'warning'"
+            [switch-on-color]="'primary'"
+            [switch-inverse]="true"
+            [switch-off-text]="text.Advanced"
+            [switch-on-text]="text.Simplified"
+            [switch-handle-width]="100"
+            [switch-label-width]="20"
+            [(ngModel)]="simplifiedMode">
+          </bSwitch>
+        </div>
       </div>
     </div>
     <app-settings-basic [simplifiedMode]="simplifiedMode"></app-settings-basic>

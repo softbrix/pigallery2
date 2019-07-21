@@ -79,6 +79,7 @@ export module ClientConfig {
   }
 
   export interface Config {
+    appVersion: string;
     applicationTitle: string;
     publicUrl: string;
     urlBase: string;
@@ -105,6 +106,7 @@ export class PublicConfigClass {
 
   public Client: ClientConfig.Config = {
     applicationTitle: 'PiGallery 2',
+    appVersion: '',
     Thumbnail: {
       concurrentThumbnailGenerations: 1,
       thumbnailSizes: [200, 400, 600],

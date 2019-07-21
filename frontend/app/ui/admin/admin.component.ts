@@ -5,6 +5,7 @@ import {NotificationService} from '../../model/notification.service';
 import {NotificationType} from '../../../../common/entities/NotificationDTO';
 import {NavigationService} from '../../model/navigation.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
+import {Config} from '../../../../common/config/public/Config';
 
 @Component({
   selector: 'app-admin',
@@ -18,6 +19,7 @@ export class AdminComponent implements OnInit {
     Advanced: 'Advanced',
     Simplified: 'Simplified'
   };
+  appVersion = Config.Client.appVersion;
 
   constructor(private _authService: AuthenticationService,
               private _navigation: NavigationService,

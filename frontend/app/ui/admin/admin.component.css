@@ -1,0 +1,7 @@
+.version{
+  color: #6c757d;
+}
+
+.version:hover{
+  text-decoration: underline;
+}

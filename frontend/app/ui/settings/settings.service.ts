@@ -20,6 +20,7 @@ export class SettingsService {
   constructor(private _networkService: NetworkService) {
     this.settings = new BehaviorSubject<IPrivateConfig>({
       Client: {
+        appVersion: '',
         Search: {
           enabled: true,
           AutoComplete: {

@@ -44,6 +44,8 @@ export class Server {
     Logger.info(LOG_TAG, 'running diagnostics...');
     await ConfigDiagnostics.runDiagnostics();
     Logger.info(LOG_TAG, 'using config:');
+    const appVer = require('../package.json').version;
+    Config.Client.appVersion = appVer;
     Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
 
     this.app = _express();
