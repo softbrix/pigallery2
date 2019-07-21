@@ -146,12 +146,23 @@ const translate = (list: any[], cb: (err: any) => void) => {
     translationFolder + ' --destination-languages=' + localsStr,
     handleError(cb));
 };
+const merge = (list: any[], cb: (err: any) => void) => {
+  const localsStr = '"[\\"' + list.join('\\",\\"') + '\\"]"';
+  exec('xlf-google-translate --method="extend-only" --source-lang="en" --source-file="./locale.source.xlf" --destination-folder="./frontend/"' +
+    translationFolder + ' --destination-languages=' + localsStr,
+    handleError(cb));
+};
 
 gulp.task('update-translation-only', function (cb) {
   translate(getLanguages(), cb);
 });
+gulp.task('merge-translation-only', function (cb) {
+  merge(getLanguages(), cb);
+});
 
 gulp.task('update-translation', gulp.series('extract-locale', 'update-translation-only'));
+
+gulp.task('merge-new-translation', gulp.series('extract-locale', 'merge-translation-only'));
 
 
 gulp.task('add-translation-only', (cb) => {

@@ -8,7 +8,7 @@
   "main": "./backend/index.js",
   "bin": "./backend/index.js",
   "scripts": {
-    "install": "tsc && gulp build-prod",
+    "installx": "tsc && gulp build-prod",
     "build-release": "gulp build-release",
     "build-backend": "tsc",
     "pretest": "tsc",
@@ -16,7 +16,7 @@
     "start": "node ./backend/index",
     "run-dev": "ng build --aot --watch --output-path=./dist --i18n-locale en --i18n-file frontend/translate/messages.en.xlf --i18n-missing-translation warning",
     "build-stats": "ng build --aot --prod --stats-json --output-path=./dist --i18n-locale en --i18n-file frontend/translate/messages.en.xlf --i18n-missing-translation warning",
-    "update-translation": "gulp update-translation",
+    "merge-new-translation": "gulp merge-new-translation",
     "add-translation": "gulp add-translation"
   },
   "repository": {
@@ -122,7 +122,7 @@
     "ts-node": "8.3.0",
     "tslint": "5.18.0",
     "typescript": "3.4.5",
-    "xlf-google-translate": "1.0.0-beta.13",
+    "xlf-google-translate": "1.0.0-beta.15",
     "zone.js": "0.9.1"
   },
   "//": [

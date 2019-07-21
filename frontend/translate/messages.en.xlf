@@ -104,7 +104,7 @@
         <source>download</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/gallery/lightbox/controls/controls.lightbox.gallery.component.html</context>
-          <context context-type="linenumber">9</context>
+          <context context-type="linenumber">11</context>
         </context-group>
         <target>download</target>
       </trans-unit>
@@ -112,7 +112,7 @@
         <source>info key: i</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/gallery/lightbox/controls/controls.lightbox.gallery.component.html</context>
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">15</context>
         </context-group>
         <target>info key: i</target>
       </trans-unit>
@@ -120,19 +120,19 @@
         <source>toggle fullscreen, key: f</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/gallery/lightbox/controls/controls.lightbox.gallery.component.html</context>
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">22</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/gallery/lightbox/controls/controls.lightbox.gallery.component.html</context>
-          <context context-type="linenumber">29</context>
+          <context context-type="linenumber">31</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/gallery/map/lightbox/lightbox.map.gallery.component.html</context>
-          <context context-type="linenumber">62</context>
+          <context context-type="linenumber">86</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/gallery/map/lightbox/lightbox.map.gallery.component.html</context>
-          <context context-type="linenumber">67</context>
+          <context context-type="linenumber">91</context>
         </context-group>
         <target>toggle fullscreen, key: f</target>
       </trans-unit>
@@ -140,11 +140,11 @@
         <source>close, key: Escape</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/gallery/lightbox/controls/controls.lightbox.gallery.component.html</context>
-          <context context-type="linenumber">36</context>
+          <context context-type="linenumber">38</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/gallery/map/lightbox/lightbox.map.gallery.component.html</context>
-          <context context-type="linenumber">70</context>
+          <context context-type="linenumber">94</context>
         </context-group>
         <target>close, key: Escape</target>
       </trans-unit>
@@ -152,7 +152,7 @@
         <source>key: left arrow</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/gallery/lightbox/controls/controls.lightbox.gallery.component.html</context>
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">76</context>
         </context-group>
         <target>key: left arrow</target>
       </trans-unit>
@@ -160,7 +160,7 @@
         <source>key: right arrow</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/gallery/lightbox/controls/controls.lightbox.gallery.component.html</context>
-          <context context-type="linenumber">58</context>
+          <context context-type="linenumber">80</context>
         </context-group>
         <target>key: right arrow</target>
       </trans-unit>
@@ -168,7 +168,7 @@
         <source>Zoom out, key: '-'</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/gallery/lightbox/controls/controls.lightbox.gallery.component.html</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">86</context>
         </context-group>
         <target>Zoom out, key: '-'</target>
       </trans-unit>
@@ -176,7 +176,7 @@
         <source>Zoom in, key: '+'</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/gallery/lightbox/controls/controls.lightbox.gallery.component.html</context>
-          <context context-type="linenumber">71</context>
+          <context context-type="linenumber">93</context>
         </context-group>
         <target>Zoom in, key: '+'</target>
       </trans-unit>
@@ -359,11 +359,19 @@
         </context-group>
         <target>To dismiss these notifications, restart the server.</target>
       </trans-unit>
+      <trans-unit id="ad04cc52928666934f1ec0d4594da3fe9711f5d4" datatype="html">
+        <source>App version:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/admin/admin.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+        <target>App version:</target>
+      </trans-unit>
       <trans-unit id="37e10df2d9c0c25ef04ac112c9c9a7723e8efae0" datatype="html">
         <source>Mode</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/admin/admin.component.html</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">30</context>
         </context-group>
         <target>Mode</target>
       </trans-unit>
@@ -476,6 +484,10 @@
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/usermanager/usermanager.settings.component.html</context>
           <context context-type="linenumber">27</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
+          <context context-type="linenumber">62</context>
         </context-group>
         <target>Name</target>
       </trans-unit>
@@ -620,43 +632,73 @@
         </context-group>
         <target>Map settings</target>
       </trans-unit>
-      <trans-unit id="1bd9d57dffd8f2e6ed1c65e3ed7bf329f317e752" datatype="html">
-        <source>Map provider</source>
+      <trans-unit id="2780e50203a2f635b9fba81e3dd37e3ee06e000c" datatype="html">
+        <source>Use image markers</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
           <context context-type="linenumber">25</context>
         </context-group>
+        <target>Use image markers</target>
+      </trans-unit>
+      <trans-unit id="05a7c135815c576c6f2a6c5a7e5adf0ff228a224" datatype="html">
+        <source>
+              Map will use thumbnail images as markers instead of the default pin.
+            </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+        <target>
+              Map will use thumbnail images as markers instead of the default pin.
+            </target>
+      </trans-unit>
+      <trans-unit id="1bd9d57dffd8f2e6ed1c65e3ed7bf329f317e752" datatype="html">
+        <source>Map provider</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
+          <context context-type="linenumber">47</context>
+        </context-group>
         <target>Map provider</target>
       </trans-unit>
-      <trans-unit id="559b1ca26c5fffeb5c5d4fbc71d64b85824d9188" datatype="html">
-        <source>Map tile url</source>
+      <trans-unit id="404941a3f2ac25d1f1ab75020507adcb8cff42df" datatype="html">
+        <source>Tile Url*</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
-          <context context-type="linenumber">37</context>
+          <context context-type="linenumber">63</context>
         </context-group>
-        <target>Map tile url</target>
+        <target>Tile Url*</target>
       </trans-unit>
-      <trans-unit id="853c11ccf6fba4454bdfb48dc708159fb7d11075" datatype="html">
-        <source>The map module will use this url to fetch the map tiles.</source>
+      <trans-unit id="fd2b3090099597195c82fe0f1963ae97243956b0" datatype="html">
+        <source>*The map module will use these urls to fetch the map tiles.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">88</context>
         </context-group>
-        <target>The map module will use this url to fetch the map tiles.</target>
+        <target>*The map module will use these urls to fetch the map tiles.</target>
+      </trans-unit>
+      <trans-unit id="56b620f4539160c20d0591fa76fea3a4091017f2" datatype="html">
+        <source>+ Add Layer
+            </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
+          <context context-type="linenumber">93</context>
+        </context-group>
+        <target>+ Add Layer
+            </target>
       </trans-unit>
       <trans-unit id="d43c7ef9da77ac203afc6f0b748adfc03a10e569" datatype="html">
         <source>Mapbox access token</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
-          <context context-type="linenumber">49</context>
+          <context context-type="linenumber">99</context>
         </context-group>
         <target>Mapbox access token</target>
       </trans-unit>
-      <trans-unit id="0afcc21341fab96f7e87fa4ef028e4a58b20190b" datatype="html">
-        <source>MapBox needs an access token to work, create one at </source>
+      <trans-unit id="82a6a6dc17d7855ddaec1e78c1ddeedb1b3212ad" datatype="html">
+        <source>MapBox needs an access token to work, create one at</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">105</context>
         </context-group>
         <target>MapBox needs an access token to work, create one at</target>
       </trans-unit>
@@ -665,7 +707,7 @@
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">114</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbanil.settings.component.html</context>
@@ -706,7 +748,7 @@
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
-          <context context-type="linenumber">66</context>
+          <context context-type="linenumber">117</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbanil.settings.component.html</context>
