@@ -80,6 +80,7 @@ import {FaceComponent} from './ui/faces/face/face.component';
 import {VersionService} from './model/version.service';
 import { DirectoriesComponent } from './ui/gallery/directories/directories.component';
 import {ControlsLightboxComponent} from './ui/gallery/lightbox/controls/controls.lightbox.gallery.component';
+import {FacesSettingsComponent} from './ui/settings/faces/faces.settings.component';
 
 
 @Injectable()
@@ -178,6 +179,7 @@ export function translationsFactory(locale: string) {
     ShareSettingsComponent,
     RandomPhotoSettingsComponent,
     BasicSettingsComponent,
+    FacesSettingsComponent,
     OtherSettingsComponent,
     IndexingSettingsComponent,
     DuplicateComponent,

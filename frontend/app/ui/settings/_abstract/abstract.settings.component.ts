@@ -38,7 +38,7 @@ export abstract class SettingsComponent<T extends { [key: string]: any }, S exte
   private readonly _settingsSubscription: Subscription = null;
 
   protected constructor(private name: string,
-                        private _authService: AuthenticationService,
+                        protected _authService: AuthenticationService,
                         private _navigation: NavigationService,
                         public _settingsService: S,
                         protected notification: NotificationService,

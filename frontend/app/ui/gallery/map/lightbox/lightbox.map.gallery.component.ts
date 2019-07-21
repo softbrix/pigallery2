@@ -54,6 +54,8 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    // TODO: remove it once yaga/leaflet-ng2 is fixes.
+    //  See issue: https://github.com/yagajs/leaflet-ng2/issues/440
     let i = 0;
     this.yagaMap.eachLayer(l => {
       if (i >= 3 || (this.paths.length === 0 && i >= 2)) {

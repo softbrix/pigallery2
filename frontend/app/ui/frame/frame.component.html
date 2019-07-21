@@ -15,10 +15,10 @@
       <li class="nav-item" [routerLinkActive]="['active']">
         <a class="nav-link"
            [routerLink]="['/gallery']"
-           [queryParams]="queryService.getParams()">Gallery</a>
+           [queryParams]="queryService.getParams()" i18n>Gallery</a>
       </li>
-      <li class="nav-item" [routerLinkActive]="['active']">
-        <a class="nav-link" [routerLink]="['/faces']">Faces</a>
+      <li class="nav-item" [routerLinkActive]="['active']" *ngIf="facesEnabled">
+        <a class="nav-link" [routerLink]="['/faces']" i18n>Faces</a>
       </li>
     </ul>
     <ul class="navbar-nav navbar-right ml-auto">

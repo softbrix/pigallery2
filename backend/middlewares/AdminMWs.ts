@@ -253,6 +253,30 @@ export class AdminMWs {
       return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
     }
   }
+  public static async updateFacesSettings(req: Request, res: Response, next: NextFunction) {
+    if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
+      return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
+    }
+
+    try {
+      // only updating explicitly set config (not saving config set by the diagnostics)
+      const original = Config.original();
+      await ConfigDiagnostics.testFacesConfig(<ClientConfig.FacesConfig>req.body.settings, original);
+
+      Config.Client.Faces = <ClientConfig.FacesConfig>req.body.settings;
+      original.Client.Faces = <ClientConfig.FacesConfig>req.body.settings;
+      original.save();
+      await ConfigDiagnostics.runDiagnostics();
+      Logger.info(LOG_TAG, 'new config:');
+      Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
+      return next();
+    } catch (err) {
+      if (err instanceof Error) {
+        return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + err.toString(), err));
+      }
+      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
+    }
+  }
 
 
   public static async updateAuthenticationSettings(req: Request, res: Response, next: NextFunction) {

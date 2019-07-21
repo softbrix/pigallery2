@@ -57,10 +57,13 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
     const metadata = this.gridMedia.media.metadata as PhotoMetadata;
     if ((metadata.keywords && metadata.keywords.length > 0) ||
       (metadata.faces && metadata.faces.length > 0)) {
-      const names: string[] = (metadata.faces || []).map(f => f.name);
-      this.keywords = names.filter((name, index) => names.indexOf(name) === index)
-        .map(n => ({value: n, type: SearchTypes.person}))
-        .concat((metadata.keywords || []).map(k => ({value: k, type: SearchTypes.keyword})));
+      this.keywords = [];
+      if (Config.Client.Faces.enabled) {
+        const names: string[] = (metadata.faces || []).map(f => f.name);
+        this.keywords = names.filter((name, index) => names.indexOf(name) === index)
+          .map(n => ({value: n, type: SearchTypes.person}));
+      }
+      this.keywords = this.keywords.concat((metadata.keywords || []).map(k => ({value: k, type: SearchTypes.keyword})));
     }
 
   }

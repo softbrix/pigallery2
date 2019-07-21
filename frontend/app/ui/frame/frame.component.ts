@@ -20,6 +20,7 @@ export class FrameComponent {
   authenticationRequired = false;
   public title: string;
   collapsed = true;
+  facesEnabled = Config.Client.Faces.enabled;
 
   constructor(private _authService: AuthenticationService,
               public notificationService: NotificationService,

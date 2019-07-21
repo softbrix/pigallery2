@@ -1,0 +1,72 @@
+<form #settingsForm="ngForm">
+  <div class="card mb-4"
+       [ngClass]="settings.enabled && !_settingsService.isSupported()?'panel-warning':''">
+    <h5 class="card-header">
+      <ng-container i18n>Faces settings</ng-container>
+      <div class="switch-wrapper">
+        <bSwitch
+          class="switch"
+          name="enabled"
+          [switch-on-color]="'success'"
+          [switch-inverse]="true"
+          [switch-off-text]="text.Disabled"
+          [switch-on-text]="text.Enabled"
+          [switch-disabled]="inProgress || (!settings.enabled && !_settingsService.isSupported())"
+          [switch-handle-width]="100"
+          [switch-label-width]="20"
+          [(ngModel)]="settings.enabled">
+        </bSwitch>
+      </div>
+    </h5>
+    <div class="card-body">
+      <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
+
+      <ng-container *ngIf="settings.enabled  || _settingsService.isSupported()">
+
+        <div class="form-group row">
+          <label class="col-md-2 control-label" for="autocompleteEnabled" i18n>Override keywords</label>
+          <div class="col-md-10">
+            <bSwitch
+              id="autocompleteEnabled"
+              class="switch"
+              name="autocompleteEnabled"
+              [switch-on-color]="'primary'"
+              [switch-disabled]="!settings.enabled"
+              [switch-inverse]="true"
+              [switch-off-text]="text.Disabled"
+              [switch-on-text]="text.Enabled"
+              [switch-handle-width]="100"
+              [switch-label-width]="20"
+              [(ngModel)]="settings.keywordsToPersons">
+            </bSwitch>
+            <small class="form-text text-muted" i18n>If a photo has the same face (person) name and keyword, the app removes the duplicate, keeping the face only.</small>
+          </div>
+        </div>
+
+
+        <div class="form-group row">
+          <label class="col-md-2 control-label" for="writeAccessMinRole" i18n>Face starring right</label>
+          <div class="col-md-10">
+            <select class="form-control" [(ngModel)]="settings.writeAccessMinRole" name="writeAccessMinRole" id="writeAccessMinRole" required>
+              <option *ngFor="let repository of userRoles" [value]="repository.key">{{repository.value}}
+              </option>
+            </select>
+            <small class="form-text text-muted" i18n>Required minimum right to start (favourite) a face.</small>
+          </div>
+        </div>
+
+      </ng-container>
+      <div class="panel-info" *ngIf="(!settings.enabled && !_settingsService.isSupported())" i18n>
+        Faces are not supported with these settings.
+      </div>
+      <button class="btn btn-success float-right"
+              [disabled]="!settingsForm.form.valid || !changed || inProgress"
+              (click)="save()" i18n>Save
+      </button>
+      <button class="btn btn-secondary float-right"
+              (click)="reset()" i18n>Reset
+      </button>
+    </div>
+  </div>
+
+</form>

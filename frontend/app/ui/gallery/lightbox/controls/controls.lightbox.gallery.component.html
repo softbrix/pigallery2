@@ -55,7 +55,7 @@
          [style.left.px]="photoFrameDim.width/2"
          [style.width.px]="faceContainerDim.width"
          [style.height.px]="faceContainerDim.height"
-         *ngIf="activePhoto && zoom == 1">
+         *ngIf="facesEnabled && activePhoto && zoom == 1">
       <a
         class="face"
         [routerLink]="['/search', face.name, {type: SearchTypes[SearchTypes.person]}]"

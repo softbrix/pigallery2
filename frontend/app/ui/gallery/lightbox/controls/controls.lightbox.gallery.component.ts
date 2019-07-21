@@ -7,6 +7,7 @@ import {filter} from 'rxjs/operators';
 import {PhotoDTO} from '../../../../../../common/entities/PhotoDTO';
 import {GalleryLightboxMediaComponent} from '../media/media.lightbox.gallery.component';
 import {SearchTypes} from '../../../../../../common/entities/AutoCompleteItem';
+import {Config} from '../../../../../../common/config/public/Config';
 
 export enum PlayBackStates {
   Paused = 1,
@@ -36,6 +37,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   @Input() mediaElement: GalleryLightboxMediaComponent;
   @Input() photoFrameDim = {width: 1, height: 1, aspect: 1};
 
+  public readonly facesEnabled = Config.Client.Faces.enabled;
 
   public zoom = 1;
   public playBackState: PlayBackStates = PlayBackStates.Paused;
@@ -44,14 +46,13 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   public controllersAlwaysOn = false;
   public controllersVisible = true;
   public drag = {x: 0, y: 0};
+  public SearchTypes = SearchTypes;
   private visibilityTimer: number = null;
   private timer: Observable<number>;
   private timerSub: Subscription;
   private prevDrag = {x: 0, y: 0};
   private prevZoom = 1;
   private faceContainerDim = {width: 0, height: 0};
-
-  public SearchTypes = SearchTypes;
 
   constructor(public fullScreenService: FullScreenService) {
   }
