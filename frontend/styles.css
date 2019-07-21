@@ -16,3 +16,7 @@
 #toast-container > div {
   opacity:1;
 }
+
+bs-dropdown-container {
+  z-index: 1;
+}
