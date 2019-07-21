@@ -216,9 +216,18 @@ input[type="range"].zoom-progress::-moz-range-track {
   transition: opacity 0.5s;
 }
 
+#controllers-container.dim-controls .face,
+#controllers-container.dim-controls-video .face {
+  opacity: 0;
+}
+
 .face-name {
   white-space: nowrap;
   color: white;
+  margin-left: -100%;
+  margin-right: -100%;
+  text-align: center;
+  display: block;
 }
 
 .face-box {

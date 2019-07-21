@@ -128,9 +128,13 @@ export class ConfigDiagnostics {
 
 
   static async testFacesConfig(faces: ClientConfig.FacesConfig, config: IPrivateConfig) {
-    if (faces.enabled === true &&
-      config.Server.database.type === DatabaseType.memory) {
-      throw new Error('Memory Database do not support faces');
+    if (faces.enabled === true) {
+      if (config.Server.database.type === DatabaseType.memory) {
+        throw new Error('Memory Database do not support faces');
+      }
+      if (config.Client.Search.enabled === false) {
+        throw new Error('Faces support needs enabled search');
+      }
     }
   }
 

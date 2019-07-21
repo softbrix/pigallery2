@@ -13,7 +13,8 @@ export class FacesSettingsService extends AbstractSettingsService<ClientConfig.F
   }
 
   public isSupported(): boolean {
-    return this._settingsService.settings.value.Server.database.type !== DatabaseType.memory;
+    return this._settingsService.settings.value.Server.database.type !== DatabaseType.memory &&
+      this._settingsService.settings.value.Client.Search.enabled === true;
   }
 
   public updateSettings(settings: ClientConfig.FacesConfig): Promise<void> {
