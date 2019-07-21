@@ -41,7 +41,7 @@ Full node install on raspberry pi description: https://www.w3schools.com/nodejs/
 
 ```bash
 cd ~
-wget https://github.com/bpatrik/pigallery2/releases/download/1.5.6/pigallery2.zip
+wget https://github.com/bpatrik/pigallery2/releases/download/1.7.0/pigallery2.zip
 unzip pigallery2.zip -d pigallery2
 cd pigallery2
 npm install
@@ -74,7 +74,7 @@ docker run \
    -v <path to your db file folder>/sqlite.db:/pigallery2-release/sqlite.db \
    -v <path to your images folder>:/pigallery2-release/demo/images \
    -v <path to your temp folder>:/pigallery2-release/demo/TEMP \
-   bpatrik/pigallery2:1.5.6-stretch
+   bpatrik/pigallery2:1.7.0-stretch
 ```
 Make sure that a file at `<path to your config file folder>/config.json` and `sqlite.db` files exists before running it. 
 
