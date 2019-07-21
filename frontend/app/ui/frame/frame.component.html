@@ -32,19 +32,18 @@
       <li class="nav-item ml-2">
         <app-language class="navbar-btn" isDark="true"></app-language>
       </li>
-      <div class="btn-group" dropdown placement="bottom right" container="body"
+      <div class="btn-group" dropdown  placement="bottom"
            *ngIf="isAdmin() || authenticationRequired">
-        <button id="button-basic" dropdownToggle
+        <button id="button-alignment" dropdownToggle
                 type="button" class="btn btn-dark dropdown-toggle"
-                aria-controls="dropdown-basic">
+                aria-controls="dropdown-alignment">
           <span class="oi oi-menu"></span>
           <span *ngIf="isAdmin() && notificationService.notifications.length>0"
                 class="navbar-badge badge badge-warning">{{notificationService.notifications.length}}</span>
-
         </button>
-        <ul id="dropdown-basic" *dropdownMenu
+        <ul id="dropdown-alignment" *dropdownMenu
             class="dropdown-menu dropdown-menu-right"
-            role="menu" aria-labelledby="button-basic">
+            role="menu" aria-labelledby="button-alignment">
           <ng-content select="[navbar-menu]"></ng-content>
           <li role="menuitem" *ngIf="isAdmin()">
             <a class="dropdown-item" href="#" [routerLink]="['/duplicates']">
