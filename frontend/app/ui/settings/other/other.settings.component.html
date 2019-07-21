@@ -16,11 +16,11 @@
             class="switch"
             name="enable"
             [switch-on-color]="'primary'"
-            [switch-inverse]="'inverse'"
+            [switch-inverse]="true"
             [switch-off-text]="text.Disabled"
             [switch-on-text]="text.Enabled"
-            [switch-handle-width]="'100'"
-            [switch-label-width]="'20'"
+            [switch-handle-width]="100"
+            [switch-label-width]="20"
             [(ngModel)]="settings.Server.enable">
           </bSwitch>
           <small class="form-text text-muted" i18n>Runs directory scanning and thumbnail generation (only for Jimp) in a
@@ -52,11 +52,11 @@
             class="switch"
             name="enableOnScrollThumbnailPrioritising"
             [switch-on-color]="'primary'"
-            [switch-inverse]="'inverse'"
+            [switch-inverse]="true"
             [switch-off-text]="text.Disabled"
             [switch-on-text]="text.Enabled"
-            [switch-handle-width]="'100'"
-            [switch-label-width]="'20'"
+            [switch-handle-width]="100"
+            [switch-label-width]="20"
             [(ngModel)]="settings.Client.enableOnScrollThumbnailPrioritising">
           </bSwitch>
           <small class="form-text text-muted" i18n>Those thumbnails get higher priority that are visible on the screen
@@ -72,11 +72,11 @@
             class="switch"
             name="enableOnScrollRendering"
             [switch-on-color]="'primary'"
-            [switch-inverse]="'inverse'"
+            [switch-inverse]="true"
             [switch-off-text]="text.Disabled"
             [switch-on-text]="text.Enabled"
-            [switch-handle-width]="'100'"
-            [switch-label-width]="'20'"
+            [switch-handle-width]="100"
+            [switch-label-width]="20"
             [(ngModel)]="settings.Client.enableOnScrollRendering">
           </bSwitch>
           <small class="form-text text-muted" i18n>Shows only the required amount of photos at once. Renders more if
@@ -94,11 +94,11 @@
             class="switch"
             name="enableCache"
             [switch-on-color]="'primary'"
-            [switch-inverse]="'inverse'"
+            [switch-inverse]="true"
             [switch-off-text]="text.Disabled"
             [switch-on-text]="text.Enabled"
-            [switch-handle-width]="'100'"
-            [switch-label-width]="'20'"
+            [switch-handle-width]="100"
+            [switch-label-width]="20"
             [(ngModel)]="settings.Client.enableCache">
           </bSwitch>
           <small class="form-text text-muted" i18n>Caches directory contents and search results for better performance
@@ -115,11 +115,11 @@
             class="switch"
             name="captionFirstNaming"
             [switch-on-color]="'primary'"
-            [switch-inverse]="'inverse'"
+            [switch-inverse]="true"
             [switch-off-text]="text.Disabled"
             [switch-on-text]="text.Enabled"
-            [switch-handle-width]="'100'"
-            [switch-label-width]="'20'"
+            [switch-handle-width]="100"
+            [switch-label-width]="20"
             [(ngModel)]="settings.Client.captionFirstNaming">
           </bSwitch>
           <small class="form-text text-muted" i18n>Show the caption (IPTC 120) tags from the EXIF data instead of the filenames.
@@ -137,11 +137,11 @@
             class="switch"
             name="showItemCount"
             [switch-on-color]="'primary'"
-            [switch-inverse]="'inverse'"
+            [switch-inverse]="true"
             [switch-off-text]="text.Disabled"
             [switch-on-text]="text.Enabled"
-            [switch-handle-width]="'100'"
-            [switch-label-width]="'20'"
+            [switch-handle-width]="100"
+            [switch-label-width]="20"
             [(ngModel)]="settings.Client.NavBar.showItemCount">
           </bSwitch>
           <small class="form-text text-muted" i18n>Show the number of items (photos) in the folder

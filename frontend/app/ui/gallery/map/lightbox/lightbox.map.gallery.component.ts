@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, HostListener, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, HostListener, Input, OnChanges, ViewChild} from '@angular/core';
 import {PhotoDTO} from '../../../../../../common/entities/PhotoDTO';
 import {Dimension} from '../../../../model/IRenderable';
 import {FullScreenService} from '../../fullscreen.service';
@@ -163,16 +163,18 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
         }
 
       };
-      if (iconTh.Available === true) {
-        FixOrientationPipe.transform(iconTh.Src, p.metadata.orientation).then((icon) => {
-          obj.iconUrl = icon;
-        });
-      } else {
-        iconTh.OnLoad = () => {
+      if (Config.Client.Map.useImageMarkers === true) {
+        if (iconTh.Available === true) {
           FixOrientationPipe.transform(iconTh.Src, p.metadata.orientation).then((icon) => {
             obj.iconUrl = icon;
           });
-        };
+        } else {
+          iconTh.OnLoad = () => {
+            FixOrientationPipe.transform(iconTh.Src, p.metadata.orientation).then((icon) => {
+              obj.iconUrl = icon;
+            });
+          };
+        }
       }
       return obj;
     });

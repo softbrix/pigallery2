@@ -38,6 +38,7 @@ export module ClientConfig {
 
   export interface MapConfig {
     enabled: boolean;
+    useImageMarkers: boolean;
     mapProvider: MapProviders;
     mapboxAccessToken: string;
     customLayers: MapLayers[];
@@ -128,6 +129,7 @@ export class PublicConfigClass {
     },
     Map: {
       enabled: true,
+      useImageMarkers: true,
       mapProvider: ClientConfig.MapProviders.OpenStreetMap,
       mapboxAccessToken: '',
       customLayers: [{name: 'street', url: ''}]

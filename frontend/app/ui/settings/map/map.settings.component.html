@@ -19,74 +19,96 @@
     </h5>
     <div class="card-body">
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
+      <ng-container *ngIf="settings.enabled">
 
-
-      <div class="form-group row">
-        <label class="col-md-2 control-label" for="mapProvider" i18n>Map provider</label>
-        <div class="col-md-10">
-          <select name="mapProvider" id="mapProvider"
-                  [disabled]="!settings.enabled"
-                  class="form-control" [(ngModel)]="settings.mapProvider" required>
-            <option *ngFor="let type of mapProviders" [ngValue]="type.key">{{type.value}}
-            </option>
-          </select>
+        <div class="form-group row" [hidden]="simplifiedMode">
+          <label class="col-md-2 control-label" for="enableOnScrollRendering" i18n>Use image markers</label>
+          <div class="col-md-10">
+            <bSwitch
+              id="enableOnScrollRendering"
+              class="switch"
+              name="enableOnScrollRendering"
+              [switch-on-color]="'primary'"
+              [switch-inverse]="true"
+              [switch-off-text]="text.Disabled"
+              [switch-on-text]="text.Enabled"
+              [switch-handle-width]="100"
+              [switch-label-width]="20"
+              [(ngModel)]="settings.useImageMarkers">
+            </bSwitch>
+            <small class="form-text text-muted" i18n>Map will use thumbnail images as markers instead of the default
+              pin.
+            </small>
+          </div>
         </div>
-      </div>
 
-      <div  class="container custom-layer-container" *ngIf="settings.mapProvider === MapProviders.Custom">
-        <table class="table table-hover">
-          <thead>
-          <tr>
-            <th i18n>Name</th>
-            <th i18n>Tile Url*</th>
-            <th></th>
-          </tr>
-          </thead>
-          <tr *ngFor="let layer of settings.customLayers; let i = index">
-            <td><input type="text" class="form-control" placeholder="Street"
-                       [(ngModel)]="layer.name"
-                       [name]="'tileName-'+i" [id]="'tileName-'+i" required></td>
-            <td>
-              <input type="text" class="form-control" placeholder="http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                     [(ngModel)]="layer.url"
-                     [name]="'tileUrl-'+i" [id]="'tileUrl-'+i" required>
-            </td>
-            <td>
-              <button [disabled]="settings.customLayers.length == 1" (click)="removeLayer(layer)"
-                      [ngClass]="settings.customLayers.length > 1? 'btn-danger':'btn-secondary'"
-                      class="btn float-right">
-                <span class="oi oi-trash" aria-hidden="true" aria-label="Delete"></span>
-              </button>
-            </td>
-          </tr>
-        </table>
 
-        <div class="row justify-content-end">
-        <small class="form-text text-muted custom-layer-info">
-          <ng-container i18n>*The map module will use these urls to fetch the map tiles.</ng-container>
-        </small>
+        <div class="form-group row">
+          <label class="col-md-2 control-label" for="mapProvider" i18n>Map provider</label>
+          <div class="col-md-10">
+            <select name="mapProvider" id="mapProvider"
+                    [disabled]="!settings.enabled"
+                    class="form-control" [(ngModel)]="settings.mapProvider" required>
+              <option *ngFor="let type of mapProviders" [ngValue]="type.key">{{type.value}}
+              </option>
+            </select>
+          </div>
         </div>
-        <div class="row justify-content-end">
-          <button class="btn btn-primary"
-                  (click)="addNewLayer()" i18n>+ Add Layer
-          </button>
+
+        <div class="container custom-layer-container" *ngIf="settings.mapProvider === MapProviders.Custom">
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th i18n>Name</th>
+              <th i18n>Tile Url*</th>
+              <th></th>
+            </tr>
+            </thead>
+            <tr *ngFor="let layer of settings.customLayers; let i = index">
+              <td><input type="text" class="form-control" placeholder="Street"
+                         [(ngModel)]="layer.name"
+                         [name]="'tileName-'+i" [id]="'tileName-'+i" required></td>
+              <td>
+                <input type="text" class="form-control" placeholder="http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                       [(ngModel)]="layer.url"
+                       [name]="'tileUrl-'+i" [id]="'tileUrl-'+i" required>
+              </td>
+              <td>
+                <button [disabled]="settings.customLayers.length == 1" (click)="removeLayer(layer)"
+                        [ngClass]="settings.customLayers.length > 1? 'btn-danger':'btn-secondary'"
+                        class="btn float-right">
+                  <span class="oi oi-trash" aria-hidden="true" aria-label="Delete"></span>
+                </button>
+              </td>
+            </tr>
+          </table>
+
+          <div class="row justify-content-end">
+            <small class="form-text text-muted custom-layer-info">
+              <ng-container i18n>*The map module will use these urls to fetch the map tiles.</ng-container>
+            </small>
+          </div>
+          <div class="row justify-content-end">
+            <button class="btn btn-primary"
+                    (click)="addNewLayer()" i18n>+ Add Layer
+            </button>
+          </div>
         </div>
-      </div>
 
-      <div class="form-group row" *ngIf="settings.mapProvider === MapProviders.Mapbox">
-        <label class="col-md-2 control-label" for="mapboxAccessToken" i18n>Mapbox access token</label>
-        <div class="col-md-10">
-          <input type="text" class="form-control" placeholder="Mapbox access token"
-                 [(ngModel)]="settings.mapboxAccessToken"
-                 name="mapboxAccessToken" id="mapboxAccessToken" required>
-          <small class="form-text text-muted">
-            <ng-container i18n>MapBox needs an access token to work, create one at</ng-container>
-            &nbsp;<a href="https://www.mapbox.com">https://www.mapbox.com</a>.
-          </small>
+        <div class="form-group row" *ngIf="settings.mapProvider === MapProviders.Mapbox">
+          <label class="col-md-2 control-label" for="mapboxAccessToken" i18n>Mapbox access token</label>
+          <div class="col-md-10">
+            <input type="text" class="form-control" placeholder="Mapbox access token"
+                   [(ngModel)]="settings.mapboxAccessToken"
+                   name="mapboxAccessToken" id="mapboxAccessToken" required>
+            <small class="form-text text-muted">
+              <ng-container i18n>MapBox needs an access token to work, create one at</ng-container>
+              &nbsp;<a href="https://www.mapbox.com">https://www.mapbox.com</a>.
+            </small>
+          </div>
         </div>
-      </div>
 
-
+      </ng-container>
       <button class="btn btn-success float-right"
               [disabled]="!settingsForm.form.valid || !changed || inProgress"
               (click)="save()" i18n>Save

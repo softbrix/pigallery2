@@ -44,6 +44,7 @@ export class SettingsService {
         },
         Map: {
           enabled: true,
+          useImageMarkers: true,
           mapProvider: ClientConfig.MapProviders.OpenStreetMap,
           mapboxAccessToken: '',
           customLayers: [{name: 'street', url: ''}]

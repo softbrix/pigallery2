@@ -8,12 +8,12 @@
           class="switch"
           name="enabled"
           [switch-on-color]="'success'"
-          [switch-inverse]="'inverse'"
+          [switch-inverse]="true"
           [switch-off-text]="text.Disabled"
           [switch-on-text]="text.Enabled"
           [switch-disabled]="inProgress || (!settings.enabled && !_settingsService.isSupported())"
-          [switch-handle-width]="'100'"
-          [switch-label-width]="'20'"
+          [switch-handle-width]="100"
+          [switch-label-width]="20"
           [(ngModel)]="settings.enabled">
         </bSwitch>
       </div>
@@ -32,11 +32,11 @@
               name="autocompleteEnabled"
               [switch-on-color]="'primary'"
               [switch-disabled]="!settings.enabled"
-              [switch-inverse]="'inverse'"
+              [switch-inverse]="true"
               [switch-off-text]="text.Disabled"
               [switch-on-text]="text.Enabled"
-              [switch-handle-width]="'100'"
-              [switch-label-width]="'20'"
+              [switch-handle-width]="100"
+              [switch-label-width]="20"
               [(ngModel)]="settings.AutoComplete.enabled">
             </bSwitch>
             <small class="form-text text-muted" i18n>Show hints while typing search query</small>
@@ -53,11 +53,11 @@
               name="instantSearchEnabled"
               [switch-on-color]="'primary'"
               [switch-disabled]="!settings.enabled"
-              [switch-inverse]="'inverse'"
+              [switch-inverse]="true"
               [switch-off-text]="text.Disabled"
               [switch-on-text]="text.Enabled"
-              [switch-handle-width]="'100'"
-              [switch-label-width]="'20'"
+              [switch-handle-width]="100"
+              [switch-label-width]="20"
               [(ngModel)]="settings.instantSearchEnabled">
             </bSwitch>
             <small class="form-text text-muted" i18n>Enables showing search results, while typing search query</small>

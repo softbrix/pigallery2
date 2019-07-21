@@ -54,11 +54,11 @@
               class="switch"
               name="enabled"
               [switch-on-color]="'primary'"
-              [switch-inverse]="'inverse'"
+              [switch-inverse]="true"
               [switch-off-text]="text.Low"
               [switch-on-text]="text.High"
-              [switch-handle-width]="'100'"
-              [switch-label-width]="'20'"
+              [switch-handle-width]="100"
+              [switch-label-width]="20"
               [(ngModel)]="settings.server.qualityPriority">
             </bSwitch>
             <small class="form-text text-muted" i18n>High quality may be slow. Especially with Jimp.</small>
