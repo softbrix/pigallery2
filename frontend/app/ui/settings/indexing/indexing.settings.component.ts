@@ -99,7 +99,9 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
       }
     });
     this.updateProgress();
-    this.statistic = await this._settingsService.getStatistic();
+    if (this._settingsService.isSupported()) {
+      this.statistic = await this._settingsService.getStatistic();
+    }
   }
 
   ngOnDestroy() {

@@ -77,7 +77,7 @@
           <input type="text" class="form-control" i18n-placeholder placeholder="Username"
                  [(ngModel)]="newUser.name" name="name" required>
           <input type="password" class="form-control" i18n-placeholder placeholder="Password"
-                 [(ngModel)]="newUser.password" name="password" required>
+                 [(ngModel)]="newUser.password" name="password" autocomplete="off"   required>
           <select class="form-control" [(ngModel)]="newUser.role" name="role" required>
             <option *ngFor="let repository of userRoles" [value]="repository.key">{{repository.value}}
             </option>
