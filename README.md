@@ -172,6 +172,9 @@ apt-get install build-essential  libkrb5-dev gcc g++
        * instant search, auto complete
      * sharing 
        * setting link expiration time
+ * Faces (persons) support
+    * reads Adobe's XMP Face region metadata. (It is defined by the Metadata Working Group (MWG).)
+    * shows face bounding box over images
  * internalization / translation support
    * currently supported languages: eng, hun
  * Nice design 
