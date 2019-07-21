@@ -8,7 +8,7 @@
   "main": "./backend/index.js",
   "bin": "./backend/index.js",
   "scripts": {
-    "installx": "tsc && gulp build-prod",
+    "install": "tsc && gulp build-prod",
     "build-release": "gulp build-release",
     "build-backend": "tsc",
     "pretest": "tsc",
