@@ -17,7 +17,7 @@ export class DirectoryEntity implements DirectoryDTO {
   name: string;
 
   @Index()
-  @Column()
+  @Column(columnCharsetCS)
   path: string;
 
   /**

@@ -106,6 +106,82 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
       .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
   });
 
+
+  it('should support case sensitive directory', async () => {
+    const gm = new GalleryManagerTest();
+    const im = new IndexingManagerTest();
+
+    const parent = TestHelper.getRandomizedDirectoryEntry();
+    const subDir1 = TestHelper.getRandomizedDirectoryEntry(parent, 'subDir');
+    const p1 = TestHelper.getRandomizedPhotoEntry(subDir1, 'subPhoto1', 0);
+    const subDir2 = TestHelper.getRandomizedDirectoryEntry(parent, 'SUBDIR');
+    const p2 = TestHelper.getRandomizedPhotoEntry(subDir2, 'subPhoto1', 0);
+
+
+    DirectoryDTO.removeReferences(parent);
+    await im.saveToDB(Utils.clone(parent));
+
+    const conn = await SQLConnection.getConnection();
+    const selected = await gm.selectParentDir(conn, parent.name, parent.path);
+    await gm.fillParentDir(conn, selected);
+
+    DirectoryDTO.removeReferences(selected);
+    removeIds(selected);
+    subDir1.isPartial = true;
+    delete subDir1.directories;
+    delete subDir1.metaFile;
+    subDir2.isPartial = true;
+    delete subDir2.directories;
+    delete subDir2.metaFile;
+    expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
+      .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
+  });
+
+  it('should support case sensitive directory path', async () => {
+    const gm = new GalleryManagerTest();
+    const im = new IndexingManagerTest();
+
+    const parent1 = TestHelper.getRandomizedDirectoryEntry(null, 'parent');
+    const parent2 = TestHelper.getRandomizedDirectoryEntry(null, 'PARENT');
+    const subDir1 = TestHelper.getRandomizedDirectoryEntry(parent1, 'subDir');
+    const p1 = TestHelper.getRandomizedPhotoEntry(subDir1, 'subPhoto1', 0);
+    const subDir2 = TestHelper.getRandomizedDirectoryEntry(parent2, 'subDir');
+    const p2 = TestHelper.getRandomizedPhotoEntry(subDir2, 'subPhoto1', 0);
+
+
+    DirectoryDTO.removeReferences(parent1);
+    await im.saveToDB(Utils.clone(parent1));
+    DirectoryDTO.removeReferences(parent2);
+    await im.saveToDB(Utils.clone(parent2));
+
+    const conn = await SQLConnection.getConnection();
+    {
+      const selected = await gm.selectParentDir(conn, parent1.name, parent1.path);
+      await gm.fillParentDir(conn, selected);
+
+      DirectoryDTO.removeReferences(selected);
+      removeIds(selected);
+      subDir1.isPartial = true;
+      delete subDir1.directories;
+      delete subDir1.metaFile;
+      expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
+        .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent1)));
+    }
+    {
+      const selected = await gm.selectParentDir(conn, parent2.name, parent2.path);
+      await gm.fillParentDir(conn, selected);
+
+      DirectoryDTO.removeReferences(selected);
+      removeIds(selected);
+      subDir2.isPartial = true;
+      delete subDir2.directories;
+      delete subDir2.metaFile;
+      expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
+        .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent2)));
+    }
+  });
+
+
   it('should save parent directory', async () => {
     const gm = new GalleryManagerTest();
     const im = new IndexingManagerTest();
