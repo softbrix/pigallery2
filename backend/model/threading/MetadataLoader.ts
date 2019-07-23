@@ -33,6 +33,7 @@ export class MetadataLoader {
       try {
         const stat = fs.statSync(fullPath);
         metadata.fileSize = stat.size;
+        metadata.creationDate = stat.ctime.getTime();
       } catch (err) {
       }
       try {
@@ -55,13 +56,14 @@ export class MetadataLoader {
                 if (Utils.isInt32(parseInt(data.streams[i].bit_rate, 10))) {
                   metadata.bitRate = parseInt(data.streams[i].bit_rate, 10) || null;
                 }
-                metadata.creationDate = Date.parse(data.streams[i].tags.creation_time);
+                metadata.creationDate = Date.parse(data.streams[i].tags.creation_time) || metadata.creationDate;
                 break;
               }
             }
 
           } catch (err) {
           }
+          metadata.creationDate = metadata.creationDate || 0;
 
           return resolve(metadata);
         });
