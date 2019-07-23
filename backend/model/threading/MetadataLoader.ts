@@ -33,7 +33,7 @@ export class MetadataLoader {
       try {
         const stat = fs.statSync(fullPath);
         metadata.fileSize = stat.size;
-        metadata.creationDate = stat.ctime.getTime();
+        metadata.creationDate = stat.mtime.getTime();
       } catch (err) {
       }
       try {
@@ -94,7 +94,7 @@ export class MetadataLoader {
             try {
               const stat = fs.statSync(fullPath);
               metadata.fileSize = stat.size;
-              metadata.creationDate = stat.ctime.getTime();
+              metadata.creationDate = stat.mtime.getTime();
             } catch (err) {
             }
 
