@@ -15,6 +15,7 @@ import {NotificationManager} from '../NotifocationManager';
 import {FaceRegionEntry} from './enitites/FaceRegionEntry';
 import {ObjectManagers} from '../ObjectManagers';
 import {IIndexingManager} from '../interfaces/IIndexingManager';
+import {DiskMangerWorker} from '../threading/DiskMangerWorker';
 
 const LOG_TAG = '[IndexingManager]';
 
@@ -43,7 +44,7 @@ export class IndexingManager implements IIndexingManager {
     });
   }
 
-  // Todo fix it, once typeorm support connection pools ofr sqlite
+  // Todo fix it, once typeorm support connection pools for sqlite
   protected async queueForSave(scannedDirectory: DirectoryDTO) {
     if (this.savingQueue.findIndex(dir => dir.name === scannedDirectory.name &&
       dir.path === scannedDirectory.path &&
@@ -89,30 +90,31 @@ export class IndexingManager implements IIndexingManager {
 
   protected async saveChildDirs(connection: Connection, currentDirId: number, scannedDirectory: DirectoryDTO) {
     const directoryRepository = connection.getRepository(DirectoryEntity);
-    // TODO: fix when first opened directory is not root
+
+    // update subdirectories that does not have a parent
+    await directoryRepository
+      .createQueryBuilder()
+      .update(DirectoryEntity)
+      .set({parent: <any>currentDirId})
+      .where('path = :path',
+        {path: DiskMangerWorker.pathFromParent(scannedDirectory)})
+      .andWhere('name NOT LIKE :root', {root: DiskMangerWorker.dirName('.')})
+      .andWhere('parent IS NULL')
+      .execute();
+
     // save subdirectories
     const childDirectories = await directoryRepository.createQueryBuilder('directory')
+      .leftJoinAndSelect('directory.parent', 'parent')
       .where('directory.parent = :dir', {
         dir: currentDirId
       }).getMany();
 
     for (let i = 0; i < scannedDirectory.directories.length; i++) {
       // Was this child Dir already indexed before?
-      let directory: DirectoryEntity = null;
-      for (let j = 0; j < childDirectories.length; j++) {
-        if (childDirectories[j].name === scannedDirectory.directories[i].name) {
-          directory = childDirectories[j];
-          childDirectories.splice(j, 1);
-          break;
-        }
-      }
+      const dirIndex = childDirectories.findIndex(d => d.name === scannedDirectory.directories[i].name);
 
-      if (directory != null) { // update existing directory
-        if (!directory.parent || !directory.parent.id) { // set parent if not set yet
-          directory.parent = <any>{id: currentDirId};
-          delete directory.media;
-          await directoryRepository.save(directory);
-        }
+      if (dirIndex !== -1) { // directory found
+        childDirectories.splice(dirIndex, 1);
       } else { // dir does not exists yet
         scannedDirectory.directories[i].parent = <any>{id: currentDirId};
         (<DirectoryEntity>scannedDirectory.directories[i]).lastScanned = null; // new child dir, not fully scanned yet
@@ -127,7 +129,7 @@ export class IndexingManager implements IIndexingManager {
 
   }
 
-  protected async saveMetaFiles(connection: Connection, currentDirID: number, scannedDirectory: DirectoryDTO) {
+  protected async saveMetaFiles(connection: Connection, currentDirID: number, scannedDirectory: DirectoryDTO): Promise<void> {
     const fileRepository = connection.getRepository(FileEntity);
     // save files
     const indexedMetaFiles = await fileRepository.createQueryBuilder('file')
@@ -189,7 +191,6 @@ export class IndexingManager implements IIndexingManager {
       const scannedFaces = (<PhotoMetadata>media[i].metadata).faces || [];
       delete (<PhotoMetadata>media[i].metadata).faces;
 
-      // let mediaItemId: number = null;
       if (mediaItem == null) { // not in DB yet
         media[i].directory = null;
         mediaItem = <any>Utils.clone(media[i]);

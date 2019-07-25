@@ -12,8 +12,6 @@ export interface IPersonManager {
 
   saveAll(names: string[]): Promise<void>;
 
-  keywordsToPerson(media: MediaDTO[]): Promise<void>;
-
   onGalleryIndexUpdate(): Promise<void>;
 
   updatePerson(name: string, partialPerson: PersonDTO): Promise<PersonEntry>;

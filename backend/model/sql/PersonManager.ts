@@ -1,7 +1,6 @@
 import {IPersonManager} from '../interfaces/IPersonManager';
 import {SQLConnection} from './SQLConnection';
 import {PersonEntry} from './enitites/PersonEntry';
-import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {PhotoDTO} from '../../../common/entities/PhotoDTO';
 import {MediaEntity} from './enitites/MediaEntity';
 import {FaceRegionEntry} from './enitites/FaceRegionEntry';
@@ -70,30 +69,6 @@ export class PersonManager implements IPersonManager {
     return this.persons;
   }
 
-  // TODO dead code, remove it
-  async keywordsToPerson(media: MediaDTO[]) {
-    await this.loadAll();
-    const personFilter = (keyword: string) => this.persons.find(p => p.name.toLowerCase() === keyword.toLowerCase());
-    (<PhotoDTO[]>media).forEach(m => {
-      if (!m.metadata.keywords || m.metadata.keywords.length === 0) {
-        return;
-      }
-
-      const personKeywords = m.metadata.keywords.filter(k => personFilter(k));
-      if (personKeywords.length === 0) {
-        return;
-      }
-      // remove persons from keywords
-      m.metadata.keywords = m.metadata.keywords.filter(k => !personFilter(k));
-      m.metadata.faces = m.metadata.faces || [];
-      personKeywords.forEach((pk: string) => {
-        m.metadata.faces.push({
-          name: pk
-        });
-      });
-
-    });
-  }
 
   async get(name: string): Promise<PersonEntry> {
 

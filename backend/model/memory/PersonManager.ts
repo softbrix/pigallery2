@@ -1,5 +1,4 @@
 import {IPersonManager} from '../interfaces/IPersonManager';
-import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {PhotoDTO} from '../../../common/entities/PhotoDTO';
 import {PersonDTO} from '../../../common/entities/PersonDTO';
 
@@ -10,10 +9,6 @@ export class PersonManager implements IPersonManager {
   }
 
   getSamplePhoto(name: string): Promise<PhotoDTO> {
-    throw new Error('Method not implemented.');
-  }
-
-  keywordsToPerson(media: MediaDTO[]): Promise<void> {
     throw new Error('Method not implemented.');
   }
 

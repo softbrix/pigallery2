@@ -37,15 +37,31 @@ export class DiskMangerWorker {
     return Math.max(stat.ctime.getTime(), stat.mtime.getTime());
   }
 
-  public static normalizeDirPath(dirPath: string) {
+  public static normalizeDirPath(dirPath: string): string {
     return path.normalize(path.join('.' + path.sep, dirPath));
+  }
+
+  public static pathFromRelativeDirName(relativeDirectoryName: string): string {
+    return path.join(path.dirname(this.normalizeDirPath(relativeDirectoryName)), path.sep);
+  }
+
+
+  public static pathFromParent(parent: { path: string, name: string }): string {
+    return path.join(this.normalizeDirPath(path.join(parent.path, parent.name)), path.sep);
+  }
+
+  public static dirName(name: string) {
+    if (name.trim().length === 0) {
+      return '.';
+    }
+    return path.basename(name);
   }
 
   public static scanDirectory(relativeDirectoryName: string, maxPhotos: number = null, photosOnly: boolean = false): Promise<DirectoryDTO> {
     return new Promise<DirectoryDTO>((resolve, reject) => {
       relativeDirectoryName = this.normalizeDirPath(relativeDirectoryName);
-      const directoryName = path.basename(relativeDirectoryName);
-      const directoryParent = path.join(path.dirname(relativeDirectoryName), path.sep);
+      const directoryName = DiskMangerWorker.dirName(relativeDirectoryName);
+      const directoryParent = this.pathFromRelativeDirName(relativeDirectoryName);
       const absoluteDirectoryName = path.join(ProjectPath.ImageFolder, relativeDirectoryName);
 
       const stat = fs.statSync(path.join(ProjectPath.ImageFolder, relativeDirectoryName));

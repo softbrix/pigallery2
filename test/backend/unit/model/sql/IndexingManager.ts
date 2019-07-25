@@ -16,6 +16,7 @@ import {ObjectManagers} from '../../../../../backend/model/ObjectManagers';
 import {PersonManager} from '../../../../../backend/model/sql/PersonManager';
 import {SQLTestHelper} from '../../../SQLTestHelper';
 import {VersionManager} from '../../../../../backend/model/sql/VersionManager';
+import {DiskMangerWorker} from '../../../../../backend/model/threading/DiskMangerWorker';
 
 class GalleryManagerTest extends GalleryManager {
 
@@ -181,6 +182,77 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
     }
   });
 
+
+  it('should save parent after child', async () => {
+    const gm = new GalleryManagerTest();
+    const im = new IndexingManagerTest();
+
+    const parent = TestHelper.getRandomizedDirectoryEntry(null, 'parentDir');
+    const p1 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo1');
+
+    const subDir = TestHelper.getRandomizedDirectoryEntry(null, 'subDir');
+    subDir.path = DiskMangerWorker.pathFromParent(parent);
+    const sp1 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto1', 0);
+    const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2', 0);
+
+
+    DirectoryDTO.removeReferences(subDir);
+    await im.saveToDB(Utils.clone(subDir));
+
+    parent.directories.push(subDir);
+
+
+    DirectoryDTO.removeReferences(parent);
+    await im.saveToDB(Utils.clone(parent));
+
+    const conn = await SQLConnection.getConnection();
+    const selected = await gm.selectParentDir(conn, parent.name, parent.path);
+    await gm.fillParentDir(conn, selected);
+
+    DirectoryDTO.removeReferences(selected);
+    removeIds(selected);
+    subDir.isPartial = true;
+    delete subDir.directories;
+    delete subDir.metaFile;
+    expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
+      .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
+  });
+
+
+  it('should save root parent after child', async () => {
+    const gm = new GalleryManagerTest();
+    const im = new IndexingManagerTest();
+
+    const parent = TestHelper.getRandomizedDirectoryEntry(null, '.');
+    const p1 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo1');
+
+    const subDir = TestHelper.getRandomizedDirectoryEntry(null, 'subDir');
+    subDir.path = DiskMangerWorker.pathFromParent(parent);
+    const sp1 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto1', 0);
+    const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2', 0);
+
+
+    DirectoryDTO.removeReferences(subDir);
+    await im.saveToDB(Utils.clone(subDir));
+
+    parent.directories.push(subDir);
+
+
+    DirectoryDTO.removeReferences(parent);
+    await im.saveToDB(Utils.clone(parent));
+
+    const conn = await SQLConnection.getConnection();
+    const selected = await gm.selectParentDir(conn, parent.name, parent.path);
+    await gm.fillParentDir(conn, selected);
+
+    DirectoryDTO.removeReferences(selected);
+    removeIds(selected);
+    subDir.isPartial = true;
+    delete subDir.directories;
+    delete subDir.metaFile;
+    expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
+      .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
+  });
 
   it('should save parent directory', async () => {
     const gm = new GalleryManagerTest();

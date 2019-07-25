@@ -6,7 +6,6 @@ import {
   PhotoMetadataEntity,
   PositionMetaDataEntity
 } from '../../../../../backend/model/sql/enitites/PhotoEntity';
-import * as path from 'path';
 import {OrientationTypes} from 'ts-exif-parser';
 import {DirectoryEntity} from '../../../../../backend/model/sql/enitites/DirectoryEntity';
 import {VideoEntity, VideoMetadataEntity} from '../../../../../backend/model/sql/enitites/VideoEntity';
@@ -14,6 +13,7 @@ import {MediaDimension} from '../../../../../common/entities/MediaDTO';
 import {CameraMetadata, FaceRegion, GPSMetadata, PhotoDTO, PhotoMetadata, PositionMetaData} from '../../../../../common/entities/PhotoDTO';
 import {DirectoryDTO} from '../../../../../common/entities/DirectoryDTO';
 import {FileDTO} from '../../../../../common/entities/FileDTO';
+import {DiskMangerWorker} from '../../../../../backend/model/threading/DiskMangerWorker';
 
 export class TestHelper {
 
@@ -153,8 +153,8 @@ export class TestHelper {
 
     const dir: DirectoryDTO = {
       id: null,
-      name: forceStr || Math.random().toString(36).substring(7),
-      path: '.',
+      name: DiskMangerWorker.dirName(forceStr || Math.random().toString(36).substring(7)),
+      path: DiskMangerWorker.pathFromParent({path: '', name: '.'}),
       mediaCount: 0,
       directories: [],
       metaFile: [],
@@ -164,7 +164,7 @@ export class TestHelper {
       parent: null
     };
     if (parent !== null) {
-      dir.path = path.join(parent.path, parent.name);
+      dir.path = DiskMangerWorker.pathFromParent(parent);
       parent.directories.push(dir);
     }
     return dir;
